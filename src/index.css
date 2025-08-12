@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --wine-burgundy: #4a0e1d;
+  --wine-gold: #c5a572;
+  --wine-cream: #f3e9e0;
+  --wine-dark: #1a110f;
+  --wine-light: #8b4b5c;
+}
+
+body {
+  @apply bg-stone-900;
+  font-family: 'Inter', sans-serif;
+  color: var(--wine-cream);
+  overflow-x: hidden;
+  background-image: linear-gradient(to right, #1a110f, #2c1810);
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.wine-gradient {
+  background: linear-gradient(135deg, var(--wine-gold) 0%, #e0c39a 100%);
+}
+
+.wine-card {
+  background: rgba(243, 233, 224, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(197, 165, 114, 0.1);
+}
+
+.wine-glass-effect {
+  background: rgba(243, 233, 224, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(197, 165, 114, 0.15);
+}
+
+.wine-text-gradient {
+  background: linear-gradient(135deg, var(--wine-gold), var(--wine-cream));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wine-shadow {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.wine-hover {
+  transition: all 0.3s ease;
+}
+
+.wine-hover:hover {
+  transform: translateY(-5px);
+  border-color: rgba(197, 165, 114, 0.3);
+  box-shadow: 0 15px 35px rgba(197, 165, 114, 0.1);
+}
+
+.wine-pattern {
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(197, 165, 114, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(74, 14, 29, 0.1) 0%, transparent 40%);
+}
+
+.wine-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--wine-gold) var(--wine-dark);
+}
+
+.wine-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.wine-scroll::-webkit-scrollbar-track {
+  background: var(--wine-dark);
+}
+
+.wine-scroll::-webkit-scrollbar-thumb {
+  background: var(--wine-gold);
+  border-radius: 4px;
+}
+
+.wine-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--wine-cream);
+}
