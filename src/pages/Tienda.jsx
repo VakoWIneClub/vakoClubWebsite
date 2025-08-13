@@ -98,8 +98,8 @@ const arteYDeco = [
     reviews: 0,
     image: "Golden vineyards art print",
     descripcion:
-      "Una hermosa imagen que representa el tipo de uva Syrah",
-    stock: 20,
+      "Syrah Vineyard Wall Art Frame, Vintage Grape Print, Home Decor",
+    stock: 12,
     destacado: true,
     descuento: 20,
     externalLink:
@@ -109,7 +109,7 @@ const arteYDeco = [
   {
     id: 8,
     name: "Poster enmarcado Rhythm and Nature ",
-    bodega: "Vako Club",
+    bodega: "Arte exclusivo Vako Club",
     categoria: "deco",
     precio: 62.55,
     precioOriginal: 77.98,
@@ -118,17 +118,17 @@ const arteYDeco = [
     image: "Vako club wall poster",
     descripcion:
       "Poster Print, Wine Culture Art, Vibrant Home Decor Sign, Relaxing Wall Picture,",
-    stock: 50,
+    stock: 5,
     destacado: true,
     descuento: 20,
     externalLink:
       "https://www.etsy.com/us-es/listing/4350168876/poster-print-wine-culture-art-vibrant",
-    image: "images/il_fullxfull.7122567645_bf9x.webp"
+    image: "images/il_fullxfull.7147581583_do84.webp"
   },
   {
     id: 15,
     name: "Poster enmarcado Tempranillo",
-    bodega: "Vako Club",
+    bodega: "Arte exclusivo Vako Club",
     categoria: "deco",
     precio: 72,
     precioOriginal: 90.09,
@@ -137,7 +137,7 @@ const arteYDeco = [
     image: "poster vako wine club",
     descripcion:
       "Vintage Tempranillo Wine Poster with Wooden Frame",
-    stock: 50,
+    stock: 17,
     destacado: true,
     descuento: 20,
     externalLink:
