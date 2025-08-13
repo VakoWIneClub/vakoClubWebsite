@@ -29,8 +29,9 @@ function App() {
           <Helmet>
             <link
               rel="icon"
-              type="image/png"
               href="/images/VakoLogo.png?v=2"
+              type="image/png"
+              sizes="32x32"
             />
             <title>Vako Club - Descubre el Mundo del Vino</title>
             <meta
