@@ -23,8 +23,8 @@ import { useToast } from "@/components/ui/use-toast";
 const vinosSeleccionados = [
   {
     id: 1,
-    image: "images/vina-ardanza-rioja-reserva.jpg",
-    bodega: "Bodega Rioja Alta",
+    name: "Rioja Reserva",
+    bodega: "Bodega Rioja Alta (vía Amazon)",
     categoria: "tintos",
     precio: 41.80,
     precioOriginal: 41.80,
@@ -41,7 +41,7 @@ const vinosSeleccionados = [
     descuento: 0,
     externalLink:
       "https://amzn.to/3JecTWD",
-    name: "Rioja Reserva (vía Amazon)"
+    image: "images/vina-ardanza-rioja-reserva.jpg",
   },
   {
     id: 2,
