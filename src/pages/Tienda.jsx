@@ -24,7 +24,6 @@ const vinosSeleccionados = [
   {
     id: 1,
     image: "images/vina-ardanza-rioja-reserva.jpg",
-    name: "Rioja Reserva",
     bodega: "Bodega Rioja Alta",
     categoria: "tintos",
     precio: 41.80,
@@ -42,6 +41,7 @@ const vinosSeleccionados = [
     descuento: 0,
     externalLink:
       "https://amzn.to/3JecTWD",
+    name: "Rioja Reserva (vía Amazon)"
   },
   {
     id: 2,
