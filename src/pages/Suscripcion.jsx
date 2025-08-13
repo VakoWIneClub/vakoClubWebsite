@@ -1,17 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus, Mail, User, Lock, Star, Gem, Crown, CheckCircle, Briefcase, Eye, EyeOff, MailCheck } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/components/ui/use-toast';
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter } from '@/components/ui/alert-dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  UserPlus,
+  Mail,
+  User,
+  Lock,
+  Star,
+  Gem,
+  Crown,
+  CheckCircle,
+  Briefcase,
+  Eye,
+  EyeOff,
+  MailCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
+import { supabase } from "@/lib/customSupabaseClient";
 
 const SubscriptionCard = ({
   icon,
@@ -19,7 +45,7 @@ const SubscriptionCard = ({
   price,
   features,
   available,
-  onSelect
+  onSelect,
 }) => {
   const Icon = icon;
   const isClickable = available && onSelect;
@@ -27,14 +53,18 @@ const SubscriptionCard = ({
     <div className="relative h-full">
       <motion.div
         whileHover={isClickable ? { y: -10, scale: 1.05 } : {}}
-        className={`wine-card rounded-2xl p-8 text-center h-full flex flex-col justify-between ${!available ? 'opacity-40' : ''} ${isClickable ? 'cursor-pointer' : ''}`}
+        className={`wine-card rounded-2xl p-8 text-center h-full flex flex-col justify-between ${
+          !available ? "opacity-40" : ""
+        } ${isClickable ? "cursor-pointer" : ""}`}
         onClick={isClickable ? onSelect : null}
       >
-        <div className={`flex-grow ${!available ? 'filter blur-sm' : ''}`}>
+        <div className={`flex-grow ${!available ? "filter blur-sm" : ""}`}>
           <div className="inline-flex p-4 rounded-full bg-amber-200/10 mb-4">
             <Icon className="h-8 w-8 text-amber-200" />
           </div>
-          <h3 className="font-playfair text-2xl font-semibold text-amber-200 mb-2">{title}</h3>
+          <h3 className="font-playfair text-2xl font-semibold text-amber-200 mb-2">
+            {title}
+          </h3>
           <p className="text-4xl font-bold wine-text-gradient mb-6">{price}</p>
           <ul className="space-y-3 text-left">
             {features.map((feature, i) => (
@@ -46,7 +76,10 @@ const SubscriptionCard = ({
           </ul>
         </div>
         {available && (
-          <Button variant="outline" className={`mt-8 w-full ${!available ? 'filter blur-sm' : ''}`}>
+          <Button
+            variant="outline"
+            className={`mt-8 w-full ${!available ? "filter blur-sm" : ""}`}
+          >
             Seleccionar Plan
           </Button>
         )}
@@ -75,10 +108,10 @@ const Suscripcion = () => {
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    profile: ''
+    name: "",
+    email: "",
+    password: "",
+    profile: "",
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState({});
@@ -86,14 +119,44 @@ const Suscripcion = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/perfil');
+      navigate("/perfil");
     }
   }, [user, navigate]);
 
   const subscriptionPlans = [
-    { icon: Star, title: 'Suscripción Gratuita', price: '€0', features: ['Descuentos en la tienda', 'Acceso a la comunidad', 'Participacion en el foro'], available: true },
-    { icon: Gem, title: 'Sommelier', price: '€15', features: ['Todo lo de Gratuita', 'Catas virtuales exclusivas', 'Acceso a guías avanzadas'], available: false },
-    { icon: Crown, title: 'Gran Reserva', price: '€45', features: ['Todo lo de Sommelier', 'Envío de vinos trimestral', 'Consultas con expertos'], available: false },
+    {
+      icon: Star,
+      title: "Suscripción Gratuita",
+      price: "€0",
+      features: [
+        "Descuentos en la tienda",
+        "Acceso a la comunidad",
+        "Participacion en el foro",
+      ],
+      available: true,
+    },
+    {
+      icon: Gem,
+      title: "Sommelier",
+      price: "€15",
+      features: [
+        "Todo lo de Gratuita",
+        "Catas virtuales exclusivas",
+        "Acceso a guías avanzadas",
+      ],
+      available: false,
+    },
+    {
+      icon: Crown,
+      title: "Gran Reserva",
+      price: "€45",
+      features: [
+        "Todo lo de Sommelier",
+        "Envío de vinos trimestral",
+        "Consultas con expertos",
+      ],
+      available: false,
+    },
   ];
 
   const handleSelectPlan = () => {
@@ -102,45 +165,53 @@ const Suscripcion = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'El nombre es obligatorio.';
+    if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio.";
     if (!formData.email.trim()) {
-      newErrors.email = 'El email es obligatorio.';
+      newErrors.email = "El email es obligatorio.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El formato del email no es válido.';
+      newErrors.email = "El formato del email no es válido.";
     }
-    if (!formData.password) newErrors.password = 'La contraseña es obligatoria.';
-    if (formData.password && formData.password.length < 6) newErrors.password = 'La contraseña debe tener al menos 6 caracteres.';
-    if (!formData.profile) newErrors.profile = 'Debes seleccionar un perfil de usuario.';
-    if (!termsAccepted) newErrors.terms = 'Debes aceptar los términos y condiciones.';
+    if (!formData.password)
+      newErrors.password = "La contraseña es obligatoria.";
+    if (formData.password && formData.password.length < 6)
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres.";
+    if (!formData.profile)
+      newErrors.profile = "Debes seleccionar un perfil de usuario.";
+    if (!termsAccepted)
+      newErrors.terms = "Debes aceptar los términos y condiciones.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleProfileChange = value => {
-    setFormData(prev => ({ ...prev, profile: value }));
+  const handleProfileChange = (value) => {
+    setFormData((prev) => ({ ...prev, profile: value }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) {
       toast({
         title: "Errores en el formulario",
-        description: "Por favor, completa todos los campos obligatorios y acepta los términos.",
-        variant: "destructive"
+        description:
+          "Por favor, completa todos los campos obligatorios y acepta los términos.",
+        variant: "destructive",
       });
       return;
     }
     setLoading(true);
 
     try {
-      const { data: emailExists, error: rpcError } = await supabase.rpc('email_exists', {
-        email_to_check: formData.email
-      });
+      const { data: emailExists, error: rpcError } = await supabase.rpc(
+        "email_exists",
+        {
+          email_to_check: formData.email,
+        }
+      );
 
       if (rpcError) {
         throw rpcError;
@@ -148,9 +219,10 @@ const Suscripcion = () => {
 
       if (emailExists) {
         toast({
-          title: 'Email ya registrado',
-          description: 'Este correo electrónico ya está en uso. Por favor, inicia sesión o utiliza otro correo.',
-          variant: 'destructive',
+          title: "Email ya registrado",
+          description:
+            "Este correo electrónico ya está en uso. Por favor, inicia sesión o utiliza otro correo.",
+          variant: "destructive",
         });
         setLoading(false);
         return;
@@ -159,26 +231,25 @@ const Suscripcion = () => {
       const { error } = await signUp(formData.email, formData.password, {
         data: {
           name: formData.name,
-          profile: formData.profile
-        }
+          profile: formData.profile,
+        },
       });
 
       if (error) {
         toast({
-          title: 'Error de registro',
-          description: error.message || 'No se pudo completar el registro.',
-          variant: 'destructive',
+          title: "Error de registro",
+          description: error.message || "No se pudo completar el registro.",
+          variant: "destructive",
         });
         return;
       }
-      
-      setShowVerificationPopup(true);
 
+      setShowVerificationPopup(true);
     } catch (error) {
       toast({
-        title: 'Error inesperado',
-        description: 'Ocurrió un error. Por favor, inténtalo de nuevo.',
-        variant: 'destructive',
+        title: "Error inesperado",
+        description: "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -187,7 +258,7 @@ const Suscripcion = () => {
 
   const handleCloseVerificationPopup = () => {
     setShowVerificationPopup(false);
-    navigate('/login');
+    navigate("/login");
   };
 
   if (user) {
@@ -197,8 +268,17 @@ const Suscripcion = () => {
   return (
     <>
       <Helmet>
+        <link
+          rel="icon"
+          href="/images/VakoLogo.png"
+          type="image/png"
+          sizes="32x32"
+        />
         <title>Suscripción - Vako Club</title>
-        <meta name="description" content="Únete a Vako Club y accede a un mundo de beneficios exclusivos, catas, y contenido premium sobre vinos." />
+        <meta
+          name="description"
+          content="Únete a Vako Club y accede a un mundo de beneficios exclusivos, catas, y contenido premium sobre vinos."
+        />
       </Helmet>
 
       <div className="min-h-screen wine-pattern py-20 px-4">
@@ -209,16 +289,23 @@ const Suscripcion = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Comienza tu Experiencia Vako Club</h1>
+            <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">
+              Comienza tu Experiencia Vako Club
+            </h1>
             <p className="text-xl text-amber-100/80 max-w-3xl mx-auto">
-              Al suscribirte, obtienes un 20% de descuento en artículos seleccionados de la tienda exclusiva de Vako Club.
+              Al suscribirte, obtienes un 20% de descuento en artículos
+              seleccionados de la tienda exclusiva de Vako Club.
             </p>
           </motion.div>
 
           {!showRegistration ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {subscriptionPlans.map((plan, index) => (
-                <SubscriptionCard key={index} {...plan} onSelect={plan.available ? handleSelectPlan : null} />
+                <SubscriptionCard
+                  key={index}
+                  {...plan}
+                  onSelect={plan.available ? handleSelectPlan : null}
+                />
               ))}
             </div>
           ) : (
@@ -234,70 +321,154 @@ const Suscripcion = () => {
                   <h1 className="font-playfair text-4xl font-bold wine-text-gradient">
                     Completa tu Registro
                   </h1>
-                  <p className="mt-2 text-amber-100/80">Estás a un paso de unirte a Vako Club.</p>
+                  <p className="mt-2 text-amber-100/80">
+                    Estás a un paso de unirte a Vako Club.
+                  </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-amber-200 font-medium">Nombre</Label>
+                    <Label
+                      htmlFor="name"
+                      className="text-amber-200 font-medium"
+                    >
+                      Nombre
+                    </Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                      <Input id="name" type="text" placeholder="Tu nombre completo" className="pl-10" value={formData.name} onChange={handleChange} disabled={loading} />
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="Tu nombre completo"
+                        className="pl-10"
+                        value={formData.name}
+                        onChange={handleChange}
+                        disabled={loading}
+                      />
                     </div>
                     <ErrorMessage message={errors.name} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-amber-200 font-medium">Email</Label>
+                    <Label
+                      htmlFor="email"
+                      className="text-amber-200 font-medium"
+                    >
+                      Email
+                    </Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                      <Input id="email" type="email" placeholder="tu@email.com" className="pl-10" value={formData.email} onChange={handleChange} disabled={loading} />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        className="pl-10"
+                        value={formData.email}
+                        onChange={handleChange}
+                        disabled={loading}
+                      />
                     </div>
-                     <ErrorMessage message={errors.email} />
+                    <ErrorMessage message={errors.email} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-amber-200 font-medium">Contraseña</Label>
+                    <Label
+                      htmlFor="password"
+                      className="text-amber-200 font-medium"
+                    >
+                      Contraseña
+                    </Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                      <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Crea una contraseña segura" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 cursor-pointer">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Crea una contraseña segura"
+                        className="pl-10 pr-10"
+                        value={formData.password}
+                        onChange={handleChange}
+                        disabled={loading}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 cursor-pointer"
+                      >
                         {showPassword ? <EyeOff /> : <Eye />}
                       </button>
                     </div>
-                     <ErrorMessage message={errors.password} />
+                    <ErrorMessage message={errors.password} />
                   </div>
-                   <div className="space-y-2">
-                    <Label htmlFor="profile" className="text-amber-200 font-medium">Perfil de Usuario</Label>
-                     <div className="relative">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="profile"
+                      className="text-amber-200 font-medium"
+                    >
+                      Perfil de Usuario
+                    </Label>
+                    <div className="relative">
                       <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                        <Select onValueChange={handleProfileChange} value={formData.profile} disabled={loading}>
-                          <SelectTrigger className="pl-10">
-                            <SelectValue placeholder="Selecciona tu perfil" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="sommelier">Sommelier</SelectItem>
-                            <SelectItem value="enologo">Enólogo</SelectItem>
-                            <SelectItem value="principiante">Principiante</SelectItem>
-                            <SelectItem value="comercial">Comercial</SelectItem>
-                            <SelectItem value="interesado">Interesado</SelectItem>
-                            <SelectItem value="otro">Otro</SelectItem>
-                          </SelectContent>
-                        </Select>
-                     </div>
-                     <ErrorMessage message={errors.profile} />
+                      <Select
+                        onValueChange={handleProfileChange}
+                        value={formData.profile}
+                        disabled={loading}
+                      >
+                        <SelectTrigger className="pl-10">
+                          <SelectValue placeholder="Selecciona tu perfil" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sommelier">Sommelier</SelectItem>
+                          <SelectItem value="enologo">Enólogo</SelectItem>
+                          <SelectItem value="principiante">
+                            Principiante
+                          </SelectItem>
+                          <SelectItem value="comercial">Comercial</SelectItem>
+                          <SelectItem value="interesado">Interesado</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <ErrorMessage message={errors.profile} />
                   </div>
 
                   <div className="items-top flex space-x-2 pt-2">
-                    <Checkbox id="terms" checked={termsAccepted} onCheckedChange={setTermsAccepted} />
+                    <Checkbox
+                      id="terms"
+                      checked={termsAccepted}
+                      onCheckedChange={setTermsAccepted}
+                    />
                     <div className="grid gap-1.5 leading-none">
-                      <label htmlFor="terms" className="text-sm font-medium leading-none text-amber-100/80 peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Acepto los <Link to="/terminos" target="_blank" className="underline text-amber-200 hover:text-amber-300">Términos y Condiciones</Link> y la <Link to="/politica-privacidad" target="_blank" className="underline text-amber-200 hover:text-amber-300">Política de Privacidad</Link>.
+                      <label
+                        htmlFor="terms"
+                        className="text-sm font-medium leading-none text-amber-100/80 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Acepto los{" "}
+                        <Link
+                          to="/terminos"
+                          target="_blank"
+                          className="underline text-amber-200 hover:text-amber-300"
+                        >
+                          Términos y Condiciones
+                        </Link>{" "}
+                        y la{" "}
+                        <Link
+                          to="/politica-privacidad"
+                          target="_blank"
+                          className="underline text-amber-200 hover:text-amber-300"
+                        >
+                          Política de Privacidad
+                        </Link>
+                        .
                       </label>
                     </div>
                   </div>
                   <ErrorMessage message={errors.terms} />
 
-                  <Button type="submit" className="w-full text-lg py-6 mt-6" variant="default" disabled={loading || !termsAccepted}>
-                    {loading ? 'Verificando y creando...' : 'Crear Cuenta'}
+                  <Button
+                    type="submit"
+                    className="w-full text-lg py-6 mt-6"
+                    variant="default"
+                    disabled={loading || !termsAccepted}
+                  >
+                    {loading ? "Verificando y creando..." : "Crear Cuenta"}
                   </Button>
                 </form>
               </div>
@@ -306,14 +477,21 @@ const Suscripcion = () => {
         </div>
       </div>
 
-      <AlertDialog open={showVerificationPopup} onOpenChange={setShowVerificationPopup}>
+      <AlertDialog
+        open={showVerificationPopup}
+        onOpenChange={setShowVerificationPopup}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <div className="flex justify-center mb-4">
               <motion.div
                 initial={{ y: 0 }}
                 animate={{ y: [-5, 5, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <MailCheck className="h-16 w-16 text-amber-400" />
               </motion.div>
@@ -322,7 +500,9 @@ const Suscripcion = () => {
               ¡Revisa tu correo!
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center text-base">
-              Te hemos enviado un e-mail de verificación a <strong>{formData.email}</strong>. Haz clic en el enlace para activar tu cuenta.
+              Te hemos enviado un e-mail de verificación a{" "}
+              <strong>{formData.email}</strong>. Haz clic en el enlace para
+              activar tu cuenta.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
