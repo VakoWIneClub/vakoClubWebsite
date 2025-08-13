@@ -67,7 +67,13 @@ const ProductGrid = ({ products }) => {
                 >
                   <div className="flex items-center space-x-2 text-white">
                     {producto.externalLink ? <ExternalLink className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    <span>{producto.externalLink ? "Ver en Amazon" : "Ver en tienda"}</span>
+                    <span>
+                      {producto.externalLink
+                        ? producto.externalLink.includes("amazon")
+                          ? "Ver en Amazon"
+                          : producto.externalLink.includes("etsy")
+                            ? "Ver en Etsy"}
+                    </span>
                   </div>
                 </div>
               </div>
