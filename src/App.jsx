@@ -30,7 +30,7 @@ function App() {
             <link
               rel="icon"
               type="image/png"
-              href="/images/VakoLogo.png"
+              href="/images/VakoLogo.png?v=2"
             />
             <title>Vako Club - Descubre el Mundo del Vino</title>
             <meta
