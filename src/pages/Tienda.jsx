@@ -45,6 +45,7 @@ const vinosSeleccionados = [
   },
   {
     id: 2,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Albariño Premium 2022",
     bodega: "Viñedos del Atlántico",
     categoria: "blancos",
@@ -63,6 +64,7 @@ const vinosSeleccionados = [
   },
   {
     id: 3,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Cava Brut Nature",
     bodega: "Cavas Tradicionales",
     categoria: "espumosos",
@@ -83,6 +85,7 @@ const vinosSeleccionados = [
 const arteYDeco = [
   {
     id: 7,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: 'Lámina "Viñedos Dorados"',
     bodega: "Arte Vako",
     categoria: "arte",
@@ -99,6 +102,7 @@ const arteYDeco = [
   },
   {
     id: 8,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Posavasos de Corcho",
     bodega: "Deco Club",
     categoria: "deco",
@@ -117,6 +121,7 @@ const arteYDeco = [
 const merchandising = [
   {
     id: 9,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: 'Camiseta "Wine Lover"',
     bodega: "Vako Style",
     categoria: "merchandising",
@@ -133,6 +138,7 @@ const merchandising = [
   },
   {
     id: 10,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Gorra Sommelier",
     bodega: "Vako Style",
     categoria: "merchandising",
@@ -150,6 +156,7 @@ const merchandising = [
 const accesorios = [
   {
     id: 11,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Sacacorchos Profesional",
     bodega: "Vako Tools",
     categoria: "accesorios",
@@ -166,6 +173,7 @@ const accesorios = [
   },
   {
     id: 12,
+    image: "images/vina-ardanza-rioja-reserva.jpg",
     name: "Decantador de Cristal",
     bodega: "Vako Glassware",
     categoria: "accesorios",
@@ -182,6 +190,7 @@ const accesorios = [
   },
   {
     id: 13,
+    image: "images/71fIFF6k+FL._AC_SL1500_.jpg",
     name: "Sacacorchos Premium Semecca®",
     bodega: "Semecca® (vía Amazon)",
     categoria: "accesorios",
