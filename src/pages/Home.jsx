@@ -185,7 +185,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <link rel="icon" href="public/images/VakoLogo.png" type="image/png" />
+        <link rel="icon" href="/images/VakoLogo.png" type="image/png" />
         <title>Inicio - Vako Club | Descubre el Mundo del Vino</title>
         <meta
           name="description"
