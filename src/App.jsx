@@ -33,9 +33,8 @@ function App() {
             />
             <link
               rel="icon"
-              href="/images/VakoLogo.png?v=3"
+              href="/images/VakoLogo.png"
               type="image/png"
-              sizes="32x32"
             />
             <title>Vako Club - Descubre el Mundo del Vino</title>
           </Helmet>
