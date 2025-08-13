@@ -60,8 +60,8 @@ const ProductGrid = ({ products }) => {
               </motion.button>
 
               <div className="relative h-64 bg-gradient-to-br from-amber-900/20 to-red-900/20 flex items-center justify-center">
-                <img  alt={producto.name} class="w-full h-full object-cover" src={producto.image}/>
-                
+                <img alt={producto.name} className="w-full h-full object-cover" src={producto.image ?? '/images/placeholder.png'}
+                  loading="lazy" />
                 <div
                   className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
                 >
@@ -114,18 +114,18 @@ const ProductGrid = ({ products }) => {
                     </div>
                     <p className="text-xs text-amber-100/60">{producto.maridaje}</p>
                   </div>
-                  
+
                   {producto.externalLink ? (
-                     <Button
-                        variant="default"
-                        size="icon"
-                        asChild
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                       <a href={producto.externalLink} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="default"
+                      size="icon"
+                      asChild
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <a href={producto.externalLink} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-5 w-5" />
-                       </a>
-                     </Button>
+                      </a>
+                    </Button>
                   ) : (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
