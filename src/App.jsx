@@ -29,7 +29,7 @@ function App() {
           <Helmet>
             <link
               rel="icon"
-              href="/images/VakoLogo.png?v=2"
+              href="/images/VakoLogo.png?v=3"
               type="image/png"
               sizes="32x32"
             />
