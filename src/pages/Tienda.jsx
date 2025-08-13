@@ -24,7 +24,7 @@ const vinosSeleccionados = [
   {
     id: 1,
     name: "Rioja Reserva 2018",
-    bodega: "Bodegas Marqués",
+    bodega: "Bodega Viña Ardanza ",
     categoria: "tintos",
     precio: 45,
     precioOriginal: 55,
@@ -182,21 +182,21 @@ const accesorios = [
     name: "Sacacorchos Premium Semecca®",
     bodega: "Semecca® (vía Amazon)",
     categoria: "accesorios",
-    precio: 19.99,
-    precioOriginal: 24.99,
-    rating: 5.0,
-    reviews: 25,
+    precio: 91.93,
+    precioOriginal: 91.93,
+    rating: 4.2,
+    reviews: 49,
     image: "Elegant Semecca professional corkscrew with a natural wood handle",
     descripcion:
-      "Sacacorchos profesional de doble palanca con mango de madera de roble natural y espiral de acero inoxidable. El regalo perfecto.",
+      "Artesanía prémium: fabricado con acero inoxidable sólido y un mango de madera natural, este sacacorchos está diseñado para una durabilidad duradera",
     alcohol: "N/A",
     region: "Producto de terceros",
     maridaje: "Ideal para cualquier botella de vino",
     stock: 0,
     destacado: true,
-    descuento: 20,
+    descuento: 0,
     externalLink:
-      "https://www.amazon.es/Semecca%C2%AE-Sacacorchos-natural-abridor-perfecto/dp/B0D5BSP34N/",
+      "https://amzn.to/45NnZuq",
   },
 ];
 const ViewEtsyButton = () => (
