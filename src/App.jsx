@@ -1,5 +1,5 @@
 import React from "react";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Toaster } from "@/components/ui/toaster";
@@ -72,7 +72,7 @@ function App() {
               />
             </Routes>
           </main>
-
+          <Analytics />
           <Footer />
           <Toaster />
         </div>
