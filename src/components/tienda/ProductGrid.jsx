@@ -18,22 +18,6 @@ const ProductGrid = ({ products }) => {
     }
   };
 
-  const handleAddToCart = (e, producto) => {
-    e.stopPropagation();
-    toast({
-      title: `${producto.name} añadido al carrito`,
-      description: `Precio: €${producto.precio} - ¡Excelente elección!`,
-    });
-  };
-
-  const handleWishlist = (e, producto) => {
-    e.stopPropagation();
-    toast({
-      title: `${producto.name} añadido a favoritos`,
-      description: "Podrás encontrarlo en tu lista de deseos.",
-    });
-  };
-
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,7 +60,7 @@ const ProductGrid = ({ products }) => {
               </motion.button>
 
               <div className="relative h-64 bg-gradient-to-br from-amber-900/20 to-red-900/20 flex items-center justify-center">
-                <img  alt={producto.name} class="w-full h-full object-cover" src="images/71fIFF6k+FL._AC_SL1500_.jpg" />
+                <img  alt={producto.image} className="w-full h-full object-cover" src={producto.image}/>
                 
                 <div
                   className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
