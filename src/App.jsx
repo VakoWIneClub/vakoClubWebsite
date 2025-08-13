@@ -27,16 +27,16 @@ function App() {
         <ScrollToTop />
         <div className="min-h-screen wine-pattern flex flex-col">
           <Helmet>
+            <title>Vako Club - Descubre el Mundo del Vino</title>
+            <meta
+              name="description"
+              content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales."
+            />
             <link
               rel="icon"
               href="/images/VakoLogo.png?v=3"
               type="image/png"
               sizes="32x32"
-            />
-            <title>Vako Club - Descubre el Mundo del Vino</title>
-            <meta
-              name="description"
-              content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales."
             />
           </Helmet>
 
