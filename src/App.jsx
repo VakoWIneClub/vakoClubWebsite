@@ -36,7 +36,7 @@ function App() {
               href="/images/VakoLogo.png"
               type="image/png"
             />
-            <title>Vako Club Descubre Mundo del Vino</title>
+            <title>Vako Club - Descubre el Mundo del Vino</title>
           </Helmet>
 
           <Navbar />
