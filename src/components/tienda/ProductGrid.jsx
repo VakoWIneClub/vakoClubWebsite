@@ -73,7 +73,7 @@ const ProductGrid = ({ products }) => {
                           ? "Ver en Amazon"
                           : producto.externalLink.toLowerCase().includes("etsy")
                             ? "Ver en Etsy"
-                            : "Ver tienda externa"
+                            : "Ver en Amazon"
                         : "Ver en tienda"}
                     </span>
                   </div>
