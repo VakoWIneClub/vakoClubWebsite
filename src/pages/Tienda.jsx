@@ -20,72 +20,6 @@ import DiscountPopup from "@/components/tienda/DiscountPopup";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { useToast } from "@/components/ui/use-toast";
-const vinosSeleccionados = [
-  {
-    id: 1,
-    name: "Rioja Reserva",
-    bodega: "Bodega Rioja Alta (vía Amazon)",
-    categoria: "tintos",
-    precio: 41.80,
-    precioOriginal: 41.80,
-    rating: 4.3,
-    reviews: 124,
-    image: "Premium Rioja red wine bottle with elegant label",
-    descripcion:
-      "Un Rioja excepcional. Garnacha, Tempranillo (Producto de terceros)",
-    alcohol: "14%",
-    region: "La Rioja, España",
-    maridaje: "Carnes rojas, quesos curados",
-    stock: 155,
-    destacado: true,
-    descuento: 0,
-    externalLink:
-      "https://amzn.to/3JecTWD",
-    image: "images/vina-ardanza-rioja-reserva.jpg"
-  },
-  {
-    id: 2,
-    name: "Pack Ramón Bilbao 3 Botellas",
-    bodega: "Ramón Bilbao (vía Amazon)",
-    categoria: "tintos",
-    precio: 44.99,
-    precioOriginal: 44.99,
-    rating: 4.1,
-    reviews: 45,
-    image: "Ramon Bilbao",
-    descripcion: "Ramón Bilbao Crianza, Ramón Bilbao Edición, Ramón Bilbao Reserva.",
-    alcohol: "14%",
-    region: "Rioja",
-    maridaje: "Carnes",
-    stock: null,
-    destacado: true,
-    descuento: null,
-    externalLink:
-      "https://amzn.to/3V5vQND",
-    image: "images/81W4aW0HRXS._AC_SX679_.jpg"
-  },
-  {
-    id: 3,
-    name: "Martín Códax Lías albariño ",
-    bodega: "Martín Códax (vía Amazon)",
-    categoria: "blancos",
-    precio: 22,
-    precioOriginal: 26,
-    rating: 4.3,
-    reviews: 16,
-    image: "Traditional Cava sparkling wine bottle with golden foil",
-    descripcion: "Elegancia y tradición en cada burbuja, método tradicional.",
-    alcohol: "13%",
-    region: "D.O. Rías Baixas",
-    maridaje: "Mariscos, Pescado",
-    stock: 31,
-    destacado: true,
-    descuento: null,
-    externalLink:
-      "https://amzn.to/46VJgmO",
-    image: "images/images(3).jpg"
-  },
-];
 const arteYDeco = [
   {
     id: 7,
@@ -264,6 +198,72 @@ const accesorios = [
     externalLink:
       "https://amzn.to/45NnZuq",
     image: "images/71fIFF6k+FL._AC_SL1500_.jpg",
+  },
+];
+const vinosSeleccionados = [
+  {
+    id: 1,
+    name: "Rioja Reserva",
+    bodega: "Bodega Rioja Alta (vía Amazon)",
+    categoria: "tintos",
+    precio: 41.80,
+    precioOriginal: 41.80,
+    rating: 4.3,
+    reviews: 124,
+    image: "Premium Rioja red wine bottle with elegant label",
+    descripcion:
+      "Un Rioja excepcional. Garnacha, Tempranillo (Producto de terceros)",
+    alcohol: "14%",
+    region: "La Rioja, España",
+    maridaje: "Carnes rojas, quesos curados",
+    stock: 155,
+    destacado: true,
+    descuento: 0,
+    externalLink:
+      "https://amzn.to/3JecTWD",
+    image: "images/vina-ardanza-rioja-reserva.jpg"
+  },
+  {
+    id: 2,
+    name: "Pack Ramón Bilbao 3 Botellas",
+    bodega: "Ramón Bilbao (vía Amazon)",
+    categoria: "tintos",
+    precio: 44.99,
+    precioOriginal: 44.99,
+    rating: 4.1,
+    reviews: 45,
+    image: "Ramon Bilbao",
+    descripcion: "Ramón Bilbao Crianza, Ramón Bilbao Edición, Ramón Bilbao Reserva.",
+    alcohol: "14%",
+    region: "Rioja",
+    maridaje: "Carnes",
+    stock: null,
+    destacado: true,
+    descuento: null,
+    externalLink:
+      "https://amzn.to/3V5vQND",
+    image: "images/81W4aW0HRXS._AC_SX679_.jpg"
+  },
+  {
+    id: 3,
+    name: "Martín Códax Lías albariño ",
+    bodega: "Martín Códax (vía Amazon)",
+    categoria: "blancos",
+    precio: 22,
+    precioOriginal: 26,
+    rating: 4.3,
+    reviews: 16,
+    image: "Traditional Cava sparkling wine bottle with golden foil",
+    descripcion: "Elegancia y tradición en cada burbuja, método tradicional.",
+    alcohol: "13%",
+    region: "D.O. Rías Baixas",
+    maridaje: "Mariscos, Pescado",
+    stock: 31,
+    destacado: true,
+    descuento: null,
+    externalLink:
+      "https://amzn.to/46VJgmO",
+    image: "images/images(3).jpg"
   },
 ];
 const ViewEtsyButton = () => (
