@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Star, Heart, Eye, ShoppingCart, ExternalLink } from 'lucide-react';
@@ -16,6 +17,22 @@ const ProductGrid = ({ products }) => {
         description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo mensaje! 🚀",
       });
     }
+  };
+
+  const handleWishlist = (e, producto) => {
+    e.stopPropagation();
+    toast({
+      title: "🚧 Funcionalidad en desarrollo",
+      description: "La lista de deseos estará disponible pronto. ¡Gracias por tu paciencia! 🚀",
+    });
+  };
+
+  const handleAddToCart = (e, producto) => {
+    e.stopPropagation();
+    toast({
+      title: "🚧 Funcionalidad en desarrollo",
+      description: "El carrito de compras estará disponible pronto. ¡Gracias por tu paciencia! 🚀",
+    });
   };
 
   return (
