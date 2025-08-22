@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 
 import { supabase } from '@/lib/customSupabaseClient';
@@ -12,11 +13,48 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchUserProfile = useCallback(async (user) => {
+    if (!user) return null;
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user profile:', error.message);
+      return { ...user };
+    }
+    
+    return { ...user, role: profile?.role || 'user' };
+  }, []);
+
   const handleSession = useCallback(async (session) => {
     setSession(session);
-    setUser(session?.user ?? null);
+    if (session?.user) {
+      const userWithProfile = await fetchUserProfile(session.user);
+      setUser(userWithProfile);
+    } else {
+      setUser(null);
+    }
     setLoading(false);
-  }, []);
+  }, [fetchUserProfile]);
+
+  const refreshUser = useCallback(async () => {
+    if (session?.user) {
+      // Re-fetch session to get latest user_metadata from auth
+      const { data: { session: newSession } } = await supabase.auth.refreshSession();
+      if (newSession) {
+        const userWithProfile = await fetchUserProfile(newSession.user);
+        setUser(userWithProfile);
+        setSession(newSession);
+      } else {
+         // If session is invalid, sign out
+        await signOut();
+      }
+    }
+  }, [session, fetchUserProfile]);
+
 
   useEffect(() => {
     const getSession = async () => {
@@ -91,7 +129,8 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
-  }), [user, session, loading, signUp, signIn, signOut]);
+    refreshUser,
+  }), [user, session, loading, signUp, signIn, signOut, refreshUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

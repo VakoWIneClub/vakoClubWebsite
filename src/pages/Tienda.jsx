@@ -450,6 +450,7 @@ const Tienda = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {user && <MemberCouponSection />}
         <Section
           title="Arte y Deco"
           icon={Paintbrush}
@@ -471,7 +472,6 @@ const Tienda = () => {
           showEtsyButton
         />
         <div className="border-t border-amber-500/10"></div>
-        {user && <MemberCouponSection />}
         <Section
           title="Vinos Seleccionados"
           icon={Wine}
