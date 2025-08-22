@@ -29,7 +29,6 @@ const Educacion = () => {
       students: 1250,
       image: 'Professional wine tasting setup with multiple glasses',
       lessons: 12,
-      price: 'Gratis'
     },
     {
       id: 2,
@@ -42,7 +41,6 @@ const Educacion = () => {
       students: 890,
       image: 'Elegant wine and food pairing presentation',
       lessons: 18,
-      price: '€49'
     },
     {
       id: 3,
@@ -55,7 +53,6 @@ const Educacion = () => {
       students: 650,
       image: 'Ancient wine cellar with historical barrels',
       lessons: 9,
-      price: '€29'
     },
     {
       id: 4,
@@ -68,7 +65,6 @@ const Educacion = () => {
       students: 420,
       image: 'Modern winery production facility',
       lessons: 24,
-      price: '€89'
     },
     {
       id: 5,
@@ -81,7 +77,6 @@ const Educacion = () => {
       students: 320,
       image: 'Professional sommelier conducting advanced tasting',
       lessons: 15,
-      price: '€69'
     },
     {
       id: 6,
@@ -94,7 +89,6 @@ const Educacion = () => {
       students: 580,
       image: 'Artisanal cheese and wine pairing board',
       lessons: 12,
-      price: '€39'
     }
   ];
 
