@@ -1,7 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Wine, Star, Users, BookOpen, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent } from 'lucide-react';
+import { Wine, Star, Users, Calendar, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -88,11 +89,11 @@ const Home = () => {
     color: 'from-purple-500 to-indigo-600',
     path: '/tienda'
   }, {
-    icon: BookOpen,
-    title: 'Educación Vitivinícola',
-    description: 'Aprende sobre catas, maridajes y la historia del vino con nuestros expertos.',
+    icon: Calendar,
+    title: 'Eventos',
+    description: 'Entérate de catas, cenas de maridaje y festivales de vino únicos.',
     color: 'from-amber-500 to-yellow-600',
-    path: '/educacion'
+    path: '/eventos'
   }];
   const communityArticles = [{
     name: 'Vinos de Selección',
