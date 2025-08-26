@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, ShoppingBag, Users, BookOpen, Home, Phone, Compass, UserPlus, LogIn, User as UserIcon, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, Users, Calendar, Home, Phone, Compass, UserPlus, LogIn, User as UserIcon, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import {
@@ -35,7 +36,7 @@ const Navbar = () => {
     { name: 'Inicio', path: '/', icon: Home },
     { name: 'Guía', path: '/guia', icon: Compass },
     { name: 'Tienda', path: '/tienda', icon: ShoppingBag },
-    { name: 'Educación', path: '/educacion', icon: BookOpen },
+    { name: 'Eventos', path: '/eventos', icon: Calendar },
     { name: 'Comunidad', path: '/comunidad', icon: Users },
     { name: 'Contacto', path: '/contacto', icon: Phone },
   ];
@@ -50,20 +51,8 @@ const Navbar = () => {
   }
 
   const handleSignOut = async () => {
-    const { error } = await signOut();
-    
-    if (error && error.message.includes('User not found')) {
-      // This is a failsafe for corrupted sessions.
-      // If Supabase can't find the user to log them out,
-      // we manually clear the session from localStorage and reload.
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      if (supabaseUrl) {
-        const projectRef = new URL(supabaseUrl).hostname.split('.')[0];
-        const localStorageKey = `sb-${projectRef}-auth-token`;
-        localStorage.removeItem(localStorageKey);
-        window.location.reload();
-      }
-    }
+    await signOut();
+    navigate('/');
   };
 
   const UserMenu = () => (
@@ -71,7 +60,7 @@ const Navbar = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10 border-2 border-amber-300/50">
-            <AvatarImage src={user.user_metadata?.profilePicture || ''} alt={user.user_metadata?.name} />
+            <AvatarImage src={user.user_metadata?.profilePicture || user.user_metadata?.avatar_url || ''} alt={user.user_metadata?.name} />
             <AvatarFallback className="bg-amber-800 text-amber-200">{getInitials(user.user_metadata?.name)}</AvatarFallback>
           </Avatar>
         </Button>

@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Home from '@/pages/Home';
 import Guia from '@/pages/Guia';
-import Educacion from '@/pages/Educacion';
+import Eventos from '@/pages/Eventos';
 import Comunidad from '@/pages/Comunidad';
 import Tienda from '@/pages/Tienda';
 import Contacto from '@/pages/Contacto';
@@ -44,7 +44,7 @@ function App() {
               <Route path="/guia/crear" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
               <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
               <Route path="/guia/:slug" element={<ArticlePage />} />
-              <Route path="/educacion" element={<Educacion />} />
+              <Route path="/eventos" element={<Eventos />} />
               <Route path="/comunidad" element={<Comunidad />} />
               <Route path="/tienda" element={<Tienda />} />
               <Route path="/contacto" element={<Contacto />} />
