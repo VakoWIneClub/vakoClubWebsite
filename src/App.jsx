@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Toaster } from '@/components/ui/toaster';
@@ -60,6 +62,8 @@ function App() {
           
           <Footer />
           <Toaster />
+          <SpeedInsights />
+          <Analytics />
         </div>
       </AuthProvider>
     </Router>
