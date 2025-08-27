@@ -9,12 +9,6 @@ const Contacto = () => {
   return (
     <>
       <Helmet>
-        <link
-          rel="icon"
-          href="/images/VakoLogo.png"
-          type="image/png"
-          sizes="32x32"
-        />
         <title>Contacto - Vako Club | Ponte en Contacto con Nosotros</title>
         <meta name="description" content="Contacta con nuestro equipo de expertos en vinos. Estamos aquí para ayudarte con cualquier consulta sobre vinos, cursos o eventos." />
       </Helmet>

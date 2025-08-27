@@ -47,12 +47,6 @@ const Comunidad = () => {
   return (
     <>
       <Helmet>
-        <link
-          rel="icon"
-          href="/images/VakoLogo.png"
-          type="image/png"
-          sizes="32x32"
-        />
         <title>Comunidad - Vako Club | Conecta con Amantes del Vino</title>
         <meta name="description" content="Únete a nuestra comunidad de amantes del vino. Participa en foros de discusión y conecta con expertos sommeliers y enólogos." />
       </Helmet>

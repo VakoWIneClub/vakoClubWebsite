@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Toaster } from '@/components/ui/toaster';
@@ -31,16 +33,6 @@ function App() {
         <ScrollToTop />
         <div className="min-h-screen wine-pattern flex flex-col">
           <Helmet>
-            <link
-              rel="icon"
-              href="/images/VakoLogo.png"
-              type="image/png"
-              sizes="32x32"
-            />
-            <meta
-              name="description"
-              content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales."
-            />
             <title>Vako Club - Descubre el Mundo del Vino</title>
             <meta name="description" content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales." />
           </Helmet>
@@ -70,6 +62,8 @@ function App() {
           
           <Footer />
           <Toaster />
+          <SpeedInsights />
+          <Analytics />
         </div>
       </AuthProvider>
     </Router>

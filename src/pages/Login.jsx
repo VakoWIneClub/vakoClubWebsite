@@ -74,12 +74,6 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <link
-          rel="icon"
-          href="/images/VakoLogo.png"
-          type="image/png"
-          sizes="32x32"
-        />
         <title>Iniciar Sesión - Vako Club</title>
         <meta name="description" content="Inicia sesión en tu cuenta de Vako Club para acceder a tus beneficios." />
       </Helmet>

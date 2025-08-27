@@ -90,8 +90,8 @@ const Home = () => {
     path: '/tienda'
   }, {
     icon: Calendar,
-    title: 'Eventos Exclusivos',
-    description: 'Participa en catas, cenas de maridaje y festivales de vino únicos.',
+    title: 'Eventos',
+    description: 'Entérate de catas, cenas de maridaje y festivales de vino únicos.',
     color: 'from-amber-500 to-yellow-600',
     path: '/eventos'
   }];

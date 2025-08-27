@@ -21,12 +21,6 @@ const PoliticaPrivacidad = () => {
   return (
     <>
       <Helmet>
-        <link
-          rel="icon"
-          href="/images/VakoLogo.png"
-          type="image/png"
-          sizes="32x32"
-        />
         <title>Política de Privacidad - Vako Club</title>
         <meta name="description" content="Conoce cómo Vako Club recopila, utiliza y protege tu información personal." />
       </Helmet>
