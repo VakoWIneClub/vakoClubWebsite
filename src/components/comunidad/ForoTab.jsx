@@ -32,7 +32,7 @@ const ForoTab = () => {
   const fetchThreads = useCallback(async () => {
     setLoading(true);
     const { data: threadsData, error: threadsError } = await supabase
-      .from('threads_with_author')
+      .from('threads_with_author_profile')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -44,7 +44,7 @@ const ForoTab = () => {
 
     const threadIds = threadsData.map(t => t.id);
     const { data: repliesData, error: repliesError } = await supabase
-      .from('replies_with_author')
+      .from('replies_with_author_profile')
       .select('*')
       .in('thread_id', threadIds)
       .order('created_at', { ascending: true });
