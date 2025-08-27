@@ -30,7 +30,6 @@ const vinosSeleccionados = [
     precioOriginal: 41.80,
     rating: 4.3,
     reviews: 124,
-    image: "Premium Rioja red wine bottle with elegant label",
     descripcion:
       "Un Rioja excepcional. Garnacha, Tempranillo (Producto de terceros)",
     alcohol: "14%",
@@ -52,7 +51,6 @@ const vinosSeleccionados = [
     precioOriginal: 44.99,
     rating: 4.1,
     reviews: 45,
-    image: "Ramon Bilbao",
     descripcion: "Ramón Bilbao Crianza, Ramón Bilbao Edición, Ramón Bilbao Reserva.",
     alcohol: "14%",
     region: "Rioja",
@@ -73,7 +71,6 @@ const vinosSeleccionados = [
     precioOriginal: 26,
     rating: 4.3,
     reviews: 16,
-    image: "Traditional Cava sparkling wine bottle with golden foil",
     descripcion: "Elegancia y tradición en cada burbuja, método tradicional.",
     alcohol: "13%",
     region: "D.O. Rías Baixas",
@@ -96,7 +93,6 @@ const arteYDeco = [
     precioOriginal: 90.09,
     rating: 4.9,
     reviews: 0,
-    image: "Golden vineyards art print",
     descripcion:
       "Syrah Vineyard Wall Art Frame, Vintage Grape Print, Home Decor",
     stock: 12,
@@ -115,7 +111,6 @@ const arteYDeco = [
     precioOriginal: 77.98,
     rating: 4.7,
     reviews: 0,
-    image: "Vako club wall poster",
     descripcion:
       "Poster Print, Wine Culture Art, Vibrant Home Decor Sign, Relaxing Wall Picture,",
     stock: 5,
@@ -134,7 +129,6 @@ const arteYDeco = [
     precioOriginal: 90.09,
     rating: 4.7,
     reviews: 0,
-    image: "poster vako wine club",
     descripcion:
       "Vintage Tempranillo Wine Poster with Wooden Frame",
     stock: 17,
@@ -155,7 +149,6 @@ const merchandising = [
     precioOriginal: 60.04,
     rating: 4.8,
     reviews: 88,
-    image: 'Stylish "Wine Lover" t-shirt',
     descripcion:
       "Camiseta de algodón orgánico con un diseño minimalista y elegante.",
     stock: 40,
@@ -174,7 +167,6 @@ const merchandising = [
     precioOriginal: 86.94,
     rating: 4.7,
     reviews: 0,
-    image: "Vako club cap",
     descripcion:
       "Gorra exclusiva Vako Wine Club",
     stock: 50,
@@ -193,7 +185,6 @@ const merchandising = [
     precioOriginal: 64.75,
     rating: 4.7,
     reviews: 110,
-    image: "Sudadera vako wine club",
     descripcion:
       "Sudadera exclusiva Vako Club printed",
     stock: 50,
@@ -214,7 +205,6 @@ const accesorios = [
     precioOriginal: 43.89,
     rating: 4.9,
     reviews: 0,
-    image: "Wine Club iPhone Case",
     descripcion:
       "Vako Wine Club iPhone Case",
     stock: 25,
@@ -233,7 +223,6 @@ const accesorios = [
     precioOriginal: 42.99,
     rating: 4.4,
     reviews: 542,
-    image: "Elegant crystal wine decanter",
     descripcion:
       "Decantador de cristal soplado a mano para oxigenar tus mejores vinos.",
     stock: 5,
@@ -252,7 +241,6 @@ const accesorios = [
     precioOriginal: 91.93,
     rating: 4.2,
     reviews: 49,
-    image: "Elegant Semecca professional corkscrew with a natural wood handle",
     descripcion:
       "Artesanía prémium: fabricado con acero inoxidable sólido y un mango de madera natural, este sacacorchos está diseñado para una durabilidad duradera",
     alcohol: "N/A",
@@ -310,7 +298,7 @@ const Section = ({ title, icon: Icon, products, showEtsyButton = false }) => (
 const MemberCouponSection = () => {
   const { toast } = useToast();
   const copyCoupon = () => {
-    navigator.clipboard.writeText("BONARDA20%");
+    navigator.clipboard.writeText("BONARDA20");
     toast({
       title: "¡Copiado!",
       description: "Cupón copiado al portapapeles.",

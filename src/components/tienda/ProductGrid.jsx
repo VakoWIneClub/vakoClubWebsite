@@ -18,6 +18,22 @@ const ProductGrid = ({ products }) => {
     }
   };
 
+  const handleWishlist = (e, producto) => {
+    e.stopPropagation();
+    toast({
+      title: "🚧 Funcionalidad en desarrollo",
+      description: "La lista de deseos estará disponible pronto. ¡Gracias por tu paciencia! 🚀",
+    });
+  };
+
+  const handleAddToCart = (e, producto) => {
+    e.stopPropagation();
+    toast({
+      title: "🚧 Funcionalidad en desarrollo",
+      description: "El carrito de compras estará disponible pronto. ¡Gracias por tu paciencia! 🚀",
+    });
+  };
+
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
