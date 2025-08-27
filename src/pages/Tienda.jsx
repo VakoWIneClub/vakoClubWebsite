@@ -439,17 +439,17 @@ const Tienda = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {user && <MemberCouponSection />}
-        <Section
-          title="Vinos Seleccionados"
-          icon={Wine}
-          products={vinosSeleccionados}
-        />
         <div className="border-t border-amber-500/10"></div>
         <Section
           title="Arte y Deco"
           icon={Paintbrush}
           products={arteYDeco}
           showEtsyButton
+        />
+        <Section
+          title="Vinos Seleccionados"
+          icon={Wine}
+          products={vinosSeleccionados}
         />
         <div className="border-t border-amber-500/10"></div>
         <Section
