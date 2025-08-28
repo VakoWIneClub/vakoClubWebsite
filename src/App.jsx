@@ -25,6 +25,9 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/contexts/SupabaseAuthContext';
 import ArticlePage from '@/pages/guia/ArticlePage';
 import ArticleEditor from '@/pages/guia/ArticleEditor';
+import EventoPage from '@/pages/eventos/EventoPage';
+import EventoEditor from '@/pages/eventos/EventoEditor';
+import SobreNosotros from '@/pages/SobreNosotros'; // Importar la nueva página
 
 function App() {
   return (
@@ -47,6 +50,9 @@ function App() {
               <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
               <Route path="/guia/:slug" element={<ArticlePage />} />
               <Route path="/eventos" element={<Eventos />} />
+              <Route path="/eventos/crear" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
+              <Route path="/eventos/editar/:slug" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
+              <Route path="/eventos/:slug" element={<EventoPage />} />
               <Route path="/comunidad" element={<Comunidad />} />
               <Route path="/tienda" element={<Tienda />} />
               <Route path="/contacto" element={<Contacto />} />
@@ -57,6 +63,7 @@ function App() {
               <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
               <Route path="/email-verification" element={<EmailVerification />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/sobre-nosotros" element={<SobreNosotros />} /> {/* Nueva ruta */}
             </Routes>
           </main>
           
