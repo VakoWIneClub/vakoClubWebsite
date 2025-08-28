@@ -11,7 +11,7 @@ const WelcomePopup = ({ isOpen, onOpenChange }) => {
   const { toast } = useToast();
 
   const copyCoupon = () => {
-    navigator.clipboard.writeText('BONARDA20%');
+    navigator.clipboard.writeText('BONARDA20');
     toast({
       title: "¡Copiado!",
       description: "Cupón copiado al portapapeles.",
@@ -36,7 +36,7 @@ const WelcomePopup = ({ isOpen, onOpenChange }) => {
           <AlertDialogDescription className="text-center text-base space-y-3">
             <p>¡Gracias por unirte! Tu cuenta ha sido verificada. Como regalo de bienvenida, aquí tienes tu <strong>cupón del 20% de descuento</strong>.</p>
             <div className="bg-stone-800/50 border border-amber-500/30 rounded-lg p-3 flex items-center justify-center gap-4">
-              <span className="font-mono text-lg text-amber-300 tracking-widest">BONARDA20%</span>
+              <span className="font-mono text-lg text-amber-300 tracking-widest">BONARDA20</span>
               <Button variant="ghost" size="icon" onClick={copyCoupon}>
                 <Copy className="h-4 w-4 text-amber-300" />
               </Button>
