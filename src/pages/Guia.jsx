@@ -1,51 +1,79 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Compass, Loader2, PlusCircle, Tag } from 'lucide-react';
+import { Compass, Loader2, PlusCircle, Tag, ChevronsDown } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import ArticleList from '@/components/guia/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { cn } from '@/lib/utils';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
+const ARTICLES_PER_PAGE = 6;
 
 const Guia = () => {
   const { user } = useAuth();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const [activeTag, setActiveTag] = useState(queryParams.get('tag') || 'Todos');
 
-  useEffect(() => {
-    const fetchArticles = async () => {
+  const fetchArticles = useCallback(async (currentPage, currentTag) => {
+    const isInitialLoad = currentPage === 0;
+    if (isInitialLoad) {
       setLoading(true);
-      let query = supabase
-        .from('articles')
-        .select('*')
-        .order('created_at', { ascending: false });
+    } else {
+      setLoadingMore(true);
+    }
 
-      if (activeTag && activeTag !== 'Todos') {
-        query = query.or(`tag1.eq.${activeTag},tag2.eq.${activeTag}`);
-      }
+    let query = supabase
+      .from('articles')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false });
 
-      const { data, error } = await query;
+    if (currentTag && currentTag !== 'Todos') {
+      query = query.or(`tag1.eq.${currentTag},tag2.eq.${currentTag}`);
+    }
 
-      if (error) {
-        console.error('Error fetching articles:', error);
-      } else {
-        setArticles(data);
-      }
+    const from = currentPage * ARTICLES_PER_PAGE;
+    const to = from + ARTICLES_PER_PAGE - 1;
+    query = query.range(from, to);
+
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('Error fetching articles:', error);
+    } else {
+      setArticles(prev => isInitialLoad ? data : [...prev, ...data]);
+      setHasMore(data.length > 0 && (isInitialLoad ? data.length : articles.length + data.length) < count);
+    }
+
+    if (isInitialLoad) {
       setLoading(false);
-    };
+    } else {
+      setLoadingMore(false);
+    }
+  }, [articles.length]);
 
-    fetchArticles();
+  useEffect(() => {
+    setArticles([]);
+    setPage(0);
+    setHasMore(true);
+    fetchArticles(0, activeTag);
   }, [activeTag]);
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchArticles(nextPage, activeTag);
+  };
 
   const handleTagClick = (tag) => {
     setActiveTag(tag);
@@ -123,12 +151,26 @@ const Guia = () => {
                 <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
              </div>
           ) : (
-            <ArticleList 
-              articles={articles} 
-              isAdmin={isAdmin}
-              onArticleDeleted={handleArticleDeleted}
-              onTagClick={handleTagClick}
-            />
+            <>
+              <ArticleList 
+                articles={articles} 
+                isAdmin={isAdmin}
+                onArticleDeleted={handleArticleDeleted}
+                onTagClick={handleTagClick}
+              />
+              {hasMore && (
+                <div className="mt-12 text-center">
+                  <Button onClick={handleLoadMore} disabled={loadingMore} size="lg">
+                    {loadingMore ? (
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    ) : (
+                      <ChevronsDown className="mr-2 h-5 w-5" />
+                    )}
+                    Mostrar Más
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
