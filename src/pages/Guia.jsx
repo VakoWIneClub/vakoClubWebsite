@@ -1,25 +1,40 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Compass, Loader2, PlusCircle } from 'lucide-react';
+import { Compass, Loader2, PlusCircle, Tag } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import ArticleList from '@/components/guia/ArticleList';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+
+const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
 
 const Guia = () => {
   const { user } = useAuth();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const [activeTag, setActiveTag] = useState(queryParams.get('tag') || 'Todos');
 
   useEffect(() => {
     const fetchArticles = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from('articles')
         .select('*')
         .order('created_at', { ascending: false });
+
+      if (activeTag && activeTag !== 'Todos') {
+        query = query.or(`tag1.eq.${activeTag},tag2.eq.${activeTag}`);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching articles:', error);
@@ -30,7 +45,16 @@ const Guia = () => {
     };
 
     fetchArticles();
-  }, []);
+  }, [activeTag]);
+
+  const handleTagClick = (tag) => {
+    setActiveTag(tag);
+    if (tag === 'Todos') {
+      navigate('/guia');
+    } else {
+      navigate(`/guia?tag=${tag}`);
+    }
+  };
 
   const handleArticleDeleted = (deletedArticleId) => {
     setArticles(articles.filter(article => article.id !== deletedArticleId));
@@ -63,7 +87,7 @@ const Guia = () => {
           </motion.div>
 
           {isAdmin && (
-             <div className="mb-12 text-center">
+             <div className="mb-8 text-center">
                 <Button asChild size="lg">
                   <Link to="/guia/crear">
                     <PlusCircle className="mr-2 h-5 w-5" />
@@ -72,6 +96,27 @@ const Guia = () => {
                 </Button>
             </div>
           )}
+
+          <div className="mb-12 flex flex-wrap justify-center items-center gap-3">
+            <Button
+              variant={activeTag === 'Todos' ? 'default' : 'outline'}
+              onClick={() => handleTagClick('Todos')}
+              className="transition-all"
+            >
+              Todos
+            </Button>
+            {TAGS.map(tag => (
+              <Button
+                key={tag}
+                variant={activeTag === tag ? 'default' : 'outline'}
+                onClick={() => handleTagClick(tag)}
+                className="transition-all"
+              >
+                <Tag className="mr-2 h-4 w-4" />
+                {tag}
+              </Button>
+            ))}
+          </div>
 
           {loading ? (
              <div className="flex justify-center items-center h-64">
@@ -82,6 +127,7 @@ const Guia = () => {
               articles={articles} 
               isAdmin={isAdmin}
               onArticleDeleted={handleArticleDeleted}
+              onTagClick={handleTagClick}
             />
           )}
         </div>

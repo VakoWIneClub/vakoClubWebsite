@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Pencil } from 'lucide-react';
+import { BookOpen, Pencil, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
@@ -8,12 +9,18 @@ import DeleteArticleDialog from '@/components/guia/DeleteArticleDialog';
 import { Button } from '@/components/ui/button';
 import DOMPurify from 'dompurify';
 
-const ArticleCard = ({ article, index, isAdmin, onArticleDeleted }) => {
+const ArticleCard = ({ article, index, isAdmin, onArticleDeleted, onTagClick }) => {
   const formattedDate = format(new Date(article.created_at), "d 'de' MMMM, yyyy", { locale: es });
 
   const handleAdminActionClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+  };
+
+  const handleTagClick = (e, tag) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onTagClick(tag);
   };
 
   const createSnippet = (htmlContent) => {
@@ -23,6 +30,8 @@ const ArticleCard = ({ article, index, isAdmin, onArticleDeleted }) => {
     return tempDiv.textContent || tempDiv.innerText || "";
   };
   
+  const tags = [article.tag1, article.tag2].filter(Boolean);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -40,10 +49,23 @@ const ArticleCard = ({ article, index, isAdmin, onArticleDeleted }) => {
             </div>
           )}
           <div className="p-8 flex-grow flex flex-col">
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {tags.map(tag => (
+                  <button
+                    key={tag}
+                    onClick={(e) => handleTagClick(e, tag)}
+                    className="text-xs bg-amber-400/20 text-amber-200 px-2 py-1 rounded-full hover:bg-amber-400/40 transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
             <h3 className="font-playfair text-2xl font-semibold text-amber-200 mb-4 flex-grow">
               {article.title}
             </h3>
-            <p className="text-amber-100/80 leading-relaxed mb-6 line-clamp-4">
+            <p className="text-amber-100/80 leading-relaxed mb-6 line-clamp-3">
               {createSnippet(article.content)}
             </p>
             <div className="mt-auto border-t border-amber-200/10 pt-4 text-xs text-amber-100/60">
@@ -71,13 +93,13 @@ const ArticleCard = ({ article, index, isAdmin, onArticleDeleted }) => {
 };
 
 
-const ArticleList = ({ articles, isAdmin, onArticleDeleted }) => {
+const ArticleList = ({ articles, isAdmin, onArticleDeleted, onTagClick }) => {
   if (articles.length === 0) {
     return (
       <div className="text-center py-16">
         <BookOpen className="h-16 w-16 mx-auto text-amber-400/50 mb-4" />
-        <h3 className="font-playfair text-2xl text-amber-200">Aún no hay artículos</h3>
-        <p className="text-amber-100/70 mt-2">Pronto habrá contenido nuevo en la guía. ¡Vuelve a visitarnos!</p>
+        <h3 className="font-playfair text-2xl text-amber-200">No hay artículos para este filtro</h3>
+        <p className="text-amber-100/70 mt-2">Prueba a seleccionar otra categoría o a ver todos los artículos.</p>
       </div>
     );
   }
@@ -91,6 +113,7 @@ const ArticleList = ({ articles, isAdmin, onArticleDeleted }) => {
           index={index} 
           isAdmin={isAdmin}
           onArticleDeleted={onArticleDeleted}
+          onTagClick={onTagClick}
         />
       ))}
     </div>

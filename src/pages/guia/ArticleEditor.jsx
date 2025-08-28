@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -8,17 +9,20 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Upload, Save, ArrowLeft } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Upload, Save, ArrowLeft, Tag } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
+
+const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
 
 const ArticleEditor = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, control, watch, formState: { errors } } = useForm();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +32,9 @@ const ArticleEditor = () => {
   const quillRef = useRef(null);
 
   const isEditing = !!slug;
+  const isAdmin = user && user.role === 'admin';
+
+  const tag1Value = watch('tag1');
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -49,6 +56,8 @@ const ArticleEditor = () => {
         setArticle(data);
         setValue('title', data.title);
         setValue('content', data.content);
+        setValue('tag1', data.tag1);
+        setValue('tag2', data.tag2);
         setImagePreview(data.image_url);
       }
       setIsLoading(false);
@@ -143,6 +152,8 @@ const ArticleEditor = () => {
         image_url: imageUrl,
         author_id: user.id,
         updated_at: new Date().toISOString(),
+        tag1: formData.tag1 || null,
+        tag2: formData.tag2 || null,
       };
 
       let result;
@@ -205,6 +216,47 @@ const ArticleEditor = () => {
               />
               {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>}
             </div>
+
+            {isAdmin && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 1</Label>
+                  <Controller
+                    name="tag1"
+                    control={control}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una etiqueta" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={null}>Ninguna</SelectItem>
+                          {TAGS.map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 2</Label>
+                   <Controller
+                    name="tag2"
+                    control={control}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value} disabled={!tag1Value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={!tag1Value ? "Elige Etiqueta 1 primero" : "Selecciona una etiqueta"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={null}>Ninguna</SelectItem>
+                          {TAGS.filter(tag => tag !== tag1Value).map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="image" className="text-amber-200 text-lg">Imagen Principal</Label>
