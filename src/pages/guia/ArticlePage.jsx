@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Calendar, User, ArrowLeft, Pencil } from 'lucide-react';
+import { Loader2, Calendar, User, ArrowLeft, Pencil, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import DOMPurify from 'dompurify';
 
 const ArticlePage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [article, setArticle] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -85,6 +87,7 @@ const ArticlePage = () => {
 
   const formattedDate = format(new Date(article.created_at), "d 'de' MMMM, yyyy", { locale: es });
   const sanitizedContent = DOMPurify.sanitize(article.content);
+  const tags = [article.tag1, article.tag2].filter(Boolean);
 
   return (
     <>
@@ -116,6 +119,22 @@ const ArticlePage = () => {
             </div>
 
             <article className="wine-card rounded-2xl p-8 md:p-12">
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {tags.map(tag => (
+                    <Button
+                      key={tag}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate(`/guia?tag=${tag}`)}
+                      className="text-xs"
+                    >
+                      <Tag className="mr-2 h-3 w-3" />
+                      {tag}
+                    </Button>
+                  ))}
+                </div>
+              )}
               <h1 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient mb-6">
                 {article.title}
               </h1>
