@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Youtube } from 'lucide-react';
@@ -8,7 +9,7 @@ const Footer = () => {
     {
       title: 'Compañía',
       links: [
-        { name: 'Sobre Nosotros', path: '#' },
+        { name: 'Sobre Nosotros', path: '/sobre-nosotros' },
         { name: 'Eventos', path: '/eventos' },
         { name: 'Guía de Vinos', path: '/guia' },
       ],
