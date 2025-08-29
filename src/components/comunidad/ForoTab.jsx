@@ -21,7 +21,7 @@ const getInitials = (name) => {
 
 const ForoTab = () => {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newThread, setNewThread] = useState({ title: '', category: '', content: '' });
@@ -95,8 +95,9 @@ const ForoTab = () => {
       } else {
         setNewThread({ title: '', category: '', content: '' });
         setShowForm(false);
-        toast({ title: "¡Tema creado!", description: "Tu conversación ha comenzado." });
+        toast({ title: "¡Tema creado!", description: "Tu conversación ha comenzado. ¡Has ganado 10 puntos!" });
         fetchThreads();
+        refreshUser();
       }
     } else {
       toast({ title: "Campos incompletos", description: "Por favor, rellena todos los campos.", variant: "destructive" });
@@ -126,7 +127,9 @@ const ForoTab = () => {
         toast({ title: "Error al responder", description: error.message, variant: "destructive" });
       } else {
         setReplyContent(prev => ({ ...prev, [threadId]: '' }));
+        toast({ title: "¡Respuesta enviada!", description: "¡Has ganado 10 puntos!" });
         fetchThreads();
+        refreshUser();
       }
     }
   };
