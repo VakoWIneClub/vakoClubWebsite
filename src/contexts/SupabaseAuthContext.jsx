@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     if (!user) return null;
     const { data: profile, error } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, points, level')
       .eq('id', user.id)
       .single();
 
@@ -26,7 +26,12 @@ export const AuthProvider = ({ children }) => {
       return { ...user };
     }
     
-    return { ...user, role: profile?.role || 'user' };
+    return { 
+      ...user, 
+      role: profile?.role || 'user',
+      points: profile?.points || 0,
+      level: profile?.level || 'Novato',
+    };
   }, []);
   
   const signOut = useCallback(async () => {

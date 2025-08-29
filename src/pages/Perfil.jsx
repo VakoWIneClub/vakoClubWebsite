@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Briefcase, Camera, Save, Lock, FileText, Tag, Loader2 } from 'lucide-react';
+import { User, Mail, Briefcase, Camera, Save, Lock, FileText, Tag, Loader2, Award, Star, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,27 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/lib/customSupabaseClient';
+
+const levelInfo = {
+  'Novato': {
+    color: 'text-green-400',
+    nextLevel: 'Aficionado',
+    nextLevelPoints: 150,
+    progressColor: 'bg-green-500'
+  },
+  'Aficionado': {
+    color: 'text-blue-400',
+    nextLevel: 'Experto',
+    nextLevelPoints: 300,
+    progressColor: 'bg-blue-500'
+  },
+  'Experto': {
+    color: 'text-violet-400',
+    nextLevel: null,
+    nextLevelPoints: Infinity,
+    progressColor: 'bg-violet-500'
+  }
+};
 
 const Perfil = () => {
   const { user, signOut, refreshUser } = useAuth();
@@ -24,6 +45,8 @@ const Perfil = () => {
     avatar_url: null,
     bio: '',
     interest_topic: '',
+    points: 0,
+    level: 'Novato'
   });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -37,6 +60,8 @@ const Perfil = () => {
         avatar_url: user.user_metadata?.avatar_url || null,
         bio: user.user_metadata?.bio || '',
         interest_topic: user.user_metadata?.interest_topic || '',
+        points: user.points || 0,
+        level: user.level || 'Novato'
       });
     }
   }, [user]);
@@ -71,7 +96,8 @@ const Perfil = () => {
         return;
       }
       
-      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const publicUrl = data.publicUrl;
 
       setFormData({ ...formData, avatar_url: publicUrl });
 
@@ -146,6 +172,10 @@ const Perfil = () => {
     return null;
   }
 
+  const currentLevelInfo = levelInfo[formData.level] || levelInfo['Novato'];
+  const basePoints = formData.level === 'Novato' ? 0 : (formData.level === 'Aficionado' ? levelInfo['Novato'].nextLevelPoints : levelInfo['Aficionado'].nextLevelPoints);
+  const progressPercentage = currentLevelInfo.nextLevelPoints === Infinity ? 100 : Math.min(((formData.points - basePoints) / (currentLevelInfo.nextLevelPoints - basePoints)) * 100, 100);
+
   return (
     <>
       <Helmet>
@@ -181,6 +211,28 @@ const Perfil = () => {
                   <h2 className="text-2xl font-bold text-amber-100">{formData.name}</h2>
                   <p className="text-amber-100/70">{formData.email}</p>
                 </div>
+              </div>
+
+              {/* Score System UI */}
+              <div className="bg-stone-800/50 rounded-lg p-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold text-amber-200 flex items-center">
+                    <Award className="mr-2 h-6 w-6" />
+                    Mi Progreso
+                  </h3>
+                  <div className="text-right">
+                    <p className={`text-lg font-bold ${currentLevelInfo.color}`}>{formData.level}</p>
+                    <p className="text-sm text-amber-100/70">{formData.points} puntos</p>
+                  </div>
+                </div>
+                <div className="w-full bg-stone-700 rounded-full h-2.5">
+                  <div className={`${currentLevelInfo.progressColor} h-2.5 rounded-full`} style={{ width: `${progressPercentage}%` }}></div>
+                </div>
+                {currentLevelInfo.nextLevel && (
+                  <p className="text-xs text-center text-amber-100/60">
+                    {currentLevelInfo.nextLevelPoints - formData.points} puntos para ser {currentLevelInfo.nextLevel}
+                  </p>
+                )}
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
