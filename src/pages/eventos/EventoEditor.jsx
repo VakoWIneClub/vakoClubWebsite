@@ -9,8 +9,26 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Loader2, Upload, Save, ArrowLeft, Calendar, MapPin, Globe, Map } from 'lucide-react';
+
+const quillModules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+    ['link', 'image'],
+    ['clean']
+  ],
+};
+
+const quillFormats = [
+  'header',
+  'bold', 'italic', 'underline', 'strike', 'blockquote',
+  'list', 'bullet', 'indent',
+  'link', 'image'
+];
 
 const EventoEditor = () => {
   const { slug } = useParams();
@@ -30,7 +48,6 @@ const EventoEditor = () => {
   const formatForInput = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    // Adjust for timezone offset before slicing
     const timezoneOffset = date.getTimezoneOffset() * 60000;
     const localDate = new Date(date.getTime() - timezoneOffset);
     return localDate.toISOString().slice(0, 16);
@@ -189,16 +206,23 @@ const EventoEditor = () => {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description" className="text-amber-200 text-lg">Descripción</Label>
-                <Controller
-                    name="description"
-                    control={control}
-                    rules={{ required: 'La descripción es obligatoria' }}
-                    render={({ field }) => (
-                        <Textarea id="description" {...field} className="wine-input" placeholder="Describe los detalles del evento..." rows={5} />
-                    )}
-                />
-                {errors.description && <p className="text-red-400 text-sm mt-1">{errors.description.message}</p>}
+              <Label htmlFor="description" className="text-amber-200 text-lg">Descripción</Label>
+              <Controller
+                name="description"
+                control={control}
+                rules={{ required: 'La descripción es obligatoria.' }}
+                render={({ field }) => (
+                  <ReactQuill 
+                    theme="snow" 
+                    value={field.value} 
+                    onChange={field.onChange}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    placeholder="Describe los detalles del evento, el programa, los vinos a catar, etc."
+                  />
+                )}
+              />
+              {errors.description && <p className="text-red-400 text-sm mt-1">{errors.description.message}</p>}
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
