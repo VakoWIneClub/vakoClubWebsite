@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -62,7 +63,7 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
           </div>
         </div>
         <div className="p-6 space-y-4 flex-grow flex flex-col">
-          <p className="text-amber-100/70 text-sm flex-grow line-clamp-3">{event.description}</p>
+          <p className="text-amber-100/70 text-sm flex-grow line-clamp-3" dangerouslySetInnerHTML={{ __html: event.description.replace(/<[^>]+>/g, '') }}></p>
           <div className="space-y-3 text-amber-100/80 text-sm">
             <div className="flex items-center space-x-2">
               <Calendar className="h-4 w-4 text-amber-400" />
@@ -125,43 +126,36 @@ const Eventos = () => {
   const isAdmin = user && user.role === 'admin';
 
   const fetchFilters = useCallback(async () => {
-    let query = supabase.from('events').select('country').not('country', 'is', null);
+    let query = supabase.from('events').select('country, city').not('country', 'is', null);
 
     if (!showPastEvents) {
       const today = new Date().toISOString();
       query = query.gte('event_date', today);
     }
     
-    const { data: countriesData, error: countriesError } = await query;
+    const { data, error } = await query;
 
-    if (countriesError) console.error("Error fetching countries", countriesError);
-    else setCountries([...new Set(countriesData.map(c => c.country))].sort());
-  }, [showPastEvents]);
+    if (error) {
+      console.error("Error fetching filters", error);
+    } else {
+      const uniqueCountries = [...new Set(data.map(c => c.country))].sort();
+      setCountries(uniqueCountries);
 
-  const fetchCities = useCallback(async (country) => {
-    if (country === 'Todos') {
-      setCities([]);
-      return;
+      if (selectedCountry !== 'Todos') {
+        const uniqueCities = [...new Set(data.filter(c => c.country === selectedCountry).map(c => c.city))].sort();
+        setCities(uniqueCities);
+      } else {
+        setCities([]);
+      }
     }
-    let query = supabase.from('events').select('city').eq('country', country).not('city', 'is', null);
-    
-    if (!showPastEvents) {
-      const today = new Date().toISOString();
-      query = query.gte('event_date', today);
-    }
-
-    const { data: citiesData, error: citiesError } = await query;
-    
-    if (citiesError) console.error("Error fetching cities", citiesError);
-    else setCities([...new Set(citiesData.map(c => c.city))].sort());
-  }, [showPastEvents]);
+  }, [showPastEvents, selectedCountry]);
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
     let query = supabase
       .from('events')
       .select('*')
-      .order('event_date', { ascending: true });
+      .order('event_date', { ascending: showPastEvents });
 
     if (selectedCountry !== 'Todos') {
       query = query.eq('country', selectedCountry);
@@ -170,7 +164,7 @@ const Eventos = () => {
       query = query.eq('city', selectedCity);
     }
     
-    if (!showPastEvents && !isAdmin) {
+    if (!showPastEvents) {
       const today = new Date().toISOString().split('T')[0];
       query = query.gte('event_date', today);
     }
@@ -179,39 +173,26 @@ const Eventos = () => {
     if (error) {
       console.error('Error fetching events:', error);
     } else {
-        if (isAdmin) {
-            setEvents(data);
-        } else {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            setEvents(data.filter(event => new Date(event.event_date) >= today));
-        }
+      setEvents(data);
     }
     setLoading(false);
-  }, [selectedCountry, selectedCity, showPastEvents, isAdmin]);
+  }, [selectedCountry, selectedCity, showPastEvents]);
 
   useEffect(() => {
     fetchFilters();
-  }, [fetchFilters, showPastEvents]);
-  
-  useEffect(() => {
     fetchEvents();
-  }, [fetchEvents, showPastEvents]);
+  }, [fetchFilters, fetchEvents]);
 
   useEffect(() => {
     setSelectedCity('Todos');
-    if (selectedCountry !== 'Todos') {
-      fetchCities(selectedCountry);
-    } else {
-      setCities([]);
-    }
-  }, [selectedCountry, fetchCities, showPastEvents]);
+  }, [selectedCountry]);
 
   const handleEventDeleted = (deletedEventId) => {
-    setEvents(events.filter(event => event.id !== deletedEventId));
+    setEvents(prevEvents => prevEvents.filter(event => event.id !== deletedEventId));
+    fetchFilters();
   };
   
-  const displayedEvents = isAdmin && showPastEvents ? events : events.filter(e => new Date(e.event_date) >= new Date(new Date().setHours(0,0,0,0)));
+  const displayedEvents = showPastEvents ? events : events.filter(e => new Date(e.event_date) >= new Date(new Date().setHours(0,0,0,0)));
 
   return (
     <>
@@ -239,7 +220,7 @@ const Eventos = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="md:flex justify-between items-center mb-12">
             <h2 className="font-playfair text-4xl font-bold wine-text-gradient text-center md:text-left mb-6 md:mb-0">
-              {showPastEvents && isAdmin ? 'Todos los Eventos' : 'Próximos Eventos'}
+              {showPastEvents ? 'Historial de Eventos' : 'Próximos Eventos'}
             </h2>
             {isAdmin && (
               <Button asChild size="lg">
