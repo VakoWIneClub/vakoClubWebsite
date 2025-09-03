@@ -10,6 +10,7 @@ import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import DOMPurify from 'dompurify';
+import ArticleComments from '@/components/guia/ArticleComments';
 
 const ArticlePage = () => {
   const { slug } = useParams();
@@ -178,15 +179,11 @@ const ArticlePage = () => {
                 prose-tr:border-b prose-tr:border-amber-200/10
                 prose-td:px-4 prose-td:py-2 prose-td:text-amber-100/80
               " dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-
-              <div className="mt-12 pt-8 border-t border-amber-200/10 text-center">
-                <Button asChild variant="outline" className="text-amber-100 border-amber-400 hover:bg-amber-400 hover:text-white transition-colors">
-                  <a href="https://www.etsy.com/us-es/shop/VakoWineClub?ref=shop_profile&listing_id=4350183580" target="_blank" rel="noopener noreferrer">
-                    Ver tienda Vako Club
-                  </a>
-                </Button>
-              </div>
             </article>
+
+            <section id="comments" className="mt-12">
+               <ArticleComments articleId={article.id} />
+            </section>
           </motion.div>
         </div>
       </div>
