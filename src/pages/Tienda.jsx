@@ -448,6 +448,7 @@ const Tienda = () => {
           products={arteYDeco}
           showEtsyButton
         />
+        <div className="border-t border-amber-500/10"></div>
         <Section
           title="Vinos Seleccionados"
           icon={Wine}
@@ -467,7 +468,6 @@ const Tienda = () => {
           products={accesorios}
           showEtsyButton
         />
-        <div className="border-t border-amber-500/10"></div>
       </div>
 
       {/* Features Section */}

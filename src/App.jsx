@@ -27,13 +27,15 @@ import ArticlePage from '@/pages/guia/ArticlePage';
 import ArticleEditor from '@/pages/guia/ArticleEditor';
 import EventoPage from '@/pages/eventos/EventoPage';
 import EventoEditor from '@/pages/eventos/EventoEditor';
-import SobreNosotros from '@/pages/SobreNosotros'; // Importar la nueva página
+import SobreNosotros from '@/pages/SobreNosotros';
+import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <ScrollToTop />
+        <AgeVerificationPopup />
         <div className="min-h-screen wine-pattern flex flex-col">
           <Helmet>
             <title>Vako Club - Descubre el Mundo del Vino</title>
@@ -63,7 +65,7 @@ function App() {
               <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
               <Route path="/email-verification" element={<EmailVerification />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/sobre-nosotros" element={<SobreNosotros />} /> {/* Nueva ruta */}
+              <Route path="/sobre-nosotros" element={<SobreNosotros />} />
             </Routes>
           </main>
           
