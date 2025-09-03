@@ -38,23 +38,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
-        // This is a more aggressive catch-all for any sign-out error.
-        // It ensures the client-side session is cleared even if Supabase has an issue.
         console.warn("Supabase signOut error, forcing client-side sign out:", error.message);
       }
     } catch (e) {
       console.error("An unexpected error occurred during signOut:", e);
     } finally {
-      // Always clear client-side state
       setUser(null);
       setSession(null);
-      // We don't need to manually remove from localStorage, 
-      // as onAuthStateChange will fire with a signed_out event,
-      // and handleSession(null) will clear state.
-      // Redirecting here ensures a clean state transition for the user.
       navigate('/');
     }
-  }, [toast, navigate]);
+  }, [navigate]);
 
   const handleSession = useCallback(async (session) => {
     setSession(session);
@@ -71,7 +64,6 @@ export const AuthProvider = ({ children }) => {
     if (session?.user) {
       const { data, error } = await supabase.auth.refreshSession();
       if (error) {
-        // If refresh fails, the token is likely invalid. Force sign-out.
         console.error("Failed to refresh session, signing out:", error.message);
         await signOut();
       } else if (data.session) {
@@ -79,7 +71,6 @@ export const AuthProvider = ({ children }) => {
         setUser(userWithProfile);
         setSession(data.session);
       } else {
-         // If session is invalid, sign out
         await signOut();
       }
     }
@@ -103,7 +94,6 @@ export const AuthProvider = ({ children }) => {
       }
     );
     
-    // Initial session load
     supabase.auth.getSession().then(({ data: { session } }) => {
       handleSession(session);
     }).catch((error) => {
