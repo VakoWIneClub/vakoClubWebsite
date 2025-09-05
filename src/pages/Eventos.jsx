@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -37,7 +38,7 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
     try {
       const { error } = await supabase.from('events').delete().eq('id', event.id);
       if (error) throw error;
-      toast({ title: "Evento eliminado", description: "El evento ha sido eliminado con éxito." });
+      toast({ title: "Evento eliminado", description: "El evento ha sido eliminado correctamente." });
       onEventDeleted(event.id);
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "No se pudo eliminar el evento." });
@@ -98,8 +99,10 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-                <AlertDialogDescription>Esta acción no se puede deshacer. Esto eliminará permanentemente el evento "{event.title}".</AlertDialogDescription>
+                <AlertDialogTitle>¿Estás seguro que deseas eliminar el evento?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción es irreversible. Se eliminará permanentemente el evento "{event.title}".
+                </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -196,8 +199,8 @@ const Eventos = () => {
   return (
     <>
       <Helmet>
-        <title>Eventos - Vako Club | Catas, Degustaciones y Más</title>
-        <meta name="description" content="Participa en nuestros exclusivos eventos de vino. Desde catas y degustaciones hasta cenas de maridaje y festivales. ¡Reserva tu lugar!" />
+        <title>Eventos de Vino - Vako Club</title>
+        <meta name="description" content="Descubre y participa en nuestros exclusivos eventos de vino. Catas, talleres y encuentros para amantes del vino en Vako Club." />
       </Helmet>
 
       <section className="relative py-20 overflow-hidden">
@@ -209,8 +212,8 @@ const Eventos = () => {
                 <Calendar className="h-16 w-16 text-white" />
               </div>
             </motion.div>
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Calendario de Eventos</h1>
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Descubre y participa en catas, cenas de maridaje y festivales de vino.</p>
+            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Eventos Exclusivos</h1>
+            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Únete a nuestras catas, talleres y encuentros. Vive la cultura del vino de una forma única.</p>
           </motion.div>
         </div>
       </section>
@@ -219,7 +222,7 @@ const Eventos = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="md:flex justify-between items-center mb-12">
             <h2 className="font-playfair text-4xl font-bold wine-text-gradient text-center md:text-left mb-6 md:mb-0">
-              {showPastEvents ? 'Historial de Eventos' : 'Próximos Eventos'}
+              {showPastEvents ? 'Eventos Pasados' : 'Próximos Eventos'}
             </h2>
             {isAdmin && (
               <Button asChild size="lg">
@@ -233,7 +236,7 @@ const Eventos = () => {
           
           <div className="flex flex-col md:flex-row gap-4 mb-8 p-4 wine-card rounded-lg">
               <div className="flex-1 space-y-2">
-                <Label className="flex items-center text-amber-200"><Globe className="mr-2 h-4 w-4"/>País</Label>
+                <Label className="flex items-center text-amber-200"><Globe className="mr-2 h-4 w-4"/>Filtrar por País</Label>
                  <Select value={selectedCountry} onValueChange={setSelectedCountry}>
                     <SelectTrigger><SelectValue/></SelectTrigger>
                     <SelectContent>
@@ -243,7 +246,7 @@ const Eventos = () => {
                   </Select>
               </div>
               <div className="flex-1 space-y-2">
-                <Label className="flex items-center text-amber-200"><Map className="mr-2 h-4 w-4"/>Ciudad</Label>
+                <Label className="flex items-center text-amber-200"><Map className="mr-2 h-4 w-4"/>Filtrar por Ciudad</Label>
                   <Select value={selectedCity} onValueChange={setSelectedCity} disabled={selectedCountry === 'Todos'}>
                     <SelectTrigger><SelectValue/></SelectTrigger>
                     <SelectContent>
@@ -267,7 +270,7 @@ const Eventos = () => {
               {displayedEvents.map((event, index) => <EventCard key={event.id} event={event} index={index} isAdmin={isAdmin} onEventDeleted={handleEventDeleted} />)}
             </div>
           ) : (
-            <p className="text-center text-amber-100/70 py-16">No hay eventos que coincidan con tu búsqueda. ¡Vuelve pronto!</p>
+            <p className="text-center text-amber-100/70 py-16">No hay eventos que coincidan con los filtros seleccionados.</p>
           )}
         </div>
       </section>

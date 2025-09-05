@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -7,10 +8,10 @@ const AboutUs = () => {
   return (
     <>
       <Helmet>
-        <title>Sobre Nosotros - Vako Club | Cultura y Pasión por el Vino</title>
-        <meta name="description" content="Descubre Vako Club: tu guía exclusiva para el fascinante universo del vino. Cultura, historia, experiencias únicas y vinos excepcionales." />
-        <meta property="og:title" content="Sobre Nosotros - Vako Club | Cultura y Pasión por el Vino" />
-        <meta property="og:description" content="Descubre Vako Club: tu guía exclusiva para el fascinante universo del vino. Cultura, historia, experiencias únicas y vinos excepcionales." />
+        <title>Sobre Nosotros - Vako Club</title>
+        <meta name="description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
+        <meta property="og:title" content="Sobre Nosotros - Vako Club" />
+        <meta property="og:description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
       </Helmet>
 
       <section className="relative py-20 overflow-hidden">
@@ -22,9 +23,9 @@ const AboutUs = () => {
                 <Wine className="h-16 w-16 text-white" />
               </div>
             </motion.div>
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Sobre Nosotros</h1>
+            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Nuestra Historia</h1>
             <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
-              Descubre la historia y la pasión que impulsan a Vako Club.
+              Nacimos de una simple pasión: el amor por el vino y el deseo de compartirlo.
             </p>
           </motion.div>
         </div>
@@ -39,7 +40,7 @@ const AboutUs = () => {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="text-lg md:text-xl leading-relaxed"
             >
-              En Vako Wine Club creemos que el vino es mucho más que una bebida: es cultura, historia, territorio y pasión compartida. Nacimos con la misión de acercar a nuestros lectores y miembros al fascinante universo del vino, combinando conocimiento, actualidad y experiencias únicas.
+              Vako Club es más que un simple club de vinos; es una comunidad global para aficionados, expertos y curiosos. Nuestro viaje comenzó con la idea de crear un espacio accesible y enriquecedor donde cualquier persona pudiera explorar el vasto y fascinante mundo del vino, sin importar su nivel de conocimiento. Creemos que cada botella tiene una historia que contar, y nuestra misión es ayudarte a descubrirla.
             </motion.p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -51,10 +52,10 @@ const AboutUs = () => {
               >
                 <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
                   <Book className="mr-3 h-8 w-8 text-amber-400" />
-                  Nuestra Guía Exclusiva
+                  Nuestra Guía
                 </h2>
                 <p className="text-md md:text-lg leading-relaxed">
-                  Somos una guía exclusiva que reúne artículos informativos sobre las últimas noticias del sector, entrevistas con bodegas, recorridos por regiones vitivinícolas, reseñas de vinos y recomendaciones de maridaje pensadas tanto para aficionados como para expertos.
+                  Ofrecemos una guía completa y en constante crecimiento, con artículos detallados sobre regiones vinícolas, variedades de uva, técnicas de cata y maridajes. Queremos que aprendas a tu propio ritmo, de una manera amena y visual.
                 </p>
               </motion.div>
 
@@ -66,10 +67,10 @@ const AboutUs = () => {
               >
                 <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
                   <Grape className="mr-3 h-8 w-8 text-amber-400" />
-                  Experiencias en Primera Persona
+                  Nuestras Experiencias
                 </h2>
                 <p className="text-md md:text-lg leading-relaxed">
-                  Además, mantenemos a nuestra comunidad al día con una agenda de eventos, catas y experiencias enogastronómicas que permiten vivir el vino en primera persona.
+                  Organizamos eventos y catas, tanto virtuales como presenciales, para que puedas conectar con otros miembros y aprender directamente de los expertos. Creemos en el poder de las experiencias compartidas para enriquecer la pasión por el vino.
                 </p>
               </motion.div>
             </div>
@@ -82,10 +83,10 @@ const AboutUs = () => {
             >
               <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
                 <Store className="mr-3 h-8 w-8 text-amber-400" />
-                Nuestra Tienda Oficial
+                Nuestra Tienda
               </h2>
               <p className="text-md md:text-lg leading-relaxed">
-                Y para quienes desean llevar la experiencia un paso más allá, contamos con nuestra tienda oficial, donde seleccionamos cuidadosamente etiquetas que reflejan la calidad, autenticidad y diversidad del mundo del vino.
+                Nuestra tienda no solo ofrece una selección curada de vinos, sino también merchandising exclusivo y accesorios para que puedas vivir la cultura del vino en todos los aspectos de tu vida. Cada producto es elegido con el mismo cuidado y pasión que dedicamos a nuestro contenido.
               </p>
             </motion.div>
 
@@ -95,7 +96,7 @@ const AboutUs = () => {
               transition={{ duration: 0.7, delay: 1.1 }}
               className="text-lg md:text-xl leading-relaxed font-semibold text-center mt-10 wine-text-gradient"
             >
-              En Vako Wine Club no solo hablamos de vino: lo compartimos, lo celebramos y lo convertimos en un estilo de vida.
+              Te invitamos a unirte a nuestra mesa, a levantar tu copa y a brindar con nosotros por las infinitas historias que el vino tiene para ofrecer. ¡Salud!
             </motion.p>
           </div>
         </div>

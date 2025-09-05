@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -15,8 +16,8 @@ const EmailVerification = () => {
     return (
         <>
             <Helmet>
-                <title>Email Verificado - Vako Club</title>
-                <meta name="description" content="Tu dirección de correo electrónico ha sido verificada con éxito en Vako Club." />
+                <title>¡Verificación Exitosa! - Vako Club</title>
+                <meta name="description" content="Tu correo electrónico ha sido verificado con éxito." />
             </Helmet>
             <div className="min-h-screen wine-pattern flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <motion.div
@@ -35,10 +36,10 @@ const EmailVerification = () => {
                             <MailCheck className="h-20 w-20 mx-auto wine-text-gradient mb-6" />
                         </motion.div>
                         <h1 className="font-playfair text-4xl font-bold wine-text-gradient">
-                           ¡Email Verificado!
+                           ¡Verificación Exitosa!
                         </h1>
                         <p className="mt-4 text-lg text-amber-100/80">
-                            ¡Gracias por confirmar tu correo! Tu cuenta ha sido verificada y ahora eres parte de Vako Club.
+                            Tu cuenta ha sido verificada. ¡Bienvenido a Vako Club!
                         </p>
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
@@ -50,7 +51,7 @@ const EmailVerification = () => {
                                 className="w-full text-lg py-6 mt-8"
                                 variant="default"
                             >
-                                Ir al Inicio
+                                Continuar
                             </Button>
                         </motion.div>
                     </div>

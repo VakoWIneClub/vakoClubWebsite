@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Briefcase, Camera, Save, Lock, FileText, Tag, Loader2, Award, Star, BarChart } from 'lucide-react';
+import { User, Mail, Briefcase, Camera, Save, Lock, FileText, Tag, Loader2, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -91,7 +91,7 @@ const Perfil = () => {
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) {
-        toast({ title: 'Error al subir imagen', description: uploadError.message, variant: 'destructive' });
+        toast({ title: "Error al subir foto", description: uploadError.message, variant: 'destructive' });
         setUploading(false);
         return;
       }
@@ -106,10 +106,10 @@ const Perfil = () => {
       });
 
       if (updateUserError) {
-          toast({ title: 'Error al guardar foto', description: updateUserError.message, variant: 'destructive' });
+          toast({ title: "Error al guardar foto", description: updateUserError.message, variant: 'destructive' });
       } else {
           refreshUser();
-          toast({ title: '¡Foto actualizada!', description: 'Tu nueva foto de perfil se ha guardado.' });
+          toast({ title: "Foto de perfil actualizada", description: "Tu nueva foto de perfil se ha guardado." });
       }
       setUploading(false);
     }
@@ -146,15 +146,15 @@ const Perfil = () => {
 
     if (profileError || userError) {
         toast({
-            title: 'Error al actualizar',
-            description: profileError?.message || userError?.message || 'No se pudo guardar tu perfil.',
+            title: "Error al actualizar",
+            description: profileError?.message || userError?.message || "Ocurrió un error inesperado.",
             variant: 'destructive',
         });
     } else {
         refreshUser();
         toast({
-            title: '¡Perfil guardado!',
-            description: 'Tu información ha sido actualizada correctamente.',
+            title: "Perfil guardado",
+            description: "Tus datos se han actualizado correctamente.",
         });
     }
   };
@@ -191,7 +191,7 @@ const Perfil = () => {
         >
           <div className="text-center mb-12">
             <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Mi Perfil</h1>
-            <p className="text-xl text-amber-100/80">Gestiona tu información personal y preferencias.</p>
+            <p className="text-xl text-amber-100/80">Gestiona tu información y preferencias.</p>
           </div>
 
           <div className="wine-glass-effect rounded-2xl p-8 md:p-12 shadow-2xl">
@@ -222,7 +222,7 @@ const Perfil = () => {
                   </h3>
                   <div className="text-right">
                     <p className={`text-lg font-bold ${currentLevelInfo.color}`}>{formData.level}</p>
-                    <p className="text-sm text-amber-100/70">{formData.points} puntos</p>
+                    <p className="text-sm text-amber-100/70">{formData.points} Puntos</p>
                   </div>
                 </div>
                 <div className="w-full bg-stone-700 rounded-full h-2.5">
@@ -237,15 +237,15 @@ const Perfil = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-amber-200 font-medium">Nombre</Label>
+                  <Label htmlFor="name" className="text-amber-200 font-medium">Nombre Completo</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                    <Input id="name" type="text" placeholder="Tu nombre completo" className="pl-10" value={formData.name} onChange={handleInputChange} disabled={loading} />
+                    <Input id="name" type="text" placeholder="Tu nombre" className="pl-10" value={formData.name} onChange={handleInputChange} disabled={loading} />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-amber-200 font-medium">Email</Label>
+                  <Label htmlFor="email" className="text-amber-200 font-medium">Correo Electrónico</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
                     <Input id="email" type="email" placeholder="tu@email.com" className="pl-10" value={formData.email} disabled />
@@ -264,10 +264,10 @@ const Perfil = () => {
                     maxLength="150"
                     rows="3"
                     className="w-full rounded-md border border-amber-500/20 bg-white/5 pl-10 pr-3 py-2 text-sm text-amber-100 ring-offset-background placeholder:text-amber-100/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                    placeholder="Cuéntanos un poco sobre ti..."
+                    placeholder="Cuéntanos un poco sobre ti y tu pasión por el vino..."
                     disabled={loading}
                   ></textarea>
-                  <p className="text-right text-xs text-amber-100/50">{formData.bio.length}/150</p>
+                  <p className="text-right text-xs text-amber-100/50">{formData.bio ? formData.bio.length : 0}/150</p>
                 </div>
               </div>
 
@@ -280,7 +280,7 @@ const Perfil = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="profile" className="text-amber-200 font-medium">Perfil de Usuario</Label>
+                  <Label htmlFor="profile" className="text-amber-200 font-medium">Perfil</Label>
                   <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 z-10" />
                       <Select onValueChange={handleProfileChange} value={formData.profile} disabled={loading}>
@@ -301,7 +301,7 @@ const Perfil = () => {
               </div>
               
               <div className="space-y-2">
-                <Button type="button" variant="outline" className="w-full" onClick={() => toast({ title: "🚧 Próximamente", description: "Podrás cambiar tu contraseña desde aquí."})}>
+                <Button type="button" variant="outline" className="w-full" onClick={() => toast({ title: "Próximamente", description: "La función para cambiar la contraseña estará disponible pronto."})}>
                   <Lock className="mr-2 h-4 w-4" />
                   Cambiar Contraseña
                 </Button>
@@ -313,7 +313,7 @@ const Perfil = () => {
                 </Button>
                 <Button type="submit" className="text-lg py-3 px-6" variant="default" disabled={loading || uploading}>
                   {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="mr-2 h-5 w-5" />}
-                  {loading ? 'Guardando...' : 'Guardar Cambios'}
+                  {loading ? "Guardando..." : "Guardar Cambios"}
                 </Button>
               </div>
             </form>

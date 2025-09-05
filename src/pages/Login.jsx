@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -36,9 +37,9 @@ const Login = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.email) {
-      newErrors.email = 'El email es obligatorio.';
+      newErrors.email = 'El correo electrónico es obligatorio.';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El formato del email no es válido.';
+      newErrors.email = 'El correo electrónico no es válido.';
     }
     if (!formData.password) newErrors.password = 'La contraseña es obligatoria.';
     setErrors(newErrors);
@@ -54,8 +55,8 @@ const Login = () => {
     e.preventDefault();
     if (!validate()) {
       toast({
-        title: "Campo inválido",
-        description: "Por favor, completa los campos correctamente.",
+        title: "Campos inválidos",
+        description: "Por favor, completa todos los campos correctamente.",
         variant: "destructive",
       });
       return;
@@ -90,11 +91,11 @@ const Login = () => {
               <h1 className="font-playfair text-4xl font-bold wine-text-gradient">
                 Iniciar Sesión
               </h1>
-              <p className="mt-2 text-amber-100/80">Bienvenido de nuevo a Vako Club.</p>
+              <p className="mt-2 text-amber-100/80">Bienvenido de nuevo a la comunidad.</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-amber-200 font-medium">Email</Label>
+                <Label htmlFor="email" className="text-amber-200 font-medium">Correo Electrónico</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
                   <Input id="email" type="email" placeholder="tu@email.com" className="pl-10" value={formData.email} onChange={handleChange} disabled={loading} />
@@ -105,7 +106,7 @@ const Login = () => {
                 <Label htmlFor="password" className="text-amber-200 font-medium">Contraseña</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Tu contraseña" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
+                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 cursor-pointer">
                     {showPassword ? <EyeOff /> : <Eye />}
                   </button>
@@ -113,7 +114,7 @@ const Login = () => {
                 <ErrorMessage message={errors.password} />
               </div>
               <Button type="submit" className="w-full text-lg py-6" variant="default" disabled={loading}>
-                {loading ? 'Entrando...' : 'Entrar al Club'}
+                {loading ? 'Iniciando...' : 'Iniciar Sesión'}
               </Button>
             </form>
             <p className="mt-6 text-center text-sm text-amber-100/60">

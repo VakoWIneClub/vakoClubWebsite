@@ -1,11 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, ShoppingBag, Users, Calendar, Home, Phone, Compass, UserPlus, LogIn, User as UserIcon, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, Users, Calendar, Home, Phone, Newspaper, UserPlus, LogIn, User as UserIcon, LogOut, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -24,27 +26,31 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const navItems = [{
-    name: 'Inicio',
+    name: "Inicio",
     path: '/',
     icon: Home
   }, {
-    name: 'Guía',
+    name: "Guía",
     path: '/guia',
     icon: Compass
   }, {
-    name: 'Tienda',
+    name: "Noticias",
+    path: '/noticias',
+    icon: Newspaper
+  }, {
+    name: "Tienda",
     path: '/tienda',
     icon: ShoppingBag
   }, {
-    name: 'Eventos',
+    name: "Eventos",
     path: '/eventos',
     icon: Calendar
   }, {
-    name: 'Comunidad',
+    name: "Comunidad",
     path: '/comunidad',
     icon: Users
   }, {
-    name: 'Contacto',
+    name: "Contacto",
     path: '/contacto',
     icon: Phone
   }];
@@ -107,7 +113,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map(item => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.startsWith(item.path) && (item.path !== '/' || location.pathname === '/');
             return <Link key={item.path} to={item.path} className={`relative flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 group ${isActive ? 'text-white' : 'text-amber-100 hover:text-white hover:bg-white/10'}`}>
                   <Icon className="h-4 w-4" />
                   <span className="font-medium text-sm">{item.name}</span>
@@ -161,7 +167,7 @@ const Navbar = () => {
             <div className="px-4 py-6 space-y-4">
               {navItems.map(item => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.startsWith(item.path) && (item.path !== '/' || location.pathname === '/');
             return <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/10 text-white' : 'text-amber-100 hover:text-white hover:bg-white/10'}`}>
                     <Icon className="h-5 w-5" />
                     <span className="font-medium">{item.name}</span>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -9,23 +10,22 @@ import MiembrosTab from '@/components/comunidad/MiembrosTab';
 import { TikTokIcon } from '@/components/ui/TikTokIcon';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+
 const Comunidad = () => {
-  const {
-    toast
-  } = useToast();
-  const {
-    user
-  } = useAuth();
+  const { toast } = useToast();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('foro');
+  
   const tabs = [{
     id: 'foro',
-    name: 'Foro',
+    name: 'Foro de Debate',
     icon: MessageCircle
   }, {
     id: 'miembros',
-    name: 'Miembros',
+    name: 'Miembros del Club',
     icon: Users
   }];
+
   const socialLinks = [{
     icon: Instagram,
     href: 'https://www.instagram.com/vakoclub',
@@ -42,12 +42,14 @@ const Comunidad = () => {
     label: 'YouTube',
     color: 'from-red-500 to-red-600'
   }];
+
   const handleInteraction = () => {
     toast({
-      title: "🚧 Esta funcionalidad aún no está implementada",
-      description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo mensaje! 🚀"
+      title: "🚧 ¡Próximamente!",
+      description: "Esta función estará disponible muy pronto para que puedas invitar a tus amigos."
     });
   };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'foro':
@@ -58,10 +60,11 @@ const Comunidad = () => {
         return null;
     }
   };
+
   return <>
       <Helmet>
-        <title>Comunidad - Vako Club | Conecta con Amantes del Vino</title>
-        <meta name="description" content="Únete a nuestra comunidad de amantes del vino. Participa en foros de discusión y conecta con expertos sommeliers y enólogos." />
+        <title>Comunidad - Vako Club</title>
+        <meta name="description" content="Únete a la comunidad de Vako Club. Participa en nuestro foro de vinos, conoce a otros miembros y comparte tu pasión." />
       </Helmet>
 
       {/* Hero Section */}
@@ -96,11 +99,11 @@ const Comunidad = () => {
               Nuestra Comunidad
             </h1>
 
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Conecta con apasionados del vino, comparte experiencias y suma puntos en tu nivel Vako Club.</p>
+            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Un lugar para conectar, debatir y compartir tu amor por el vino.</p>
             {!user && <Link to="/suscripcion">
                 <Button size="lg">
                   <UserPlus className="mr-2 h-5 w-5" />
-                  Únete a la Comunidad
+                  Únete al Club
                 </Button>
               </Link>}
           </motion.div>
@@ -120,10 +123,10 @@ const Comunidad = () => {
           duration: 0.8
         }} className="text-center mb-12">
             <h2 className="font-playfair text-3xl md:text-4xl font-bold wine-text-gradient mb-4">
-              Síguenos en Redes Sociales
+              Síguenos en Redes
             </h2>
             <p className="text-lg text-amber-100/70 max-w-2xl mx-auto">
-              No te pierdas nuestro contenido exclusivo, eventos en vivo y mucho más.
+              No te pierdas nuestras últimas noticias, catas en vivo y contenido exclusivo.
             </p>
           </motion.div>
           <div className="flex justify-center gap-6">
@@ -190,24 +193,24 @@ const Comunidad = () => {
             <Heart className="h-16 w-16 text-red-400 mx-auto" />
             
             <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient">
-              Únete a la Familia
+              ¿Te unes a la conversación?
             </h2>
             
             <p className="text-xl text-amber-100/80 max-w-2xl mx-auto">
-              Forma parte de una comunidad apasionada donde cada copa cuenta una historia y cada encuentro crea nuevas amistades.
+              Regístrate gratis para empezar a participar en el foro, seguir a otros miembros y crear tu propio perfil de cata.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user && <Link to="/suscripcion">
                   <Button className="px-8 py-4 text-lg wine-gradient hover:opacity-90 transition-all duration-300 wine-shadow">
                     <Users className="mr-2 h-5 w-5" />
-                    Unirse Gratis
+                    Unirme Gratis
                   </Button>
                 </Link>}
               
               <Button variant="outline" className="px-8 py-4 text-lg border-amber-400 text-amber-200 hover:bg-amber-400 hover:text-amber-900 transition-all duration-300" onClick={handleInteraction}>
                 <Share2 className="mr-2 h-5 w-5" />
-                Invitar Amigos
+                Invitar a un amigo
               </Button>
             </div>
           </motion.div>

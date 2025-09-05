@@ -1,78 +1,74 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Calendar, User, ArrowLeft, Pencil, Tag } from 'lucide-react';
 import { format } from 'date-fns';
-import { es, enUS, ptBR } from 'date-fns/locale';
+import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import DOMPurify from 'dompurify';
-import ArticleComments from '@/components/guia/ArticleComments';
-import { useTranslation } from 'react-i18next';
+import ArticleComments from '@/components/noticias/ArticleComments';
 
 const ArticlePage = () => {
-  const { t, i18n } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [article, setArticle] = useState(null);
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const isAdmin = user && user.role === 'admin';
 
-  const getLocale = () => {
-    switch(i18n.language) {
-      case 'es': return es;
-      case 'pt': return ptBR;
-      default: return enUS;
-    }
-  }
+  const fetchArticle = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    
+    const { data: articleData, error: articleError } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      setLoading(true);
-      const { data: articleData, error: articleError } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (articleError || !articleData) {
-        console.error('Error fetching article:', articleError);
-        setLoading(false);
-        return;
-      }
-      
-      setArticle(articleData);
-
-      if (articleData.author_id) {
-        const { data: authorData, error: authorError } = await supabase
-          .from('profiles')
-          .select('name, avatar_url')
-          .eq('id', articleData.author_id)
-          .single();
-        
-        if (authorError) {
-          console.error('Error fetching author:', authorError);
-        } else {
-          setAuthor(authorData);
-        }
-      }
-      
+    if (articleError || !articleData) {
+      console.error('Error fetching article:', articleError);
+      setError(true);
       setLoading(false);
-    };
+      return;
+    }
+    
+    setArticle(articleData);
 
-    fetchArticle();
+    if (articleData.author_id) {
+      const { data: authorData, error: authorError } = await supabase
+        .from('profiles')
+        .select('name, avatar_url')
+        .eq('id', articleData.author_id)
+        .single();
+      
+      if (authorError) {
+        console.error('Error fetching author:', authorError);
+      } else {
+        setAuthor(authorData);
+      }
+    }
+    
+    setLoading(false);
   }, [slug]);
 
+  useEffect(() => {
+    fetchArticle();
+  }, [fetchArticle]);
+
   const createSnippet = (htmlContent) => {
+    if (!htmlContent) return "";
     const cleanHtml = DOMPurify.sanitize(htmlContent);
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = cleanHtml;
-    return tempDiv.textContent || tempDiv.innerText || "";
+    return (tempDiv.textContent || tempDiv.innerText || "").substring(0, 160);
   };
 
   if (loading) {
@@ -83,27 +79,29 @@ const ArticlePage = () => {
     );
   }
 
-  if (!article) {
+  if (error || !article) {
     return (
-      <div className="text-center py-20">
-        <h1 className="font-playfair text-4xl text-amber-200">{t('guide.article_not_found')}</h1>
-        <p className="text-amber-100/70 mt-4">{t('guide.article_not_found_desc')}</p>
-        <Link to="/guia" className="mt-8 inline-block px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
-          {t('guide.back_to_guide')}
-        </Link>
+      <div className="text-center py-20 px-4">
+        <h1 className="font-playfair text-4xl text-amber-200">Artículo no encontrado</h1>
+        <p className="text-amber-100/70 mt-4">El artículo que buscas no existe o ha sido eliminado.</p>
+        <Button asChild className="mt-8">
+          <Link to="/noticias">
+            Volver a Noticias
+          </Link>
+        </Button>
       </div>
     );
   }
 
-  const formattedDate = format(new Date(article.created_at), "d 'de' MMMM, yyyy", { locale: getLocale() });
+  const formattedDate = format(new Date(article.created_at), "d 'de' MMMM, yyyy", { locale: es });
   const sanitizedContent = DOMPurify.sanitize(article.content);
   const tags = [article.tag1, article.tag2].filter(Boolean);
 
   return (
     <>
       <Helmet>
-        <title>{`${article.title} - ${t('guide.title')}`}</title>
-        <meta name="description" content={createSnippet(article.content).substring(0, 160)} />
+        <title>{`${article.title} - Noticias Vako Club`}</title>
+        <meta name="description" content={createSnippet(article.content)} />
       </Helmet>
 
       <div className="wine-pattern pt-12 pb-20">
@@ -114,15 +112,17 @@ const ArticlePage = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex justify-between items-center mb-8">
-              <Link to="/guia" className="inline-flex items-center text-amber-300 hover:text-amber-100 transition-colors group">
-                <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                {t('guide.back_to_guide')}
-              </Link>
+              <Button asChild variant="ghost" className="text-amber-300 hover:text-amber-100 group">
+                <Link to="/noticias">
+                  <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                  Volver a Noticias
+                </Link>
+              </Button>
               {isAdmin && (
                 <Button asChild>
-                  <Link to={`/guia/editar/${article.slug}`}>
+                  <Link to={`/noticias/editar/${article.slug}`}>
                     <Pencil className="mr-2 h-4 w-4" />
-                    {t('guide.edit_article')}
+                    Editar Artículo
                   </Link>
                 </Button>
               )}
@@ -136,7 +136,7 @@ const ArticlePage = () => {
                       key={tag}
                       variant="outline"
                       size="sm"
-                      onClick={() => navigate(`/guia?tag=${tag}`)}
+                      onClick={() => navigate(`/noticias?tag=${tag}`)}
                       className="text-xs"
                     >
                       <Tag className="mr-2 h-3 w-3" />
@@ -161,7 +161,7 @@ const ArticlePage = () => {
                     ) : (
                       <User className="h-5 w-5 mr-2 text-amber-300/80" />
                     )}
-                    <span>{author.name || t('guide.unknown_author')}</span>
+                    <span>{author.name || "Autor Desconocido"}</span>
                   </div>
                 )}
               </div>

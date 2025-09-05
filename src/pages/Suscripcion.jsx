@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -91,9 +92,9 @@ const Suscripcion = () => {
   }, [user, navigate]);
 
   const subscriptionPlans = [
-    { icon: Star, title: 'Suscripción Gratuita', price: '€0', features: ['Descuentos en la tienda', 'Acceso a la comunidad', 'Participacion en el foro'], available: true },
-    { icon: Gem, title: 'Sommelier', price: '€15', features: ['Todo lo de Gratuita', 'Catas virtuales exclusivas', 'Acceso a guías avanzadas'], available: false },
-    { icon: Crown, title: 'Gran Reserva', price: '€45', features: ['Todo lo de Sommelier', 'Envío de vinos trimestral', 'Consultas con expertos'], available: false },
+    { icon: Star, title: "Plan Aficionado", price: "Gratis", features: ["Acceso al foro", "Perfil de miembro", "Boletín mensual"], available: true },
+    { icon: Gem, title: "Plan Sommelier", price: "$9/mes", features: ["Todo en Aficionado", "Catas virtuales", "Contenido exclusivo"], available: false },
+    { icon: Crown, title: "Plan Reserva", price: "$19/mes", features: ["Todo en Sommelier", "Envío de vinos trimestral", "Acceso prioritario a eventos"], available: false },
   ];
 
   const handleSelectPlan = () => {
@@ -104,13 +105,13 @@ const Suscripcion = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'El nombre es obligatorio.';
     if (!formData.email.trim()) {
-      newErrors.email = 'El email es obligatorio.';
+      newErrors.email = 'El correo electrónico es obligatorio.';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El formato del email no es válido.';
+      newErrors.email = 'El correo electrónico no es válido.';
     }
     if (!formData.password) newErrors.password = 'La contraseña es obligatoria.';
     if (formData.password && formData.password.length < 6) newErrors.password = 'La contraseña debe tener al menos 6 caracteres.';
-    if (!formData.profile) newErrors.profile = 'Debes seleccionar un perfil de usuario.';
+    if (!formData.profile) newErrors.profile = 'Debes seleccionar un perfil.';
     if (!termsAccepted) newErrors.terms = 'Debes aceptar los términos y condiciones.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -129,8 +130,8 @@ const Suscripcion = () => {
     e.preventDefault();
     if (!validate()) {
       toast({
-        title: "Errores en el formulario",
-        description: "Por favor, completa todos los campos obligatorios y acepta los términos.",
+        title: "Error en el formulario",
+        description: "Por favor, completa todos los campos correctamente.",
         variant: "destructive"
       });
       return;
@@ -148,8 +149,8 @@ const Suscripcion = () => {
 
       if (emailExists) {
         toast({
-          title: 'Email ya registrado',
-          description: 'Este correo electrónico ya está en uso. Por favor, inicia sesión o utiliza otro correo.',
+          title: "Correo ya registrado",
+          description: "Ya existe una cuenta con este correo. Por favor, inicia sesión.",
           variant: 'destructive',
         });
         setLoading(false);
@@ -165,8 +166,8 @@ const Suscripcion = () => {
 
       if (error) {
         toast({
-          title: 'Error de registro',
-          description: error.message || 'No se pudo completar el registro.',
+          title: "Error al registrarse",
+          description: error.message || "Ocurrió un error inesperado.",
           variant: 'destructive',
         });
         return;
@@ -176,8 +177,8 @@ const Suscripcion = () => {
 
     } catch (error) {
       toast({
-        title: 'Error inesperado',
-        description: 'Ocurrió un error. Por favor, inténtalo de nuevo.',
+        title: "Error inesperado",
+        description: "Ocurrió un error. Por favor, inténtalo de nuevo.",
         variant: 'destructive',
       });
     } finally {
@@ -209,9 +210,9 @@ const Suscripcion = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Comienza tu Experiencia Vako Club</h1>
+            <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Elige tu Aventura</h1>
             <p className="text-xl text-amber-100/80 max-w-3xl mx-auto">
-              Al suscribirte, obtienes un 20% de descuento en artículos seleccionados de la tienda exclusiva de Vako Club.
+              Únete a nuestra comunidad y eleva tu pasión por el vino. Tenemos un plan para cada tipo de aficionado.
             </p>
           </motion.div>
 
@@ -232,22 +233,22 @@ const Suscripcion = () => {
                 <div className="text-center mb-8">
                   <UserPlus className="h-12 w-12 mx-auto wine-text-gradient mb-4" />
                   <h1 className="font-playfair text-4xl font-bold wine-text-gradient">
-                    Completa tu Registro
+                    Crea tu Cuenta Gratis
                   </h1>
-                  <p className="mt-2 text-amber-100/80">Estás a un paso de unirte a Vako Club.</p>
+                  <p className="mt-2 text-amber-100/80">Y empieza a disfrutar de Vako Club.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-amber-200 font-medium">Nombre</Label>
+                    <Label htmlFor="name" className="text-amber-200 font-medium">Nombre Completo</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                      <Input id="name" type="text" placeholder="Tu nombre completo" className="pl-10" value={formData.name} onChange={handleChange} disabled={loading} />
+                      <Input id="name" type="text" placeholder="Tu nombre y apellido" className="pl-10" value={formData.name} onChange={handleChange} disabled={loading} />
                     </div>
                     <ErrorMessage message={errors.name} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-amber-200 font-medium">Email</Label>
+                    <Label htmlFor="email" className="text-amber-200 font-medium">Correo Electrónico</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
                       <Input id="email" type="email" placeholder="tu@email.com" className="pl-10" value={formData.email} onChange={handleChange} disabled={loading} />
@@ -258,7 +259,7 @@ const Suscripcion = () => {
                     <Label htmlFor="password" className="text-amber-200 font-medium">Contraseña</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                      <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Crea una contraseña segura" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
+                      <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Mínimo 6 caracteres" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
                       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 cursor-pointer">
                         {showPassword ? <EyeOff /> : <Eye />}
                       </button>
@@ -266,7 +267,7 @@ const Suscripcion = () => {
                      <ErrorMessage message={errors.password} />
                   </div>
                    <div className="space-y-2">
-                    <Label htmlFor="profile" className="text-amber-200 font-medium">Perfil de Usuario</Label>
+                    <Label htmlFor="profile" className="text-amber-200 font-medium">¿Cuál es tu perfil?</Label>
                      <div className="relative">
                       <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
                         <Select onValueChange={handleProfileChange} value={formData.profile} disabled={loading}>
@@ -290,14 +291,16 @@ const Suscripcion = () => {
                     <Checkbox id="terms" checked={termsAccepted} onCheckedChange={setTermsAccepted} />
                     <div className="grid gap-1.5 leading-none">
                       <label htmlFor="terms" className="text-sm font-medium leading-none text-amber-100/80 peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Acepto los <Link to="/terminos" target="_blank" className="underline text-amber-200 hover:text-amber-300">Términos y Condiciones</Link> y la <Link to="/politica-privacidad" target="_blank" className="underline text-amber-200 hover:text-amber-300">Política de Privacidad</Link>.
+                        Acepto los{' '}
+                        <Link to="/terminos" target="_blank" className="underline text-amber-200 hover:text-amber-300">Términos y Condiciones</Link>
+                        {' y la '}<Link to="/politica-privacidad" target="_blank" className="underline text-amber-200 hover:text-amber-300">Política de Privacidad</Link>.
                       </label>
                     </div>
                   </div>
                   <ErrorMessage message={errors.terms} />
 
                   <Button type="submit" className="w-full text-lg py-6 mt-6" variant="default" disabled={loading || !termsAccepted}>
-                    {loading ? 'Verificando y creando...' : 'Crear Cuenta'}
+                    {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
                   </Button>
                 </form>
               </div>
@@ -319,10 +322,10 @@ const Suscripcion = () => {
               </motion.div>
             </div>
             <AlertDialogTitle className="text-center font-playfair text-2xl">
-              ¡Revisa tu correo!
+              ¡Último paso! Verifica tu correo
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center text-base">
-              Te hemos enviado un e-mail de verificación a <strong>{formData.email}</strong>. Haz clic en el enlace para activar tu cuenta.
+                Hemos enviado un enlace de verificación a <strong>{formData.email}</strong>. Por favor, revisa tu bandeja de entrada (y la carpeta de spam) para activar tu cuenta.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

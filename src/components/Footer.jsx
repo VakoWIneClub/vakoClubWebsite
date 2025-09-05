@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Youtube } from 'lucide-react';
@@ -6,28 +7,28 @@ import { TikTokIcon } from '@/components/ui/TikTokIcon';
 const Footer = () => {
   const footerSections = [
     {
-      title: 'Compañía',
+      title: "Compañía",
       links: [
-        { name: 'Sobre Nosotros', path: '/sobre-nosotros' },
-        { name: 'Eventos', path: '/eventos' },
-        { name: 'Guía de Vinos', path: '/guia' },
+        { name: "Sobre Nosotros", path: '/sobre-nosotros' },
+        { name: "Eventos", path: '/eventos' },
+        { name: "Noticias", path: '/noticias' },
       ],
     },
     {
-      title: 'Comunidad',
+      title: "Comunidad",
       links: [
-        { name: 'Foro', path: '/comunidad' },
-        { name: 'Miembros', path: '/comunidad?tab=miembros' },
-        { name: 'Eventos', path: '/eventos' },
+        { name: "Foro", path: '/comunidad' },
+        { name: "Miembros", path: '/comunidad?tab=miembros' },
+        { name: "Eventos", path: '/eventos' },
       ],
     },
     {
-      title: 'Soporte',
+      title: "Soporte",
       links: [
-        { name: 'Contacto', path: '/contacto' },
-        { name: 'FAQs', path: '/contacto#faq' },
-        { name: 'Términos de Uso', path: '/terminos' },
-        { name: 'Política de Privacidad', path: '/politica-privacidad' },
+        { name: "Contacto", path: '/contacto' },
+        { name: "FAQs", path: '/contacto#faq' },
+        { name: "Términos de Uso", path: '/terminos' },
+        { name: "Política de Privacidad", path: '/politica-privacidad' },
       ],
     },
   ];
