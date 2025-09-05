@@ -9,6 +9,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Home from '@/pages/Home';
 import Guia from '@/pages/Guia';
+import WineryPage from '@/pages/guia/WineryPage';
+import WineryEditor from '@/pages/guia/WineryEditor';
+import Noticias from '@/pages/Noticias';
 import Eventos from '@/pages/Eventos';
 import Comunidad from '@/pages/Comunidad';
 import Tienda from '@/pages/Tienda';
@@ -23,8 +26,8 @@ import AuthCallback from '@/pages/AuthCallback';
 import ScrollToTop from '@/components/ScrollToTop';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/contexts/SupabaseAuthContext';
-import ArticlePage from '@/pages/guia/ArticlePage';
-import ArticleEditor from '@/pages/guia/ArticleEditor';
+import ArticlePage from '@/pages/noticias/ArticlePage';
+import ArticleEditor from '@/pages/noticias/ArticleEditor';
 import EventoPage from '@/pages/eventos/EventoPage';
 import EventoEditor from '@/pages/eventos/EventoEditor';
 import SobreNosotros from '@/pages/SobreNosotros';
@@ -48,9 +51,13 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/guia" element={<Guia />} />
-              <Route path="/guia/crear" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
-              <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
-              <Route path="/guia/:slug" element={<ArticlePage />} />
+              <Route path="/guia/crear" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
+              <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
+              <Route path="/guia/:slug" element={<WineryPage />} />
+              <Route path="/noticias" element={<Noticias />} />
+              <Route path="/noticias/crear" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
+              <Route path="/noticias/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
+              <Route path="/noticias/:slug" element={<ArticlePage />} />
               <Route path="/eventos" element={<Eventos />} />
               <Route path="/eventos/crear" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
               <Route path="/eventos/editar/:slug" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />

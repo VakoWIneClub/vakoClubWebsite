@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -22,7 +23,7 @@ const Terminos = () => {
     <>
       <Helmet>
         <title>Términos y Condiciones - Vako Club</title>
-        <meta name="description" content="Lee los Términos y Condiciones de uso de la plataforma y servicios de Vako Club." />
+        <meta name="description" content="Consulta los términos y condiciones de uso de la plataforma Vako Club." />
       </Helmet>
       <div className="min-h-screen wine-pattern py-20 px-4">
         <motion.div
@@ -36,39 +37,39 @@ const Terminos = () => {
                 <FileText className="h-12 w-12 text-amber-200" />
               </div>
             <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Términos y Condiciones</h1>
-            <p className="text-xl text-amber-100/80">Última actualización: 1 de agosto de 2025</p>
+            <p className="text-xl text-amber-100/80">Última actualización: 05 de Septiembre, 2025</p>
           </div>
 
           <div className="wine-glass-effect rounded-2xl p-8 md:p-12 shadow-2xl">
             <LegalSection title="1. Aceptación de los Términos">
-              <p>Al acceder y utilizar Vako Wine Club (en adelante, "el Sitio Web"), aceptas cumplir y estar sujeto a los siguientes términos y condiciones de uso. Si no estás de acuerdo con estos términos, no debes utilizar el Sitio Web.</p>
+              <p>Al acceder y utilizar el sitio web de Vako Club (en adelante, "el Sitio"), usted acepta estar sujeto a estos Términos y Condiciones ("Términos"). Si no está de acuerdo con alguna parte de los términos, no podrá utilizar nuestros servicios.</p>
             </LegalSection>
 
-            <LegalSection title="2. Uso del Sitio Web">
-              <p>El contenido y los servicios ofrecidos en el Sitio Web son para tu uso personal y no comercial. No puedes modificar, copiar, distribuir, transmitir, mostrar, realizar, reproducir, publicar, licenciar, crear trabajos derivados, transferir o vender ninguna información, software, productos o servicios obtenidos del Sitio Web.</p>
-              <p>Te comprometes a no utilizar el Sitio Web para ningún propósito ilegal o prohibido por estos términos.</p>
+            <LegalSection title="2. Uso del Sitio">
+              <p>El Sitio y su contenido son para su uso personal y no comercial. No debe modificar, copiar, distribuir, transmitir, mostrar, realizar, reproducir, publicar, licenciar, crear trabajos derivados, transferir o vender ninguna información, software, productos o servicios obtenidos del Sitio.</p>
+              <p>Usted se compromete a no utilizar el Sitio para ningún propósito que sea ilegal o esté prohibido por estos Términos.</p>
             </LegalSection>
 
             <LegalSection title="3. Cuentas de Usuario">
-              <p>Para acceder a ciertas funciones del Sitio Web, es posible que debas registrarte para obtener una cuenta. Eres responsable de mantener la confidencialidad de tu contraseña y cuenta, y eres totalmente responsable de todas las actividades que ocurran bajo tu cuenta.</p>
-              <p>Nos reservamos el derecho de suspender o cancelar tu cuenta en cualquier momento si violas alguno de estos términos.</p>
+              <p>Para acceder a ciertas funciones del Sitio, es posible que deba crear una cuenta. Usted es responsable de mantener la confidencialidad de su cuenta y contraseña, y de restringir el acceso a su computadora. Acepta la responsabilidad de todas las actividades que ocurran bajo su cuenta o contraseña.</p>
+              <p>Vako Club se reserva el derecho de rechazar el servicio, cancelar cuentas, eliminar o editar contenido a su entera discreción.</p>
             </LegalSection>
             
-            <LegalSection title="4. Propiedad Intelectual">
-              <p>Todo el contenido del Sitio Web, incluyendo textos, gráficos, logos, iconos, imágenes y software, es propiedad de Vako Wine Club o de sus proveedores de contenido y está protegido por las leyes de derechos de autor internacionales.</p>
+            <LegalSection title="4. Contenido del Usuario">
+              <p>Los usuarios pueden publicar contenido, como comentarios, fotos y otros materiales ("Contenido del Usuario"). Usted es el único responsable del Contenido del Usuario que publica en el Sitio. Al publicar Contenido del Usuario, nos otorga una licencia no exclusiva, libre de regalías, perpetua, irrevocable y totalmente sublicenciable para usar, reproducir, modificar, adaptar, publicar, traducir, crear trabajos derivados, distribuir y mostrar dicho contenido en todo el mundo y en cualquier medio.</p>
             </LegalSection>
             
-            <LegalSection title="5. Limitación de Responsabilidad">
-              <p>El Sitio Web se proporciona "tal cual" y "según disponibilidad". Vako Wine Club no ofrece garantías de ningún tipo, ya sean expresas o implícitas, sobre el funcionamiento del sitio o la información, contenido, materiales o productos incluidos en este sitio.</p>
-              <p>En ningún caso Vako Wine Club será responsable de ningún daño directo, indirecto, incidental, especial o consecuente que surja del uso o la imposibilidad de uso del Sitio Web.</p>
+            <LegalSection title="5. Enlaces a Terceros">
+              <p>El Sitio puede contener enlaces a sitios web de terceros que no son propiedad ni están controlados por Vako Club. No tenemos control ni asumimos ninguna responsabilidad por el contenido, las políticas de privacidad o las prácticas de los sitios web de terceros.</p>
+              <p>Usted reconoce y acepta que Vako Club no será responsable, directa o indirectamente, de ningún daño o pérdida causada o presuntamente causada por o en conexión con el uso o la confianza en dicho contenido, bienes o servicios disponibles en o a través de dichos sitios web.</p>
             </LegalSection>
 
-            <LegalSection title="6. Modificaciones de los Términos">
-              <p>Nos reservamos el derecho de cambiar estos términos en cualquier momento. Tu uso continuado del Sitio Web después de cualquier cambio constituirá tu aceptación de los nuevos términos.</p>
+            <LegalSection title="6. Limitación de Responsabilidad">
+              <p>En la máxima medida permitida por la ley aplicable, en ningún caso Vako Club, sus afiliados, directores, empleados o agentes serán responsables de ningún daño indirecto, incidental, especial, consecuente o punitivo, incluyendo, entre otros, la pérdida de beneficios, datos, uso, buena voluntad u otras pérdidas intangibles, como resultado de (i) su acceso o uso o incapacidad para acceder o usar el servicio; (ii) cualquier conducta o contenido de cualquier tercero en el servicio.</p>
             </LegalSection>
             
-            <LegalSection title="7. Contacto">
-              <p>Si tienes alguna pregunta sobre estos Términos y Condiciones, por favor contáctanos a través de la información proporcionada en nuestra página de Contacto.</p>
+            <LegalSection title="7. Cambios en los Términos">
+              <p>Nos reservamos el derecho, a nuestra entera discreción, de modificar o reemplazar estos Términos en cualquier momento. Si una revisión es material, intentaremos proporcionar un aviso de al menos 30 días antes de que los nuevos términos entren en vigencia. Lo que constituye un cambio material se determinará a nuestra entera discreción.</p>
             </LegalSection>
           </div>
         </motion.div>

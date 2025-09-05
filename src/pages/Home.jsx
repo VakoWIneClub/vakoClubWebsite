@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -7,36 +8,42 @@ import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter } from '@/components/ui/alert-dialog';
 
-const WelcomePopup = ({ isOpen, onOpenChange }) => {
-  const { toast } = useToast();
-
+const WelcomePopup = ({
+  isOpen,
+  onOpenChange
+}) => {
+  const {
+    toast
+  } = useToast();
   const copyCoupon = () => {
-    navigator.clipboard.writeText('BONARDA20');
+    navigator.clipboard.writeText('BONARDA20%');
     toast({
-      title: "¡Copiado!",
-      description: "Cupón copiado al portapapeles.",
+      title: "¡Cupón copiado!",
+      description: "Usa BONARDA20% en la tienda."
     });
   };
-
-  return (
-    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
+  return <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <div className="flex justify-center mb-4">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1], rotate: [0, -15, 15, 0] }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
-            >
+            <motion.div animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, -15, 15, 0]
+          }} transition={{
+            duration: 1,
+            repeat: Infinity,
+            ease: 'easeInOut'
+          }}>
               <PartyPopper className="h-16 w-16 text-amber-400" />
             </motion.div>
           </div>
           <AlertDialogTitle className="text-center font-playfair text-2xl">
-            ¡Bienvenido a Vako Club!
+            ¡Bienvenido a la familia Vako Club!
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-base space-y-3">
-            <p>¡Gracias por unirte! Tu cuenta ha sido verificada. Como regalo de bienvenida, aquí tienes tu <strong>cupón del 20% de descuento</strong>.</p>
+            <p>Para celebrar tu llegada, te regalamos un <strong>20% de descuento</strong> en merchandising y arte. ¡Explora nuestra tienda y encuentra tu pieza favorita!</p>
             <div className="bg-stone-800/50 border border-amber-500/30 rounded-lg p-3 flex items-center justify-center gap-4">
-              <span className="font-mono text-lg text-amber-300 tracking-widest">BONARDA20</span>
+              <span className="font-mono text-lg text-amber-300 tracking-widest">BONARDA20%</span>
               <Button variant="ghost" size="icon" onClick={copyCoupon}>
                 <Copy className="h-4 w-4 text-amber-300" />
               </Button>
@@ -46,96 +53,88 @@ const WelcomePopup = ({ isOpen, onOpenChange }) => {
         <AlertDialogFooter>
           <Button className="w-full" onClick={() => onOpenChange(false)}>
             <BadgePercent className="mr-2 h-4 w-4" />
-            Empezar a Explorar
+            ¡Genial, gracias!
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
-    </AlertDialog>
-  );
+    </AlertDialog>;
 };
-
-
 const Home = () => {
-  const { toast } = useToast();
   const location = useLocation();
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
-
   useEffect(() => {
     const hash = location.hash;
     if (hash.includes('type=signup')) {
-      // Check if we've shown it before in this session
       const welcomeShown = sessionStorage.getItem('welcomePopupShown');
       if (!welcomeShown) {
         setShowWelcomePopup(true);
         sessionStorage.setItem('welcomePopupShown', 'true');
-        // Clean up the URL
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     }
   }, [location]);
-
   const logoUrl = 'https://storage.googleapis.com/hostinger-horizons-assets-prod/1376a1dc-c051-4229-8281-e847b8e98dae/679ab33053f5b8d0d4f73e2d796f0a32.png';
   const features = [{
     icon: Users,
-    title: 'Comunidad Exclusiva',
-    description: 'Conecta con otros amantes del vino y comparte experiencias únicas.',
+    title: "Comunidad Apasionada",
+    description: "Conecta con otros amantes del vino, comparte tus descubrimientos y participa en debates.",
     color: 'from-red-500 to-rose-600',
     path: '/comunidad'
   }, {
     icon: ShoppingBag,
-    title: 'Tienda Online',
-    description: 'Descubre vinos excepcionales cuidadosamente seleccionados por sommeliers.',
+    title: "Tienda Exclusiva",
+    description: "Accede a una selección curada de vinos, merchandising y accesorios únicos del club.",
     color: 'from-purple-500 to-indigo-600',
     path: '/tienda'
   }, {
     icon: Calendar,
-    title: 'Eventos',
-    description: 'Entérate de catas, cenas de maridaje y festivales de vino únicos.',
+    title: "Eventos y Catas",
+    description: "Participa en catas virtuales y presenciales, talleres y encuentros exclusivos para miembros.",
     color: 'from-amber-500 to-yellow-600',
     path: '/eventos'
   }];
   const communityArticles = [{
-    name: 'Vinos de Selección',
-    description: 'Etiquetas curadas por la comunidad.',
+    name: "Vinos selectos",
+    description: "Descubre nuestra colección de vinos de alta calidad",
     icon: Wine,
     image: 'A curated selection of fine wine bottles'
   }, {
-    name: 'Arte y Deco',
-    description: 'Creaciones inspiradas en el vino.',
+    name: "Arte y decoración",
+    description: "Piezas únicas para decorar tus espacios con la cultura del vino",
     icon: Paintbrush,
     image: 'Artistic decorations with a wine theme'
   }, {
-    name: 'Merchandising',
-    description: 'Lleva la pasión por el vino contigo.',
+    name: "Merchandising",
+    description: "Lleva tu pasión por el vino con nuestra línea de productos",
     icon: Shirt,
     image: 'Stylish Vako Club branded merchandise'
   }, {
-    name: 'Accesorios',
-    description: 'Herramientas para el perfecto sommelier.',
+    name: "Accesorios",
+    description: "Las mejores herramientas para disfrutar al máximo de tus vinos",
     icon: GlassWater,
     image: 'Elegant wine accessories and tools'
   }];
   const stats = [{
     number: '500+',
-    label: 'Vinos Selectos',
+    label: "Vinos Catados",
     icon: Wine
   }, {
     number: '10K+',
-    label: 'Miembros Activos',
+    label: "Miembros Activos",
     icon: Users
   }, {
     number: '50+',
-    label: 'Expertos',
+    label: "Expertos Colaboradores",
     icon: Award
   }, {
     number: '4.9',
-    label: 'Valoración',
+    label: "Rating Promedio",
     icon: Star
   }];
   return <>
       <Helmet>
-        <title>Inicio - Vako Club | Descubre el Mundo del Vino</title>
-        <meta name="description" content="Bienvenido a Vako Club, tu destino para descubrir, aprender y disfrutar del fascinante mundo del vino. Únete a nuestra comunidad exclusiva." />
+        <title>Vako Club - Tu Comunidad de Vinos</title>
+        <meta name="description" content="Bienvenido a Vako Club, un espacio para amantes del vino. Explora nuestra tienda, eventos y únete a una comunidad apasionada." />
       </Helmet>
 
       <WelcomePopup isOpen={showWelcomePopup} onOpenChange={setShowWelcomePopup} />
@@ -166,28 +165,26 @@ const Home = () => {
               <img src={logoUrl} alt="Vako Club Logo" className="h-48 w-auto" />
             </motion.div>
 
-            <h1 className="font-playfair text-5xl md:text-7xl font-bold wine-text-gradient leading-tight">
-              Bienvenido a
-              <br />
-              Vako Club
-            </h1>
+            <h1 className="font-playfair text-5xl md:text-7xl font-bold wine-text-gradient leading-tight" dangerouslySetInnerHTML={{
+            __html: "Bienvenido a<br />Vako Club"
+          }}></h1>
 
             <p className="text-xl md:text-2xl text-amber-100/80 max-w-3xl mx-auto leading-relaxed">
-              Sumérgete en el fascinante mundo del vino con nuestra comunidad exclusiva de expertos y amantes del buen vino.
+              Donde cada copa cuenta una historia. Descubre, aprende y comparte tu pasión por el vino.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link to="/guia">
+              <Link to="/noticias">
                 <Button variant="outline" className="px-8 py-4 text-lg">
                   <Compass className="mr-2 h-5 w-5" />
-                  Explorar Guía
+                  Explorar Noticias
                 </Button>
               </Link>
               
               <Link to="/tienda">
                 <Button variant="default" className="px-8 py-4 text-lg">
                   <ShoppingBag className="mr-2 h-5 w-5" />
-                  Explorar Tienda
+                  Ir a la Tienda
                 </Button>
               </Link>
             </div>
@@ -234,7 +231,7 @@ const Home = () => {
               Una Experiencia Única
             </h2>
             <p className="text-xl text-amber-100/70 max-w-3xl mx-auto">
-              Descubre por qué Vako Club es la comunidad de vinos más elegante y educativa del mundo.
+              Más que un club, somos un punto de encuentro para explorar el universo del vino.
             </p>
           </motion.div>
 
@@ -283,10 +280,10 @@ const Home = () => {
           duration: 0.8
         }} className="text-center mb-16">
             <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient mb-6">
-              Artículos de Nuestra Comunidad
+              Artículos para la comunidad
             </h2>
             <p className="text-xl text-amber-100/70 max-w-3xl mx-auto">
-              Explora productos únicos creados y seleccionados por nuestros miembros.
+              Descubre nuestra selección de productos pensados para la comunidad
             </p>
           </motion.div>
 
@@ -368,16 +365,16 @@ const Home = () => {
             <Heart className="h-16 w-16 text-red-400 mx-auto" />
             
             <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient">
-              Únete a Nuestra Comunidad
+              ¿Listo para descorchar tu pasión?
             </h2>
             
-            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Descubre un mundo de sabores, conocimiento y experiencias compartidas con otros apasionados del vino.</p>
-            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Suscríbete a nuestra comunidad y obtén un 20% de descuento en todos nuestros artículos exclusivos.</p>
+            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Únete a Vako Club hoy y comienza tu viaje enológico. ¡Es gratis!</p>
+            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Te regalamos un 20% de descuento en merchandising y arte con el código: BONARDA20</p>
             
             <Link to="/suscripcion">
               <Button variant="outline" className="px-8 py-4 text-lg">
                 <Users className="mr-2 h-5 w-5" />
-                Únete al Club
+                Unirme a la Comunidad
               </Button>
             </Link>
           </motion.div>

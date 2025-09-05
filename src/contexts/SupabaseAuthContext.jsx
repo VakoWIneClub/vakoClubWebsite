@@ -79,6 +79,23 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
+    
+    supabase.auth.getSession().then(async ({ data: { session }, error }) => {
+      if (error) {
+        console.error("Error getting initial session:", error);
+        setLoading(false);
+        return;
+      }
+      if (!session) {
+        setLoading(false);
+        return;
+      }
+      await handleSession(session);
+    }).catch((error) => {
+      console.error("Unhandled error in getSession:", error);
+      setLoading(false);
+    });
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN') {
@@ -88,18 +105,15 @@ export const AuthProvider = ({ children }) => {
         } else if (event === 'TOKEN_REFRESHED') {
           await handleSession(session);
         } else if (event === 'USER_UPDATED') {
-          const userWithProfile = await fetchUserProfile(session.user);
-          setUser(userWithProfile);
+          if (session?.user) {
+            const userWithProfile = await fetchUserProfile(session.user);
+            setUser(userWithProfile);
+          }
+        } else if (event === 'INITIAL_SESSION') {
+          // This event is handled by getSession() above, but we keep it for clarity
         }
       }
     );
-    
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      handleSession(session);
-    }).catch((error) => {
-      console.error("Error getting initial session:", error);
-      setLoading(false);
-    });
 
     return () => subscription.unsubscribe();
   }, [handleSession, fetchUserProfile]);

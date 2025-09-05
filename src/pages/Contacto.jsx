@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -9,8 +10,8 @@ const Contacto = () => {
   return (
     <>
       <Helmet>
-        <title>Contacto - Vako Club | Ponte en Contacto con Nosotros</title>
-        <meta name="description" content="Contacta con nuestro equipo de expertos en vinos. Estamos aquí para ayudarte con cualquier consulta sobre vinos, cursos o eventos." />
+        <title>Contacto - Vako Club</title>
+        <meta name="description" content="¿Tienes preguntas o sugerencias? Ponte en contacto con el equipo de Vako Club. Estamos aquí para ayudarte." />
       </Helmet>
 
       {/* Hero Section */}
@@ -36,11 +37,11 @@ const Contacto = () => {
             </motion.div>
 
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Contacta con Nosotros
+              Hablemos de Vino
             </h1>
 
             <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
-              Estamos aquí para ayudarte en tu viaje por el mundo del vino. ¡Hablemos!
+              Estamos aquí para resolver tus dudas, escuchar tus sugerencias y compartir nuestra pasión.
             </p>
           </motion.div>
         </div>

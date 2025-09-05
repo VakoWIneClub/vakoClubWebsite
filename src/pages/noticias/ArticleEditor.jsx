@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -13,12 +14,10 @@ import { Loader2, Upload, Save, ArrowLeft, Tag } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
-import { useTranslation } from 'react-i18next';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
 
 const ArticleEditor = () => {
-  const { t } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -52,7 +51,7 @@ const ArticleEditor = () => {
 
       if (error || !data) {
         toast({ variant: "destructive", title: "Error", description: "No se pudo cargar el artículo para editar." });
-        navigate('/guia');
+        navigate('/noticias');
       } else {
         setArticle(data);
         setValue('title', data.title);
@@ -162,14 +161,14 @@ const ArticleEditor = () => {
         const { data, error } = await supabase.from('articles').update(articleData).eq('id', article.id).select().single();
         if (error) throw error;
         result = data;
-        toast({ title: t('guide.article_updated_success'), description: t('guide.article_updated_desc') });
+        toast({ title: "Artículo actualizado", description: "El artículo ha sido modificado con éxito." });
       } else {
         const { data, error } = await supabase.from('articles').insert(articleData).select().single();
         if (error) throw error;
         result = data;
-        toast({ title: t('guide.article_created_success'), description: t('guide.article_created_desc') });
+        toast({ title: "Artículo creado", description: "El nuevo artículo ha sido publicado." });
       }
-      navigate(`/guia/${result.slug}`);
+      navigate(`/noticias/${result.slug}`);
     } catch (error) {
       toast({ variant: "destructive", title: "Error al guardar", description: error.message });
     } finally {
@@ -188,32 +187,32 @@ const ArticleEditor = () => {
   return (
     <>
       <Helmet>
-        <title>{isEditing ? t('guide.edit_page_title') : t('guide.create_page_title')} - Vako Club</title>
+        <title>{isEditing ? 'Editando Artículo' : 'Crear Nuevo Artículo'} - Vako Club</title>
       </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex justify-between items-center">
-            <Button type="button" variant="ghost" onClick={() => navigate('/guia')} className="text-amber-200">
+            <Button type="button" variant="ghost" onClick={() => navigate('/noticias')} className="text-amber-200">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              {t('guide.back_to_guide')}
+              Volver a Noticias
             </Button>
             <h1 className="font-playfair text-3xl md:text-4xl font-bold wine-text-gradient">
-              {isEditing ? t('guide.edit_page_title') : t('guide.create_page_title')}
+              {isEditing ? 'Editar Artículo' : 'Crear Nuevo Artículo'}
             </h1>
             <Button type="submit" disabled={isSubmitting} size="lg">
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-              {isEditing ? t('guide.save_changes') : t('guide.publish')}
+              {isEditing ? 'Guardar Cambios' : 'Publicar'}
             </Button>
           </div>
 
           <div className="wine-card p-8 rounded-2xl space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-amber-200 text-lg">{t('guide.article_title_label')}</Label>
+              <Label htmlFor="title" className="text-amber-200 text-lg">Título del Artículo</Label>
               <Input
                 id="title"
-                {...register('title', { required: t('guide.title_required') })}
+                {...register('title', { required: 'El título es obligatorio.' })}
                 className="wine-input text-xl"
-                placeholder={t('guide.article_title_placeholder')}
+                placeholder="Un titular atractivo y conciso"
               />
               {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>}
             </div>
@@ -221,17 +220,17 @@ const ArticleEditor = () => {
             {isAdmin && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>{t('guide.tag1_label')}</Label>
+                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 1</Label>
                   <Controller
                     name="tag1"
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('guide.select_tag_placeholder')} />
+                          <SelectValue placeholder="Selecciona una etiqueta" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>{t('guide.no_tag')}</SelectItem>
+                          <SelectItem value={null}>Sin etiqueta</SelectItem>
                           {TAGS.map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
                         </SelectContent>
                       </Select>
@@ -239,17 +238,17 @@ const ArticleEditor = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>{t('guide.tag2_label')}</Label>
+                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 2</Label>
                    <Controller
                     name="tag2"
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value} disabled={!tag1Value}>
                         <SelectTrigger>
-                          <SelectValue placeholder={!tag1Value ? t('guide.select_tag1_first') : t('guide.select_tag_placeholder')} />
+                          <SelectValue placeholder={!tag1Value ? 'Elige primero la etiqueta 1' : 'Selecciona una etiqueta'} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>{t('guide.no_tag')}</SelectItem>
+                          <SelectItem value={null}>Sin etiqueta</SelectItem>
                           {TAGS.filter(tag => tag !== tag1Value).map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
                         </SelectContent>
                       </Select>
@@ -260,13 +259,13 @@ const ArticleEditor = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-amber-200 text-lg">{t('guide.main_image_label')}</Label>
+              <Label htmlFor="image" className="text-amber-200 text-lg">Imagen Principal</Label>
               <div className="flex items-center gap-4">
                 {imagePreview && <img src={imagePreview} alt="Vista previa" className="h-24 w-36 rounded-lg object-cover" />}
                 <Button asChild variant="outline" className="flex-1">
                   <label className="cursor-pointer">
                     <Upload className="mr-2 h-4 w-4" />
-                    {imageFile ? t('guide.change_image') : t('guide.select_image')}
+                    {imageFile ? 'Cambiar imagen' : 'Seleccionar imagen'}
                     <input id="image" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                   </label>
                 </Button>
@@ -274,11 +273,11 @@ const ArticleEditor = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-amber-200 text-lg">{t('guide.content_label')}</Label>
+              <Label className="text-amber-200 text-lg">Contenido</Label>
               <Controller
                 name="content"
                 control={control}
-                rules={{ required: t('guide.content_required') }}
+                rules={{ required: 'El contenido no puede estar vacío.' }}
                 render={({ field }) => (
                   <ReactQuill
                     ref={quillRef}

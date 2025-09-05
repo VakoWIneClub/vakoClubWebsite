@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
@@ -20,6 +21,70 @@ import DiscountPopup from "@/components/tienda/DiscountPopup";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { useToast } from "@/components/ui/use-toast";
+
+const vinosSeleccionados = [
+  {
+    id: 1,
+    name: "Rioja Reserva",
+    bodega: "Bodega Rioja Alta (vía Amazon)",
+    categoria: "tintos",
+    precio: 41.80,
+    precioOriginal: 41.80,
+    rating: 4.3,
+    reviews: 124,
+    descripcion:
+      "Un Rioja excepcional. Garnacha, Tempranillo (Producto de terceros)",
+    alcohol: "14%",
+    region: "La Rioja, España",
+    maridaje: "Carnes rojas, quesos curados",
+    stock: 155,
+    destacado: true,
+    descuento: 0,
+    externalLink:
+      "https://amzn.to/3JecTWD",
+    image: "images/vina-ardanza-rioja-reserva.jpg"
+  },
+  {
+    id: 2,
+    name: "Pack Ramón Bilbao 3 Botellas",
+    bodega: "Ramón Bilbao (vía Amazon)",
+    categoria: "tintos",
+    precio: 44.99,
+    precioOriginal: 44.99,
+    rating: 4.1,
+    reviews: 45,
+    descripcion: "Ramón Bilbao Crianza, Ramón Bilbao Edición, Ramón Bilbao Reserva.",
+    alcohol: "14%",
+    region: "Rioja",
+    maridaje: "Carnes",
+    stock: null,
+    destacado: true,
+    descuento: null,
+    externalLink:
+      "https://amzn.to/3V5vQND",
+    image: "images/81W4aW0HRXS._AC_SX679_.jpg"
+  },
+  {
+    id: 3,
+    name: "Martín Códax Lías albariño ",
+    bodega: "Martín Códax (vía Amazon)",
+    categoria: "blancos",
+    precio: 22,
+    precioOriginal: 26,
+    rating: 4.3,
+    reviews: 16,
+    descripcion: "Elegancia y tradición en cada burbuja, método tradicional.",
+    alcohol: "13%",
+    region: "D.O. Rías Baixas",
+    maridaje: "Mariscos, Pescado",
+    stock: 31,
+    destacado: true,
+    descuento: null,
+    externalLink:
+      "https://amzn.to/46VJgmO",
+    image: "images/images(3).jpg"
+  },
+];
 const arteYDeco = [
   {
     id: 7,
@@ -191,86 +256,24 @@ const accesorios = [
     image: "images/71fIFF6k+FL._AC_SL1500_.jpg",
   },
 ];
-const vinosSeleccionados = [
-  {
-    id: 1,
-    name: "Rioja Reserva",
-    bodega: "Bodega Rioja Alta (vía Amazon)",
-    categoria: "tintos",
-    precio: 41.80,
-    precioOriginal: 41.80,
-    rating: 4.3,
-    reviews: 124,
-    image: "Premium Rioja red wine bottle with elegant label",
-    descripcion:
-      "Un Rioja excepcional. Garnacha, Tempranillo (Producto de terceros)",
-    alcohol: "14%",
-    region: "La Rioja, España",
-    maridaje: "Carnes rojas, quesos curados",
-    stock: 155,
-    destacado: true,
-    descuento: 0,
-    externalLink:
-      "https://amzn.to/3JecTWD",
-    image: "images/vina-ardanza-rioja-reserva.jpg"
-  },
-  {
-    id: 2,
-    name: "Pack Ramón Bilbao 3 Botellas",
-    bodega: "Ramón Bilbao (vía Amazon)",
-    categoria: "tintos",
-    precio: 44.99,
-    precioOriginal: 44.99,
-    rating: 4.1,
-    reviews: 45,
-    image: "Ramon Bilbao",
-    descripcion: "Ramón Bilbao Crianza, Ramón Bilbao Edición, Ramón Bilbao Reserva.",
-    alcohol: "14%",
-    region: "Rioja",
-    maridaje: "Carnes",
-    stock: null,
-    destacado: true,
-    descuento: null,
-    externalLink:
-      "https://amzn.to/3V5vQND",
-    image: "images/81W4aW0HRXS._AC_SX679_.jpg"
-  },
-  {
-    id: 3,
-    name: "Martín Códax Lías albariño ",
-    bodega: "Martín Códax (vía Amazon)",
-    categoria: "blancos",
-    precio: 22,
-    precioOriginal: 26,
-    rating: 4.3,
-    reviews: 16,
-    image: "Traditional Cava sparkling wine bottle with golden foil",
-    descripcion: "Elegancia y tradición en cada burbuja, método tradicional.",
-    alcohol: "13%",
-    region: "D.O. Rías Baixas",
-    maridaje: "Mariscos, Pescado",
-    stock: 31,
-    destacado: true,
-    descuento: null,
-    externalLink:
-      "https://amzn.to/46VJgmO",
-    image: "images/images(3).jpg"
-  },
-];
-const ViewEtsyButton = () => (
-  <div className="mt-8 text-center">
-    <a
-      href="https://www.etsy.com/shop/VakoWineClub"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Button variant="outline" size="lg">
-        <ExternalLink className="mr-2 h-5 w-5" />
-        Ver Tienda Completa
-      </Button>
-    </a>
-  </div>
-);
+
+const ViewEtsyButton = () => {
+  return (
+    <div className="mt-8 text-center">
+      <a
+        href="https://www.etsy.com/shop/VakoWineClub"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button variant="outline" size="lg">
+          <ExternalLink className="mr-2 h-5 w-5" />
+          Ver Tienda Completa en Etsy
+        </Button>
+      </a>
+    </div>
+  );
+};
+
 const Section = ({ title, icon: Icon, products, showEtsyButton = false }) => (
   <div className="py-16">
     <motion.div
@@ -298,13 +301,14 @@ const Section = ({ title, icon: Icon, products, showEtsyButton = false }) => (
     {showEtsyButton && <ViewEtsyButton />}
   </div>
 );
+
 const MemberCouponSection = () => {
   const { toast } = useToast();
   const copyCoupon = () => {
     navigator.clipboard.writeText("BONARDA20");
     toast({
-      title: "¡Copiado!",
-      description: "Cupón copiado al portapapeles.",
+      title: "¡Cupón copiado!",
+      description: "Usa BONARDA20 en la tienda de Etsy.",
     });
   };
   return (
@@ -325,11 +329,10 @@ const MemberCouponSection = () => {
       >
         <BadgePercent className="h-12 w-12 mx-auto wine-text-gradient mb-4" />
         <h2 className="font-playfair text-3xl font-bold text-amber-200">
-          Tu Beneficio Exclusivo
+          Descuento Exclusivo para Miembros
         </h2>
         <p className="mt-2 text-lg text-amber-100/80">
-          Como miembro de Vako Club, tienes un cupón de descuento del 20% en
-          todos los productos de nuestra tienda exclusiva.
+          Como miembro de Vako Club, disfruta de un 20% de descuento en todo nuestro merchandising y arte.
         </p>
         <div className="mt-6 bg-stone-800/50 border border-amber-500/30 rounded-lg p-4 inline-flex items-center justify-center gap-4">
           <span className="font-mono text-2xl text-amber-300 tracking-widest">
@@ -343,6 +346,7 @@ const MemberCouponSection = () => {
     </div>
   );
 };
+
 const Tienda = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const { user } = useAuth();
@@ -369,7 +373,7 @@ const Tienda = () => {
         <title>Tienda Exclusiva - Vako Club | Vinos, Arte y Accesorios</title>
         <meta
           name="description"
-          content="Explora la Tienda Exclusiva de Vako Club. Encuentra vinos de selección, arte, merchandising y accesorios únicos para amantes del vino."
+          content="Explora la tienda de Vako Club. Encuentra vinos seleccionados, merchandising exclusivo, arte y accesorios para amantes del vino."
         />
       </Helmet>
 
@@ -414,12 +418,11 @@ const Tienda = () => {
             </motion.div>
 
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Tienda Exclusiva
+              Tienda Vako Club
             </h1>
 
             <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
-              Descubre artículos únicos de nuestra comunidad: desde vinos de
-              selección hasta arte, merchandising y accesorios.
+              Una selección de productos que celebran la cultura del vino.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 text-amber-100/80">
