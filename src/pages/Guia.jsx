@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -9,8 +8,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link, useSearchParams } from 'react-router-dom';
 import WineryList from '@/components/guia/WineryList';
+import DOMPurify from 'dompurify';
 
 const WINERIES_PER_PAGE = 9;
+
+// Sanitiza HTML y devuelve un texto plano truncado
+const makeExcerpt = (html = '', maxLen = 180) => {
+  if (!html) return '';
+  const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  // Convierte a texto plano
+  const div = document.createElement('div');
+  div.innerHTML = safe;
+  const text = (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen - 1).trimEnd() + '…';
+};
 
 const Guia = () => {
   const { user } = useAuth();
@@ -59,10 +71,16 @@ const Guia = () => {
     if (error) {
       console.error('Error fetching wineries:', error);
     } else {
-      setWineries(prev => isLoadMore ? [...prev, ...data] : data);
+      // Adjunta excerpt seguro desde la descripción HTML (ReactQuill)
+      const withExcerpts = (data || []).map(w => ({
+        ...w,
+        description_excerpt: makeExcerpt(w.description, 180),
+      }));
+
+      setWineries(prev => isLoadMore ? [...prev, ...withExcerpts] : withExcerpts);
       setHasMore(prev => {
-        const currentCount = isLoadMore ? wineries.length + data.length : data.length;
-        return currentCount < count;
+        const currentCount = isLoadMore ? wineries.length + withExcerpts.length : withExcerpts.length;
+        return currentCount < (count || 0);
       });
     }
 
@@ -77,13 +95,17 @@ const Guia = () => {
   useEffect(() => {
     setPage(0);
     fetchWineries(0, nameFilter, countryFilter, cityFilter, false);
-  }, [nameFilter, countryFilter, cityFilter]);
+  }, [nameFilter, countryFilter, cityFilter, fetchWineries]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(0);
     setWineries([]);
-    setSearchParams({ name: nameInput, country: countryInput, city: cityInput });
+    const params = {};
+    if (nameInput) params.name = nameInput;
+    if (countryInput) params.country = countryInput;
+    if (cityInput) params.city = cityInput;
+    setSearchParams(params);
   };
 
   const clearFilters = () => {
