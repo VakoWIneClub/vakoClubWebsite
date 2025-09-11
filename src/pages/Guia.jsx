@@ -12,14 +12,18 @@ import DOMPurify from 'dompurify';
 
 const WINERIES_PER_PAGE = 9;
 
-// Sanitiza HTML y devuelve un texto plano truncado
-const makeExcerpt = (html = '', maxLen = 180) => {
+/** Quita todo HTML y devuelve texto plano truncado */
+const stripHtmlToText = (html = '') => {
   if (!html) return '';
+  // Sanitiza primero por seguridad
   const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-  // Convierte a texto plano
-  const div = document.createElement('div');
-  div.innerHTML = safe;
-  const text = (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  // Fallback robusto sin depender del DOM del navegador
+  const noTags = safe.replace(/<[^>]*>/g, ' ');
+  return noTags.replace(/\s+/g, ' ').trim();
+};
+
+const makeExcerpt = (html = '', maxLen = 180) => {
+  const text = stripHtmlToText(html);
   if (text.length <= maxLen) return text;
   return text.slice(0, maxLen - 1).trimEnd() + '…';
 };
@@ -46,11 +50,7 @@ const Guia = () => {
     if (isFetching.current) return;
     isFetching.current = true;
 
-    if (isLoadMore) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-    }
+    if (isLoadMore) setLoadingMore(true); else setLoading(true);
 
     let query = supabase
       .from('wineries')
@@ -71,24 +71,22 @@ const Guia = () => {
     if (error) {
       console.error('Error fetching wineries:', error);
     } else {
-      // Adjunta excerpt seguro desde la descripción HTML (ReactQuill)
-      const withExcerpts = (data || []).map(w => ({
-        ...w,
-        description_excerpt: makeExcerpt(w.description, 180),
-      }));
-
-      setWineries(prev => isLoadMore ? [...prev, ...withExcerpts] : withExcerpts);
-      setHasMore(prev => {
-        const currentCount = isLoadMore ? wineries.length + withExcerpts.length : withExcerpts.length;
-        return currentCount < (count || 0);
+      // Para la vista de lista: forzamos description en texto plano y añadimos excerpt
+      const mapped = (data || []).map(w => {
+        const plain = stripHtmlToText(w.description);
+        return {
+          ...w,
+          description: plain,                // <-- forzamos texto plano en la lista
+          description_excerpt: makeExcerpt(w.description, 180),
+        };
       });
+
+      setWineries(prev => (isLoadMore ? [...prev, ...mapped] : mapped));
+      const currentCount = isLoadMore ? (wineries.length + mapped.length) : mapped.length;
+      setHasMore(currentCount < (count || 0));
     }
 
-    if (isLoadMore) {
-      setLoadingMore(false);
-    } else {
-      setLoading(false);
-    }
+    if (isLoadMore) setLoadingMore(false); else setLoading(false);
     isFetching.current = false;
   }, [wineries.length]);
 
