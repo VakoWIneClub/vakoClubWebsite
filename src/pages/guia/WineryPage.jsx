@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +9,7 @@ import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import GrapeRating from '@/components/guia/GrapeRating';
+import DOMPurify from 'dompurify';
 
 const WineryMap = lazy(() => import('@/components/guia/WineryMap'));
 
@@ -93,11 +93,16 @@ const WineryPage = () => {
   const formattedDate = format(new Date(winery.created_at), "d 'de' MMMM, yyyy", { locale: es });
   const hasImages = winery.image_urls && winery.image_urls.length > 0;
 
+  // Sanitiza HTML generado por ReactQuill
+  const safeDescriptionHtml = winery.description
+    ? DOMPurify.sanitize(winery.description, { USE_PROFILES: { html: true } })
+    : '';
+
   return (
     <>
       <Helmet>
         <title>{`${winery.title} - Guía de Bodegas`}</title>
-        <meta name="description" content={winery.description?.substring(0, 160) || `Descubre más sobre ${winery.title} en Vako Club.`} />
+        <meta name="description" content={winery.description?.replace(/<[^>]+>/g, '').substring(0, 160) || `Descubre más sobre ${winery.title} en Vako Club.`} />
       </Helmet>
 
       <div className="wine-pattern pt-12 pb-20">
@@ -190,11 +195,13 @@ const WineryPage = () => {
               )}
 
               {winery.description && (
-                <div className="prose prose-lg prose-invert max-w-none 
-                  prose-p:text-amber-100/80 prose-p:leading-relaxed
-                  prose-a:text-amber-300 hover:prose-a:text-amber-100 prose-a:transition-colors
-                  prose-strong:text-amber-100 mt-8"
-                  dangerouslySetInnerHTML={{ __html: winery.description.replace(/\n/g, '<br />') }}
+                <div
+                  className="prose prose-lg prose-invert max-w-none 
+                    prose-p:text-amber-100/80 prose-p:leading-relaxed
+                    prose-a:text-amber-300 hover:prose-a:text-amber-100 prose-a:transition-colors
+                    prose-strong:text-amber-100 mt-8
+                    prose-img:rounded-lg prose-img:mx-auto prose-img:max-h-[600px] prose-img:w-auto"
+                  dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }}
                 />
               )}
               
