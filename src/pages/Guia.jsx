@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -9,8 +8,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link, useSearchParams } from 'react-router-dom';
 import WineryList from '@/components/guia/WineryList';
+import DOMPurify from 'dompurify';
 
 const WINERIES_PER_PAGE = 9;
+
+/** Quita todo HTML y devuelve texto plano truncado */
+const stripHtmlToText = (html = '') => {
+  if (!html) return '';
+  // Sanitiza primero por seguridad
+  const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  // Fallback robusto sin depender del DOM del navegador
+  const noTags = safe.replace(/<[^>]*>/g, ' ');
+  return noTags.replace(/\s+/g, ' ').trim();
+};
+
+const makeExcerpt = (html = '', maxLen = 180) => {
+  const text = stripHtmlToText(html);
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen - 1).trimEnd() + '…';
+};
 
 const Guia = () => {
   const { user } = useAuth();
@@ -34,11 +50,7 @@ const Guia = () => {
     if (isFetching.current) return;
     isFetching.current = true;
 
-    if (isLoadMore) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-    }
+    if (isLoadMore) setLoadingMore(true); else setLoading(true);
 
     let query = supabase
       .from('wineries')
@@ -59,31 +71,39 @@ const Guia = () => {
     if (error) {
       console.error('Error fetching wineries:', error);
     } else {
-      setWineries(prev => isLoadMore ? [...prev, ...data] : data);
-      setHasMore(prev => {
-        const currentCount = isLoadMore ? wineries.length + data.length : data.length;
-        return currentCount < count;
+      // Para la vista de lista: forzamos description en texto plano y añadimos excerpt
+      const mapped = (data || []).map(w => {
+        const plain = stripHtmlToText(w.description);
+        return {
+          ...w,
+          description: plain,                // <-- forzamos texto plano en la lista
+          description_excerpt: makeExcerpt(w.description, 180),
+        };
       });
+
+      setWineries(prev => (isLoadMore ? [...prev, ...mapped] : mapped));
+      const currentCount = isLoadMore ? (wineries.length + mapped.length) : mapped.length;
+      setHasMore(currentCount < (count || 0));
     }
 
-    if (isLoadMore) {
-      setLoadingMore(false);
-    } else {
-      setLoading(false);
-    }
+    if (isLoadMore) setLoadingMore(false); else setLoading(false);
     isFetching.current = false;
   }, [wineries.length]);
 
   useEffect(() => {
     setPage(0);
     fetchWineries(0, nameFilter, countryFilter, cityFilter, false);
-  }, [nameFilter, countryFilter, cityFilter]);
+  }, [nameFilter, countryFilter, cityFilter, fetchWineries]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(0);
     setWineries([]);
-    setSearchParams({ name: nameInput, country: countryInput, city: cityInput });
+    const params = {};
+    if (nameInput) params.name = nameInput;
+    if (countryInput) params.country = countryInput;
+    if (cityInput) params.city = cityInput;
+    setSearchParams(params);
   };
 
   const clearFilters = () => {
