@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Wine, Star, Users, Calendar, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent } from 'lucide-react';
+import { Wine, Star, Users, Calendar, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -183,7 +183,7 @@ const Home = () => {
               
               <Link to="/noticias">
                 <Button variant="default" className="px-8 py-4 text-lg">
-                  <ShoppingBag className="mr-2 h-5 w-5" />
+                  <Newspaper className="mr-2 h-5 w-5" />
                   Ver Noticias
                 </Button>
               </Link>
