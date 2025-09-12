@@ -92,7 +92,7 @@ const Suscripcion = () => {
   }, [user, navigate]);
 
   const subscriptionPlans = [
-    { icon: Star, title: "Plan Aficionado", price: "Gratis", features: ["Acceso al foro", "Perfil de miembro", "Boletín mensual"], available: true },
+    { icon: Star, title: "Plan Aficionado", price: "Gratis", features: ["Guía Exclusiva", "Acceso al foro", "Perfil de miembro"], available: true },
     { icon: Gem, title: "Plan Sommelier", price: "$9/mes", features: ["Todo en Aficionado", "Catas virtuales", "Contenido exclusivo"], available: false },
     { icon: Crown, title: "Plan Reserva", price: "$19/mes", features: ["Todo en Sommelier", "Envío de vinos trimestral", "Acceso prioritario a eventos"], available: false },
   ];
