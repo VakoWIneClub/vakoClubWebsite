@@ -200,7 +200,7 @@ const Eventos = () => {
     <>
       <Helmet>
         <title>Eventos de Vino - Vako Club</title>
-        <meta name="description" content="Descubre y participa en nuestros exclusivos eventos de vino. Catas, talleres y encuentros para amantes del vino en Vako Club." />
+        <meta name="description" content="Descubre y participa en eventos de vino. Catas, talleres y encuentros para amantes del vino en Vako Club." />
       </Helmet>
 
       <section className="relative py-20 overflow-hidden">
@@ -213,7 +213,7 @@ const Eventos = () => {
               </div>
             </motion.div>
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Eventos Exclusivos</h1>
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Únete a nuestras catas, talleres y encuentros. Vive la cultura del vino de una forma única.</p>
+            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Infórmate sobre catas, talleres y encuentros. Vive la cultura del vino de una forma única.</p>
           </motion.div>
         </div>
       </section>

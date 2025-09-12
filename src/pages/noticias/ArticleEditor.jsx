@@ -15,7 +15,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 
-const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
+const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 
 const ArticleEditor = () => {
   const { slug } = useParams();
