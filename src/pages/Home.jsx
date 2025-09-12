@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Wine, Star, Users, Calendar, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent } from 'lucide-react';
+import { Wine, Star, Users, Calendar, ShoppingBag, Award, Heart, Grape, Paintbrush, Shirt, GlassWater, Compass, PartyPopper, Copy, BadgePercent, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -174,17 +174,17 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link to="/noticias">
+              <Link to="/guia">
                 <Button variant="outline" className="px-8 py-4 text-lg">
                   <Compass className="mr-2 h-5 w-5" />
-                  Explorar Noticias
+                  Explorar Guía
                 </Button>
               </Link>
               
-              <Link to="/tienda">
+              <Link to="/noticias">
                 <Button variant="default" className="px-8 py-4 text-lg">
-                  <ShoppingBag className="mr-2 h-5 w-5" />
-                  Ir a la Tienda
+                  <Newspaper className="mr-2 h-5 w-5" />
+                  Ver Noticias
                 </Button>
               </Link>
             </div>

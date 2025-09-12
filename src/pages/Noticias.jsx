@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import ArticleList from '@/components/noticias/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias"];
+const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 const ARTICLES_PER_PAGE = 6;
 
 const Noticias = () => {
