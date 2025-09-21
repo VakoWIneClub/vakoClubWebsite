@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Helmet } from 'react-helmet';
@@ -8,13 +9,10 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GrapeRating from '@/components/guia/GrapeRating';
-
-// ReactQuill
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 const WineryEditor = () => {
   const { slug } = useParams();
@@ -22,7 +20,7 @@ const WineryEditor = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { register, handleSubmit, setValue, control, watch, formState: { errors } } = useForm({
-    defaultValues: { score: 0 }
+    defaultValues: { score: 0, description: '' }
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +32,22 @@ const WineryEditor = () => {
   const watchedScore = watch('score');
   const isEditing = !!slug;
 
-  const reactQuillRef = useRef(null);
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      ['link'],
+      ['clean']
+    ],
+  };
+
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline', 'blockquote',
+    'list', 'bullet',
+    'link'
+  ];
 
   useEffect(() => {
     const fetchWinery = async () => {
@@ -56,6 +69,7 @@ const WineryEditor = () => {
         setValue('address', data.address);
         setValue('country', data.country);
         setValue('city', data.city);
+        setValue('website_url', data.website_url);
         setImagePreviews(data.image_urls || []);
       }
       setIsLoading(false);
@@ -65,7 +79,7 @@ const WineryEditor = () => {
   }, [slug, isEditing, navigate, setValue, toast]);
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files);
     if (files.length > 0) {
       setImageFiles(prev => [...prev, ...files]);
       const newPreviews = files.map(file => URL.createObjectURL(file));
@@ -80,7 +94,6 @@ const WineryEditor = () => {
     const removedPreview = newPreviews.splice(index, 1)[0];
     setImagePreviews(newPreviews);
 
-    // Si el preview era un blob local, intenta quitar su file pareja
     if (removedPreview.startsWith('blob:')) {
       const fileIndex = imageFiles.findIndex(file => URL.createObjectURL(file) === removedPreview);
       if (fileIndex > -1) newFiles.splice(fileIndex, 1);
@@ -94,7 +107,7 @@ const WineryEditor = () => {
 
     for (const file of imageFiles) {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id}_${Date.now()}_${Math.random()}.${fileExt}`;
+      const fileName = `${user.id}_${Date.now()}_${Math.random()}.${fileExt}`;
       const filePath = `public/${fileName}`;
 
       const { error } = await supabase.storage.from('winery-images').upload(filePath, file);
@@ -107,65 +120,15 @@ const WineryEditor = () => {
     return [...existingUrls, ...uploadedUrls];
   };
 
-  // === Quill: handler para subir e insertar imágenes ===
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file || !user) return;
-
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${user.id}_${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`;
-        const filePath = `public/${fileName}`;
-
-        const { error } = await supabase.storage.from('winery-images').upload(filePath, file);
-        if (error) throw error;
-
-        const { data } = supabase.storage.from('winery-images').getPublicUrl(filePath);
-        const url = data.publicUrl;
-
-        const quill = reactQuillRef.current?.getEditor?.();
-        const range = quill?.getSelection(true);
-        quill?.insertEmbed(range?.index ?? 0, 'image', url, 'user');
-        quill?.setSelection((range?.index ?? 0) + 1);
-
-      } catch (e) {
-        toast({ variant: 'destructive', title: 'Error al subir imagen', description: e.message || 'Inténtalo de nuevo' });
-      }
-    };
-    input.click();
-  }, [user, toast]);
-
-  // === Quill: módulos y formatos ===
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-        ['link', 'image', 'video'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }), [imageHandler]);
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video',
-  ];
-
   const getCoordinatesForAddress = async (address) => {
-    if (!address) return { latitude: null, longitude: null };
+    if (!address || address.trim() === '') {
+      return { latitude: null, longitude: null };
+    }
     try {
       const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data && data.length > 0) {
         return { latitude: parseFloat(data[0].lat), longitude: parseFloat(data[0].lon) };
@@ -192,11 +155,12 @@ const WineryEditor = () => {
 
       const wineryData = {
         title: formData.title,
-        description: formData.description, // HTML de ReactQuill
+        description: formData.description,
         score: formData.score ? parseFloat(formData.score) : null,
         country: formData.country,
         city: formData.city,
         address: formData.address,
+        website_url: formData.website_url,
         latitude,
         longitude,
         image_urls: imageUrls,
@@ -218,7 +182,7 @@ const WineryEditor = () => {
       }
       navigate(`/guia/${result.slug}`);
     } catch (error) {
-      toast({ variant: "destructive", title: "Error al guardar", description: error.message || 'Revisa los datos e inténtalo de nuevo.' });
+      toast({ variant: "destructive", title: "Error al guardar", description: error.message });
     } finally {
       setIsSubmitting(false);
     }
@@ -258,7 +222,7 @@ const WineryEditor = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
+               <div className="space-y-2">
                 <Label htmlFor="country" className="text-amber-200 text-lg"><Globe className="inline-block mr-2 h-5 w-5"/>País</Label>
                 <Input id="country" {...register('country', { required: 'El país es obligatorio' })} className="wine-input" placeholder="Ej: Argentina"/>
                 {errors.country && <p className="text-red-400 text-sm mt-1">{errors.country.message}</p>}
@@ -274,22 +238,24 @@ const WineryEditor = () => {
               <Label htmlFor="address" className="text-amber-200 text-lg">Dirección Completa</Label>
               <Input id="address" {...register('address')} className="wine-input" placeholder="Para mostrar en el mapa (Ej: Cobos s/n, Luján de Cuyo, Mendoza, Argentina)"/>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="website_url" className="text-amber-200 text-lg"><LinkIcon className="inline-block mr-2 h-5 w-5"/>Sitio Web</Label>
+              <Input id="website_url" {...register('website_url')} className="wine-input" placeholder="https://www.bodega.com"/>
+            </div>
             
             <div className="space-y-2">
               <Label htmlFor="description" className="text-amber-200 text-lg">Descripción</Label>
               <Controller
                 name="description"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <ReactQuill
-                    ref={reactQuillRef}
                     theme="snow"
-                    value={field.value || ''}
+                    value={field.value}
                     onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    modules={modules}
-                    formats={formats}
+                    modules={quillModules}
+                    formats={quillFormats}
                     placeholder="Describe la bodega, su historia, sus vinos destacados, etc."
                   />
                 )}

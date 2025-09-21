@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -100,7 +99,7 @@ const ArticlePage = () => {
   return (
     <>
       <Helmet>
-        <title>{`${article.title} - Noticias Vako Club`}</title>
+        <title>{`${article.title} - Noticias de Vako Club`}</title>
         <meta name="description" content={createSnippet(article.content)} />
       </Helmet>
 
@@ -161,7 +160,7 @@ const ArticlePage = () => {
                     ) : (
                       <User className="h-5 w-5 mr-2 text-amber-300/80" />
                     )}
-                    <span>{author.name || "Autor Desconocido"}</span>
+                    <span>{author.name || 'Autor Desconocido'}</span>
                   </div>
                 )}
               </div>

@@ -22,7 +22,7 @@ const WineryMap = ({ lat, lon, title }) => {
 
     return (
         <motion.div 
-            className="h-96 rounded-2xl overflow-hidden shadow-lg shadow-black/20 my-8"
+            className="h-96 rounded-2xl overflow-hidden shadow-lg shadow-black/20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}

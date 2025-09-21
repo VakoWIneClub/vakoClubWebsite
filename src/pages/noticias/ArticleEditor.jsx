@@ -23,7 +23,7 @@ const ArticleEditor = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { register, handleSubmit, setValue, control, watch, formState: { errors } } = useForm();
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [article, setArticle] = useState(null);
@@ -42,7 +42,7 @@ const ArticleEditor = () => {
         setIsLoading(false);
         return;
       }
-      
+
       const { data, error } = await supabase
         .from('articles')
         .select('*')
@@ -127,7 +127,7 @@ const ArticleEditor = () => {
       container: [
         [{ 'header': [1, 2, 3, 4, false] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
         ['link', 'image', 'video'],
         ['clean']
       ],
@@ -220,7 +220,7 @@ const ArticleEditor = () => {
             {isAdmin && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 1</Label>
+                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4" />Etiqueta 1</Label>
                   <Controller
                     name="tag1"
                     control={control}
@@ -238,8 +238,8 @@ const ArticleEditor = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4"/>Etiqueta 2</Label>
-                   <Controller
+                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4" />Etiqueta 2</Label>
+                  <Controller
                     name="tag2"
                     control={control}
                     render={({ field }) => (

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -25,7 +24,6 @@ import EmailVerification from '@/pages/EmailVerification';
 import AuthCallback from '@/pages/AuthCallback';
 import ScrollToTop from '@/components/ScrollToTop';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { AuthProvider } from '@/contexts/SupabaseAuthContext';
 import ArticlePage from '@/pages/noticias/ArticlePage';
 import ArticleEditor from '@/pages/noticias/ArticleEditor';
 import EventoPage from '@/pages/eventos/EventoPage';
@@ -35,54 +33,52 @@ import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <ScrollToTop />
-        <AgeVerificationPopup />
-        <div className="min-h-screen wine-pattern flex flex-col">
-          <Helmet>
-            <title>Vako Club - Descubre el Mundo del Vino</title>
-            <meta name="description" content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales." />
-          </Helmet>
-          
-          <Navbar />
-          
-          <main className="pt-20 flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/guia" element={<Guia />} />
-              <Route path="/guia/crear" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
-              <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
-              <Route path="/guia/:slug" element={<WineryPage />} />
-              <Route path="/noticias" element={<Noticias />} />
-              <Route path="/noticias/crear" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
-              <Route path="/noticias/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
-              <Route path="/noticias/:slug" element={<ArticlePage />} />
-              <Route path="/eventos" element={<Eventos />} />
-              <Route path="/eventos/crear" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
-              <Route path="/eventos/editar/:slug" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
-              <Route path="/eventos/:slug" element={<EventoPage />} />
-              <Route path="/comunidad" element={<Comunidad />} />
-              <Route path="/tienda" element={<Tienda />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/suscripcion" element={<Suscripcion />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
-              <Route path="/terminos" element={<Terminos />} />
-              <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
-              <Route path="/email-verification" element={<EmailVerification />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-            </Routes>
-          </main>
-          
-          <Footer />
-          <Toaster />
+    <>
+      <ScrollToTop />
+      <AgeVerificationPopup />
+      <div className="min-h-screen wine-pattern flex flex-col">
+        <Helmet>
+          <title>Vako Club - Descubre el Mundo del Vino</title>
+          <meta name="description" content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales." />
+        </Helmet>
+        
+        <Navbar />
+        
+        <main className="pt-20 flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/guia" element={<ProtectedRoute><Guia /></ProtectedRoute>} />
+            <Route path="/guia/crear" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
+            <Route path="/guia/editar/:slug" element={<ProtectedRoute adminOnly><WineryEditor /></ProtectedRoute>} />
+            <Route path="/guia/:slug" element={<ProtectedRoute><WineryPage /></ProtectedRoute>} />
+            <Route path="/noticias" element={<Noticias />} />
+            <Route path="/noticias/crear" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
+            <Route path="/noticias/editar/:slug" element={<ProtectedRoute adminOnly><ArticleEditor /></ProtectedRoute>} />
+            <Route path="/noticias/:slug" element={<ArticlePage />} />
+            <Route path="/eventos" element={<Eventos />} />
+            <Route path="/eventos/crear" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
+            <Route path="/eventos/editar/:slug" element={<ProtectedRoute adminOnly><EventoEditor /></ProtectedRoute>} />
+            <Route path="/eventos/:slug" element={<EventoPage />} />
+            <Route path="/comunidad" element={<Comunidad />} />
+            <Route path="/tienda" element={<Tienda />} />
+            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/suscripcion" element={<Suscripcion />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+            <Route path="/terminos" element={<Terminos />} />
+            <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
+            <Route path="/email-verification" element={<EmailVerification />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+          </Routes>
+        </main>
+        
+        <Footer />
+        <Toaster />
           <SpeedInsights />
           <Analytics />
-        </div>
-      </AuthProvider>
-    </Router>
+      </div>
+    </>
   );
 }
 

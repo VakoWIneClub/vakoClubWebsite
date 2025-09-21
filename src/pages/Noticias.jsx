@@ -19,7 +19,7 @@ const Noticias = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -65,11 +65,11 @@ const Noticias = () => {
 
   useEffect(() => {
     if (isInitialLoad.current) {
-        isInitialLoad.current = false;
-        fetchArticles(0, activeTag);
+      isInitialLoad.current = false;
+      fetchArticles(0, activeTag);
     }
   }, [activeTag, fetchArticles]);
-  
+
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -92,7 +92,7 @@ const Noticias = () => {
   const handleArticleDeleted = (deletedArticleId) => {
     setArticles(articles.filter(article => article.id !== deletedArticleId));
   };
-  
+
   const isAdmin = user && user.role === 'admin';
 
   return (
@@ -120,13 +120,13 @@ const Noticias = () => {
           </motion.div>
 
           {isAdmin && (
-             <div className="mb-8 text-center">
-                <Button asChild size="lg">
-                  <Link to="/noticias/crear">
-                    <PlusCircle className="mr-2 h-5 w-5" />
-                    Crear Artículo
-                  </Link>
-                </Button>
+            <div className="mb-8 text-center">
+              <Button asChild size="lg">
+                <Link to="/noticias/crear">
+                  <PlusCircle className="mr-2 h-5 w-5" />
+                  Crear Artículo
+                </Link>
+              </Button>
             </div>
           )}
 
@@ -152,13 +152,13 @@ const Noticias = () => {
           </div>
 
           {loading ? (
-             <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
-             </div>
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
+            </div>
           ) : (
             <>
-              <ArticleList 
-                articles={articles} 
+              <ArticleList
+                articles={articles}
                 isAdmin={isAdmin}
                 onArticleDeleted={handleArticleDeleted}
                 onTagClick={handleTagClick}
