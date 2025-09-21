@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -58,7 +59,7 @@ const Guia = () => {
     } else if (data) {
       setWineries(prev => {
         const newWineries = isLoadMore ? [...prev, ...data] : data;
-        setHasMore(newWineries.length < count);
+        setHasMore(newWineries.length < (count ?? 0));
         return newWineries;
       });
     }
@@ -75,7 +76,7 @@ const Guia = () => {
     return () => {
       controller.abort();
     };
-  }, [nameFilter, countryFilter, cityFilter]);
+  }, [nameFilter, countryFilter, cityFilter, fetchWineries]);
   const handleSearch = e => {
     e.preventDefault();
     setPage(0);
