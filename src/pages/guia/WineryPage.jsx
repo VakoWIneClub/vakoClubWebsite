@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -74,6 +73,11 @@ const WineryPage = () => {
   }
 
   const sanitizedDescription = DOMPurify.sanitize(winery.description);
+
+  // Ensure website_url has a protocol
+  const websiteUrl = winery.website_url && !winery.website_url.startsWith('http://') && !winery.website_url.startsWith('https://')
+    ? `https://${winery.website_url}`
+    : winery.website_url;
 
   return (
     <>
@@ -157,9 +161,9 @@ const WineryPage = () => {
                       />
                     </>
                   )}
-                  {winery.website_url && (
+                  {websiteUrl && (
                     <Button asChild variant="outline">
-                      <a href={winery.website_url} target="_blank" rel="noopener noreferrer">
+                      <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" /> Visitar Web
                       </a>
                     </Button>
