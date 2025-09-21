@@ -1,78 +1,60 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Calendar, User, ArrowLeft, Pencil, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
+import { Loader2, MapPin, Pencil, Trash2, ChevronLeft, ChevronRight, ExternalLink, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import GrapeRating from '@/components/guia/GrapeRating';
-import DOMPurify from 'dompurify';
-
-const WineryMap = lazy(() => import('@/components/guia/WineryMap'));
+import { useFavorites } from '@/contexts/FavoritesContext';
+import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
+import WineryMap from '@/components/guia/WineryMap';
+import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
 
 const WineryPage = () => {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const { user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [winery, setWinery] = useState(null);
-  const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const isAdmin = user && user.role === 'admin';
 
   useEffect(() => {
     const fetchWinery = async () => {
       setLoading(true);
-      const { data: wineryData, error: wineryError } = await supabase
+      const { data, error } = await supabase
         .from('wineries')
         .select('*')
         .eq('slug', slug)
         .single();
 
-      if (wineryError || !wineryData) {
-        console.error('Error fetching winery:', wineryError);
-        navigate('/guia');
-        return;
+      if (error) {
+        console.error('Error fetching winery:', error);
+      } else {
+        setWinery(data);
       }
-      
-      setWinery(wineryData);
-
-      if (wineryData.author_id) {
-        const { data: authorData, error: authorError } = await supabase
-          .from('profiles')
-          .select('name, avatar_url')
-          .eq('id', wineryData.author_id)
-          .single();
-        
-        if (authorError) console.error('Error fetching author:', authorError);
-        else setAuthor(authorData);
-      }
-      
       setLoading(false);
     };
 
     fetchWinery();
-  }, [slug, navigate]);
+  }, [slug]);
+
+  const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
+
+  const hasImages = winery?.image_urls && winery.image_urls.length > 0;
+  const images = hasImages ? winery.image_urls : ['https://images.unsplash.com/photo-1598521628464-3435b348a21e?q=80&w=2070&auto=format&fit=crop'];
 
   const nextImage = () => {
-    if (winery && winery.image_urls) {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % winery.image_urls.length);
-    }
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
-    if (winery && winery.image_urls) {
-      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + winery.image_urls.length) % winery.image_urls.length);
-    }
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-10rem)]">
+      <div className="flex justify-center items-center min-h-screen wine-pattern">
         <Loader2 className="h-16 w-16 text-amber-300 animate-spin" />
       </div>
     );
@@ -80,138 +62,113 @@ const WineryPage = () => {
 
   if (!winery) {
     return (
-      <div className="text-center py-20">
-        <h1 className="font-playfair text-4xl text-amber-200">Bodega no encontrada</h1>
-        <p className="text-amber-100/70 mt-4">La bodega que buscas no existe o ha sido eliminada.</p>
-        <Link to="/guia" className="mt-8 inline-block px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
-          Volver a la Guía
+      <div className="text-center py-20 wine-pattern">
+        <h2 className="text-2xl font-bold text-white">Bodega no encontrada</h2>
+        <Link to="/guia" className="text-amber-400 hover:underline mt-4 inline-block">
+          Volver a la guía
         </Link>
       </div>
     );
   }
 
-  const formattedDate = format(new Date(winery.created_at), "d 'de' MMMM, yyyy", { locale: es });
-  const hasImages = winery.image_urls && winery.image_urls.length > 0;
-
-  // Sanitiza HTML generado por ReactQuill
-  const safeDescriptionHtml = winery.description
-    ? DOMPurify.sanitize(winery.description, { USE_PROFILES: { html: true } })
-    : '';
-
   return (
     <>
       <Helmet>
-        <title>{`${winery.title} - Guía de Bodegas`}</title>
-        <meta name="description" content={winery.description?.replace(/<[^>]+>/g, '').substring(0, 160) || `Descubre más sobre ${winery.title} en Vako Club.`} />
+        <title>{`${winery.title} - Guía de Bodegas Vako Club`}</title>
+        <meta name="description" content={winery.description.substring(0, 160)} />
       </Helmet>
 
-      <div className="wine-pattern pt-12 pb-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            <div className="flex justify-between items-center mb-8">
-              <Link to="/guia" className="inline-flex items-center text-amber-300 hover:text-amber-100 transition-colors group">
-                <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                Volver a la Guía
-              </Link>
-              {isAdmin && (
-                <Button asChild>
-                  <Link to={`/guia/editar/${winery.slug}`}>
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Editar Bodega
-                  </Link>
-                </Button>
-              )}
-            </div>
-
-            <article className="wine-card rounded-2xl p-8 md:p-12">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                <h1 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient mb-4 md:mb-0">
-                  {winery.title}
-                </h1>
-                {winery.score && (
-                  <div className="flex-shrink-0 bg-black/30 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center gap-3">
-                    <GrapeRating rating={winery.score} size={28} />
-                    <span className="text-amber-100 text-xl font-bold">{Number(winery.score).toFixed(1)}</span>
-                  </div>
+      <div className="min-h-screen wine-pattern pt-24 pb-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="wine-card rounded-2xl overflow-hidden">
+              <div className="relative h-96 group">
+                <motion.img
+                  key={currentImageIndex}
+                  src={images[currentImageIndex]}
+                  alt={`${winery.title} - imagen ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                {images.length > 1 && (
+                  <>
+                    <Button size="icon" variant="ghost" className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity" onClick={prevImage}>
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity" onClick={nextImage}>
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </>
                 )}
-              </div>
-              
-              <div className="flex items-center text-amber-100/70 mb-6 text-md">
-                <MapPin className="h-5 w-5 mr-2" />
-                <span>{winery.city}, {winery.country}</span>
-              </div>
-
-              <div className="flex items-center space-x-6 text-amber-100/70 mb-8 border-b border-t border-amber-200/10 py-4">
-                <div className="flex items-center">
-                  <Calendar className="h-5 w-5 mr-2 text-amber-300/80" />
-                  <span>Añadido el {formattedDate}</span>
+                <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <h1 className="font-playfair text-4xl md:text-5xl font-bold text-amber-100">
+                    {winery.title}
+                  </h1>
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center text-amber-100/80 text-lg">
+                      <MapPin className="h-5 w-5 mr-2" />
+                      <span>{winery.city}, {winery.country}</span>
+                    </div>
+                    {winery.score && <WineryScoreDisplay score={winery.score} className="text-lg" />}
+                  </div>
                 </div>
-                {author && (
-                  <div className="flex items-center">
-                    {author.avatar_url ? (
-                      <img src={author.avatar_url} alt={author.name} className="h-6 w-6 rounded-full mr-2" />
-                    ) : (
-                      <User className="h-5 w-5 mr-2 text-amber-300/80" />
-                    )}
-                    <span>Por {author.name || 'Autor desconocido'}</span>
-                  </div>
-                )}
               </div>
 
-              {hasImages && (
-                <div className="my-8 rounded-lg overflow-hidden shadow-lg shadow-black/20 relative aspect-video">
-                  <AnimatePresence initial={false}>
-                    <motion.img
-                      key={currentImageIndex}
-                      src={winery.image_urls[currentImageIndex]}
-                      alt={`${winery.title} - imagen ${currentImageIndex + 1}`}
-                      className="w-full h-full object-cover absolute inset-0"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ opacity: { duration: 0.5 } }}
-                    />
-                  </AnimatePresence>
-                  {winery.image_urls.length > 1 && (
+              <div className="p-8">
+                <div className="flex items-center gap-4 mb-6 flex-wrap">
+                  <Button variant="outline" onClick={() => toggleFavorite(winery.id)}>
+                    <Heart className={`mr-2 h-4 w-4 transition-all duration-300 ${isFavorite(winery.id) ? 'fill-current text-red-800' : ''}`} />
+                    {isFavorite(winery.id) ? 'Quitar de Favoritos' : 'Añadir a Favoritos'}
+                  </Button>
+                  {isAdmin && (
                     <>
-                      <Button size="icon" variant="ghost" className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60" onClick={prevImage}>
-                        <ChevronLeft className="h-6 w-6" />
+                      <Button asChild>
+                        <Link to={`/guia/editar/${winery.slug}`}>
+                          <Pencil className="mr-2 h-4 w-4" /> Editar
+                        </Link>
                       </Button>
-                      <Button size="icon" variant="ghost" className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60" onClick={nextImage}>
-                        <ChevronRight className="h-6 w-6" />
-                      </Button>
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
-                        {winery.image_urls.map((_, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setCurrentImageIndex(index)}
-                            className={`h-2 w-2 rounded-full transition-all ${index === currentImageIndex ? 'bg-amber-200 w-4' : 'bg-white/50'}`}
-                          />
-                        ))}
-                      </div>
+                      <DeleteWineryDialog 
+                        wineryId={winery.id} 
+                        wineryTitle={winery.title}
+                        onDeleted={() => window.location.href = '/guia'}
+                        trigger={
+                          <Button variant="destructive">
+                            <Trash2 className="mr-2 h-4 w-4" /> Eliminar
+                          </Button>
+                        }
+                      />
                     </>
                   )}
+                  {winery.website_url && (
+                    <Button asChild variant="outline">
+                      <a href={winery.website_url} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" /> Visitar Web
+                      </a>
+                    </Button>
+                  )}
                 </div>
-              )}
+                
+                <div className="prose prose-invert prose-lg max-w-none prose-p:text-amber-100/80 prose-headings:text-amber-200 prose-headings:font-playfair">
+                  <p>{winery.description}</p>
+                </div>
 
-              {winery.description && (
-                <div
-                  className="prose prose-lg prose-invert max-w-none 
-                    prose-p:text-amber-100/80 prose-p:leading-relaxed
-                    prose-a:text-amber-300 hover:prose-a:text-amber-100 prose-a:transition-colors
-                    prose-strong:text-amber-100 mt-8
-                    prose-img:rounded-lg prose-img:mx-auto prose-img:max-h-[600px] prose-img:w-auto"
-                  dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }}
-                />
-              )}
-              
-              {winery.latitude && winery.longitude && (
-                <Suspense fallback={<div className="h-96 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
-                  <WineryMap lat={winery.latitude} lon={winery.longitude} title={winery.title} />
-                </Suspense>
-              )}
-
-            </article>
+                {winery.latitude && winery.longitude && (
+                  <div className="mt-8">
+                    <h2 className="font-playfair text-3xl font-bold text-amber-200 mb-4">Ubicación</h2>
+                    <div className="h-96 rounded-lg overflow-hidden">
+                      <WineryMap lat={winery.latitude} lng={winery.longitude} wineryName={winery.title} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

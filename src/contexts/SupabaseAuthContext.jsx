@@ -13,6 +13,21 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const signOut = useCallback(async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.warn("Supabase signOut error, forcing client-side sign out:", error.message);
+      }
+    } catch (e) {
+      console.error("An unexpected error occurred during signOut:", e);
+    } finally {
+      setUser(null);
+      setSession(null);
+      navigate('/');
+    }
+  }, [navigate]);
+
   const fetchUserProfile = useCallback(async (user) => {
     if (!user) return null;
     const { data: profile, error } = await supabase
@@ -34,21 +49,6 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
   
-  const signOut = useCallback(async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.warn("Supabase signOut error, forcing client-side sign out:", error.message);
-      }
-    } catch (e) {
-      console.error("An unexpected error occurred during signOut:", e);
-    } finally {
-      setUser(null);
-      setSession(null);
-      navigate('/');
-    }
-  }, [navigate]);
-
   const handleSession = useCallback(async (session) => {
     setSession(session);
     if (session?.user) {

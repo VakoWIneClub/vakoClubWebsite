@@ -1,18 +1,26 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Pencil, Compass, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Pencil, Compass, MapPin, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
-import GrapeRating from '@/components/guia/GrapeRating';
+import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
+import { useFavorites } from '@/contexts/FavoritesContext';
 
 const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleAdminActionClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+  };
+
+  const handleFavoriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(winery.id);
   };
 
   const hasImages = winery.image_urls && winery.image_urls.length > 0;
@@ -63,9 +71,8 @@ const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
               </>
             )}
             {winery.score && (
-              <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1.5 text-amber-200 text-sm font-semibold">
-                <GrapeRating rating={winery.score} size={18} />
-                <span className="ml-1 font-bold">{Number(winery.score).toFixed(1)}</span>
+              <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
+                <WineryScoreDisplay score={winery.score} />
               </div>
             )}
           </div>
@@ -83,8 +90,11 @@ const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
           </div>
         </div>
       </Link>
+      <div className="absolute top-4 left-4" onClick={handleFavoriteClick}>
+        <Heart className={`h-6 w-6 text-amber-200 cursor-pointer transition-all duration-300 ${isFavorite(winery.id) ? 'fill-current text-red-800' : 'hover:text-red-800'}`} />
+      </div>
       {isAdmin && (
-        <div className="absolute top-4 left-4 flex items-center gap-2" onClick={handleAdminActionClick}>
+        <div className="absolute top-4 right-16 flex items-center gap-2" onClick={handleAdminActionClick}>
            <Button asChild variant="ghost" size="icon" className="h-9 w-9 bg-black/30 hover:bg-black/60">
               <Link to={`/guia/editar/${winery.slug}`}>
                 <Pencil className="h-4 w-4 text-amber-200" />

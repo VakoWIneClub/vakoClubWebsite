@@ -1,4 +1,3 @@
-
 export const vinosSeleccionados = [
   {
     id: 1,
