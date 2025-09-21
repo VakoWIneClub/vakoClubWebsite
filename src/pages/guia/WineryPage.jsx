@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Loader2, MapPin, Pencil, Trash2, ChevronLeft, ChevronRight, ExternalLink, Heart } from 'lucide-react';
+import { Loader2, MapPin, Pencil, Trash2, ChevronLeft, ChevronRight, ExternalLink, Heart, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
 import WineryMap from '@/components/guia/WineryMap';
 import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
+import DOMPurify from 'dompurify';
 
 const WineryPage = () => {
   const { slug } = useParams();
@@ -19,25 +21,25 @@ const WineryPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchWinery = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('wineries')
-        .select('*')
-        .eq('slug', slug)
-        .single();
+  const fetchWinery = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('wineries')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-      if (error) {
-        console.error('Error fetching winery:', error);
-      } else {
-        setWinery(data);
-      }
-      setLoading(false);
-    };
-
-    fetchWinery();
+    if (error) {
+      console.error('Error fetching winery:', error);
+    } else {
+      setWinery(data);
+    }
+    setLoading(false);
   }, [slug]);
+
+  useEffect(() => {
+    fetchWinery();
+  }, [fetchWinery]);
 
   const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
 
@@ -71,6 +73,8 @@ const WineryPage = () => {
     );
   }
 
+  const sanitizedDescription = DOMPurify.sanitize(winery.description);
+
   return (
     <>
       <Helmet>
@@ -85,6 +89,13 @@ const WineryPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
+            <div className="mb-6">
+              <Button asChild variant="outline">
+                <Link to="/guia">
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Volver a la Guía
+                </Link>
+              </Button>
+            </div>
             <div className="wine-card rounded-2xl overflow-hidden">
               <div className="relative h-96 group">
                 <motion.img
@@ -155,16 +166,15 @@ const WineryPage = () => {
                   )}
                 </div>
                 
-                <div className="prose prose-invert prose-lg max-w-none prose-p:text-amber-100/80 prose-headings:text-amber-200 prose-headings:font-playfair">
-                  <p>{winery.description}</p>
-                </div>
+                <div 
+                  className="prose prose-invert prose-lg max-w-none prose-p:text-amber-100/80 prose-headings:text-amber-200 prose-headings:font-playfair prose-a:text-amber-300 prose-strong:text-amber-100"
+                  dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+                />
 
                 {winery.latitude && winery.longitude && (
                   <div className="mt-8">
                     <h2 className="font-playfair text-3xl font-bold text-amber-200 mb-4">Ubicación</h2>
-                    <div className="h-96 rounded-lg overflow-hidden">
-                      <WineryMap lat={winery.latitude} lng={winery.longitude} wineryName={winery.title} />
-                    </div>
+                    <WineryMap lat={winery.latitude} lon={winery.longitude} title={winery.title} />
                   </div>
                 )}
               </div>

@@ -9,10 +9,10 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GrapeRating from '@/components/guia/GrapeRating';
+import ReactQuill from 'react-quill';
 
 const WineryEditor = () => {
   const { slug } = useParams();
@@ -20,7 +20,7 @@ const WineryEditor = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { register, handleSubmit, setValue, control, watch, formState: { errors } } = useForm({
-    defaultValues: { score: 0 }
+    defaultValues: { score: 0, description: '' }
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +31,23 @@ const WineryEditor = () => {
   
   const watchedScore = watch('score');
   const isEditing = !!slug;
+
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      ['link'],
+      ['clean']
+    ],
+  };
+
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline', 'blockquote',
+    'list', 'bullet',
+    'link'
+  ];
 
   useEffect(() => {
     const fetchWinery = async () => {
@@ -102,61 +119,6 @@ const WineryEditor = () => {
     
     return [...existingUrls, ...uploadedUrls];
   };
-
-  // === Quill: handler para subir e insertar imágenes ===
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file || !user) return;
-
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${user.id}_${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`;
-        const filePath = `public/${fileName}`;
-
-        const { error } = await supabase.storage.from('winery-images').upload(filePath, file);
-        if (error) throw error;
-
-        const { data } = supabase.storage.from('winery-images').getPublicUrl(filePath);
-        const url = data.publicUrl;
-
-        const quill = reactQuillRef.current?.getEditor?.();
-        const range = quill?.getSelection(true);
-        quill?.insertEmbed(range?.index ?? 0, 'image', url, 'user');
-        quill?.setSelection((range?.index ?? 0) + 1);
-
-      } catch (e) {
-        toast({ variant: 'destructive', title: 'Error al subir imagen', description: e.message || 'Inténtalo de nuevo' });
-      }
-    };
-    input.click();
-  }, [user, toast]);
-
-  // === Quill: módulos y formatos ===
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-        ['link', 'image', 'video'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }), [imageHandler]);
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video',
-  ];
 
   const getCoordinatesForAddress = async (address) => {
     if (!address || address.trim() === '') {
@@ -287,16 +249,13 @@ const WineryEditor = () => {
               <Controller
                 name="description"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <ReactQuill
-                    ref={reactQuillRef}
                     theme="snow"
-                    value={field.value || ''}
+                    value={field.value}
                     onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    modules={modules}
-                    formats={formats}
+                    modules={quillModules}
+                    formats={quillFormats}
                     placeholder="Describe la bodega, su historia, sus vinos destacados, etc."
                   />
                 )}

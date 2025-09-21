@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
 import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
 import { useFavorites } from '@/contexts/FavoritesContext';
+import DOMPurify from 'dompurify';
 
 const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -37,6 +38,8 @@ const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
+
+  const sanitizedDescription = DOMPurify.sanitize(winery.description);
 
   return (
     <motion.div
@@ -84,9 +87,10 @@ const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
               <MapPin className="h-4 w-4 mr-2" />
               <span>{winery.city}, {winery.country}</span>
             </div>
-            <p className="text-amber-100/80 leading-relaxed mb-4 line-clamp-3 flex-grow">
-              {winery.description}
-            </p>
+            <div 
+              className="prose prose-sm prose-invert text-amber-100/80 leading-relaxed mb-4 line-clamp-3 flex-grow prose-p:m-0"
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+            />
           </div>
         </div>
       </Link>
