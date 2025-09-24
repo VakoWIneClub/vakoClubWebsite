@@ -1,31 +1,58 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Compass, Loader2, PlusCircle, ChevronsDown, Search, X } from 'lucide-react';
+import { Compass, Loader2, PlusCircle, ChevronsDown, Search, X, List, Map } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useSearchParams } from 'react-router-dom';
 import WineryList from '@/components/guia/WineryList';
+import GuideMap from '@/components/guia/GuideMap';
 const WINERIES_PER_PAGE = 9;
 const Guia = () => {
   const {
     user
   } = useAuth();
   const [wineries, setWineries] = useState([]);
+  const [allWineriesForMap, setAllWineriesForMap] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [countries, setCountries] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const nameFilter = useMemo(() => searchParams.get('name') || '', [searchParams]);
   const countryFilter = useMemo(() => searchParams.get('country') || '', [searchParams]);
   const cityFilter = useMemo(() => searchParams.get('city') || '', [searchParams]);
   const [nameInput, setNameInput] = useState(nameFilter);
-  const [countryInput, setCountryInput] = useState(countryFilter);
   const [cityInput, setCityInput] = useState(cityFilter);
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      const {
+        data: countriesData,
+        error: countriesError
+      } = await supabase.from('wineries').select('country');
+      if (countriesError) {
+        console.error('Error fetching countries:', countriesError);
+      } else {
+        const uniqueCountries = [...new Set(countriesData.map(w => w.country).filter(Boolean))].sort();
+        setCountries(uniqueCountries);
+      }
+      const {
+        data: mapData,
+        error: mapError
+      } = await supabase.from('wineries').select('id, title, slug, latitude, longitude, city, country').filter('latitude', 'not.is', null).filter('longitude', 'not.is', null);
+      if (mapError) {
+        console.error('Error fetching wineries for map:', mapError);
+      } else {
+        setAllWineriesForMap(mapData);
+      }
+    };
+    fetchInitialData();
+  }, []);
   const fetchWineries = useCallback(async (currentPage, name, country, city, isLoadMore = false, abortSignal) => {
     if (isLoadMore) {
       setLoadingMore(true);
@@ -41,7 +68,7 @@ const Guia = () => {
       ascending: false
     });
     if (name) query = query.ilike('title', `%${name}%`);
-    if (country) query = query.ilike('country', `%${country}%`);
+    if (country) query = query.eq('country', country);
     if (city) query = query.ilike('city', `%${city}%`);
     const from = currentPage * WINERIES_PER_PAGE;
     const to = from + WINERIES_PER_PAGE - 1;
@@ -83,13 +110,21 @@ const Guia = () => {
     setWineries([]);
     setSearchParams({
       name: nameInput,
-      country: countryInput,
+      country: countryFilter,
+      city: cityInput
+    });
+  };
+  const handleCountryChange = value => {
+    setPage(0);
+    setWineries([]);
+    setSearchParams({
+      name: nameInput,
+      country: value === 'all' ? '' : value,
       city: cityInput
     });
   };
   const clearFilters = () => {
     setNameInput('');
-    setCountryInput('');
     setCityInput('');
     setPage(0);
     setWineries([]);
@@ -102,6 +137,7 @@ const Guia = () => {
   };
   const handleWineryDeleted = deletedWineryId => {
     setWineries(wineries.filter(winery => winery.id !== deletedWineryId));
+    setAllWineriesForMap(allWineriesForMap.filter(winery => winery.id !== deletedWineryId));
   };
   const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
   return <>
@@ -125,7 +161,7 @@ const Guia = () => {
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
               Guía de Bodegas
             </h1>
-            <p className="mt-4 text-xl text-amber-100/80 max-w-3xl mx-auto">Encuentra tu bodega favorita en nuestra guía, evaluadas con puntajes primpios de Vako Club</p>
+            <p className="mt-4 text-xl text-amber-100/80 max-w-3xl mx-auto">Encuentra tu bodega favorita en nuestra guía. Puedes filtrar en la lista o buscar en el mapa.</p>
           </motion.div>
           
           <motion.div initial={{
@@ -146,7 +182,15 @@ const Guia = () => {
                 </div>
                 <div>
                   <label htmlFor="country-filter" className="block text-sm font-medium text-amber-200 mb-1">País</label>
-                  <Input id="country-filter" placeholder="Ej: Argentina" value={countryInput} onChange={e => setCountryInput(e.target.value)} />
+                  <Select onValueChange={handleCountryChange} value={countryFilter || 'all'}>
+                    <SelectTrigger id="country-filter">
+                      <SelectValue placeholder="Seleccionar país" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos los países</SelectItem>
+                      {countries.map(country => <SelectItem key={country} value={country}>{country}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <label htmlFor="city-filter" className="block text-sm font-medium text-amber-200 mb-1">Ciudad</label>
@@ -172,17 +216,28 @@ const Guia = () => {
             </form>
           </motion.div>
 
-          {loading ? <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
-             </div> : <>
-              <WineryList wineries={wineries} isAdmin={isAdmin} onWineryDeleted={handleWineryDeleted} />
-              {wineries.length > 0 && hasMore && <div className="mt-12 text-center">
-                  <Button onClick={handleLoadMore} disabled={loadingMore} size="lg">
-                    {loadingMore ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ChevronsDown className="mr-2 h-5 w-5" />}
-                    Cargar más bodegas
-                  </Button>
-                </div>}
-            </>}
+          <Tabs defaultValue="list" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:w-96 mx-auto mb-8">
+              <TabsTrigger value="list"><List className="mr-2 h-4 w-4" />Lista</TabsTrigger>
+              <TabsTrigger value="map"><Map className="mr-2 h-4 w-4" />Mapa</TabsTrigger>
+            </TabsList>
+            <TabsContent value="list">
+              {loading ? <div className="flex justify-center items-center h-64">
+                    <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
+                </div> : <>
+                  <WineryList wineries={wineries} isAdmin={isAdmin} onWineryDeleted={handleWineryDeleted} />
+                  {wineries.length > 0 && hasMore && <div className="mt-12 text-center">
+                      <Button onClick={handleLoadMore} disabled={loadingMore} size="lg">
+                        {loadingMore ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ChevronsDown className="mr-2 h-5 w-5" />}
+                        Cargar más bodegas
+                      </Button>
+                    </div>}
+                </>}
+            </TabsContent>
+            <TabsContent value="map">
+              <GuideMap wineries={allWineriesForMap} />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </>;
