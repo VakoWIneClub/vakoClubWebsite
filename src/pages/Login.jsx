@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 
 const ErrorMessage = ({ message }) => {
@@ -17,8 +17,11 @@ const ErrorMessage = ({ message }) => {
 const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn, user } = useAuth();
   
+  const from = location.state?.from?.pathname || '/perfil';
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -29,9 +32,9 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/perfil');
+      navigate(from, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, from]);
 
   const validate = () => {
     const newErrors = {};
@@ -64,7 +67,7 @@ const Login = () => {
     const { error } = await signIn(formData.email, formData.password);
     
     if (!error) {
-      navigate('/perfil');
+      navigate(from, { replace: true });
     }
     setLoading(false);
   };
