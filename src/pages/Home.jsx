@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter } from '@/components/ui/alert-dialog';
-
 const WelcomePopup = ({
   isOpen,
   onOpenChange
@@ -368,7 +367,7 @@ const Home = () => {
             </h2>
             
             <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Únete a Vako Club hoy y comienza tu viaje enológico. ¡Es gratis!</p>
-            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Te regalamos un 20% de descuento en merchandising y arte con el código: BONARDA20</p>
+            <p className="text-xl text-amber-100/70 max-w-2xl mx-auto">Te regalamos un 20% de descuento en merchandising y arte.</p>
             
             <Link to="/suscripcion">
               <Button variant="outline" className="px-8 py-4 text-lg">

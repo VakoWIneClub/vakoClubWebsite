@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -10,7 +11,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import GrapeRating from '@/components/guia/GrapeRating';
 import ReactQuill from 'react-quill';
 
 const WineryEditor = () => {
@@ -18,8 +18,8 @@ const WineryEditor = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { register, handleSubmit, setValue, control, watch, formState: { errors } } = useForm({
-    defaultValues: { score: 0, description: '' }
+  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm({
+    defaultValues: { description: '' }
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +28,6 @@ const WineryEditor = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   
-  const watchedScore = watch('score');
   const isEditing = !!slug;
 
   const quillModules = {
@@ -64,7 +63,6 @@ const WineryEditor = () => {
         setWinery(data);
         setValue('title', data.title);
         setValue('description', data.description);
-        setValue('score', data.score);
         setValue('address', data.address);
         setValue('country', data.country);
         setValue('city', data.city);
@@ -155,7 +153,6 @@ const WineryEditor = () => {
       const wineryData = {
         title: formData.title,
         description: formData.description,
-        score: formData.score ? parseFloat(formData.score) : null,
         country: formData.country,
         city: formData.city,
         address: formData.address,
@@ -259,34 +256,6 @@ const WineryEditor = () => {
                   />
                 )}
               />
-            </div>
-
-            <div className="space-y-3">
-              <Label className="text-amber-200 text-lg">Puntuación</Label>
-              <div className="flex items-center gap-4 bg-white/5 p-3 rounded-lg">
-                <Controller
-                  name="score"
-                  control={control}
-                  render={({ field }) => (
-                    <GrapeRating
-                      rating={field.value}
-                      onRatingChange={field.onChange}
-                      interactive
-                      size={28}
-                    />
-                  )}
-                />
-                <span className="font-bold text-amber-200 text-xl w-24 text-center">{Number(watchedScore).toFixed(1)} / 5.0</span>
-                <Input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  value={watchedScore}
-                  onChange={(e) => setValue('score', Math.max(0, Math.min(5, parseFloat(e.target.value) || 0)))}
-                  className="wine-input w-28"
-                />
-              </div>
             </div>
 
             <div className="space-y-4">

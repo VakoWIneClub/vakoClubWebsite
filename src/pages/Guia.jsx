@@ -61,9 +61,6 @@ const Guia = () => {
     }
     let query = supabase.from('wineries').select('*', {
       count: 'exact'
-    }).order('score', {
-      ascending: false,
-      nulls: 'last'
     }).order('created_at', {
       ascending: false
     });

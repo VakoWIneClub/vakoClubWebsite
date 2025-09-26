@@ -1,10 +1,10 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Pencil, Compass, MapPin, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
-import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import DOMPurify from 'dompurify';
 
@@ -71,11 +71,6 @@ const WineryCard = ({ winery, index, isAdmin, onWineryDeleted }) => {
                   <ChevronRight className="h-5 w-5" />
                 </Button>
               </>
-            )}
-            {winery.score && (
-              <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
-                <WineryScoreDisplay score={winery.score} />
-              </div>
             )}
           </div>
           <div className="p-6 flex-grow flex flex-col">
