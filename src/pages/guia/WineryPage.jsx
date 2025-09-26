@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -9,7 +10,6 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
 import WineryMap from '@/components/guia/WineryMap';
-import WineryScoreDisplay from '@/components/guia/WineryScoreDisplay';
 import DOMPurify from 'dompurify';
 
 const WineryPage = () => {
@@ -131,7 +131,6 @@ const WineryPage = () => {
                       <MapPin className="h-5 w-5 mr-2" />
                       <span>{winery.city}, {winery.country}</span>
                     </div>
-                    {winery.score && <WineryScoreDisplay score={winery.score} className="text-lg" />}
                   </div>
                 </div>
               </div>

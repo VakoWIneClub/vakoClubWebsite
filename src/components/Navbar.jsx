@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, ShoppingBag, Users, Calendar, Home, Phone, Newspaper, UserPlus, LogIn, User as UserIcon, LogOut, Compass } from 'lucide-react';
+import { Menu, X, ShoppingBag, Users, Calendar, Home, Phone, Newspaper, UserPlus, LogIn, User as UserIcon, LogOut, Compass, Gem } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -85,6 +86,10 @@ const Navbar = () => {
         <DropdownMenuItem onSelect={() => navigate('/perfil')}>
           <UserIcon className="mr-2 h-4 w-4" />
           <span>Perfil</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => navigate('/perfil/suscripcion')}>
+          <Gem className="mr-2 h-4 w-4" />
+          <span>Suscripción</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleSignOut}>
