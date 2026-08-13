@@ -2,7 +2,7 @@
 
 > Este archivo es la "memoria compartida" del equipo. Cada agente lo lee antes de trabajar y actualiza su propia sección al terminar (nunca borra el trabajo de otro agente). Así el equipo funciona coordinado aunque cada agente se ejecute por separado, en momentos distintos.
 
-**Última actualización:** 2026-08-13 — Julian confirmó el catálogo inicial (guía general ya creada + nueva línea de guías regionales planificada) y el estado de la campaña de Instagram (semana 1 lista, resto pendiente).
+**Última actualización:** 2026-08-13 — `vako-research` entregó el informe de ángulo/demanda para la Guía del Vino Español (primera guía de la serie regional).
 
 ## 📘 Catálogo de guías PDF activas
 | Título | Tema | Precio | Estado | Enlace de venta / cobro |
@@ -27,17 +27,19 @@ Ninguna oferta configurada todavía. `vako-ofertas` debe crear la primera oferta
 - **Acción sugerida:** en cuanto el contenido de la Semana 1 quede pegado aquí, usar `vako-creatividades` para generar la Semana 2 en adelante manteniendo el mismo hilo creativo, tono y ángulos ya usados.
 
 ## 🔎 Últimos hallazgos de investigación
-`[Ninguno todavía — ejecuta vako-research para el primer informe]`
+- **2026-08-13 — Ángulo y demanda: Guía del Vino Español.** El tema más buscado y menos resuelto en un solo sitio es "crianza vs. reserva vs. gran reserva"; la competencia de pago está débil (ebooks baratos con poca prueba social) o es carísima (certificaciones profesionales $795–$1.395), sin nada visual/curado de precio medio en canales de venta directa tipo Gumroad/Etsy; el contenido gratis (Wine Folly, Spanish Wine Lover, YouTube) es abundante pero disperso, no consolidado; hay ganchos de estacionalidad fuertes ahora mismo (vendimia en curso, Día Internacional del Tempranillo el 12/11/2026, regalo de Navidad desde noviembre). Precio orientativo sugerido a testear: €12–€19. Informe completo: `claudeAgents/claudeMarketing/research/2026-08-13-guia-vino-espanol-angulo-demanda.md`.
 
 ## 🧭 Próximas acciones sugeridas
 1. Pegar el contenido de la Semana 1 de Instagram para que `vako-creatividades` pueda continuar con la Semana 2.
-2. Decidir qué región de la serie de guías se crea primero (Argentina / España / Francia / otra) y correr `vako-research` para validar el ángulo antes de escribirla.
-3. Definir con `vako-ofertas` si la serie regional se vende suelta, en bundle, o como colección.
+2. ✅ Ángulo de España ya validado por `vako-research` (ver hallazgos arriba). Pendiente: correr `vako-research` para validar el ángulo de Argentina y luego el de Francia antes de escribirlas.
+3. Definir con `vako-ofertas` si la serie regional se vende suelta, en bundle, o como colección — el informe de España sugiere un rango de precio orientativo de €12–€19 a testear, pendiente de contrastar con el precio real de la Guía General (todavía `[PENDIENTE: precio]` en el catálogo de arriba).
 4. Cuando Julian esté listo (sin fecha fijada), resolver el método de cobro externo para poder vender.
-5. Ejecutar `vako-research` para una primera foto del mercado de guías de vino por región (competencia + tendencias).
+5. Confirmar con Julian el índice/contenido real de la Guía General ya creada, para evitar solapamiento con la Guía del Vino Español (el informe de investigación tuvo que inferir el hueco de contenido porque el índice real no está documentado en este repositorio).
+6. Con el ángulo ya validado, siguiente paso natural: escribir el contenido de la Guía del Vino Español y que `vako-landing` prepare su página de venta.
 
 ## 🗂️ Historial de sprints y lanzamientos
 | Fecha | Playbook / agente | Sector | Resultado / archivo |
 |---|---|---|---|
 | 2026-08-13 | Setup inicial | Equipo completo | Estructura del equipo creada (agentes + skill orquestadora + esta memoria compartida) |
 | 2026-08-13 | Actualización de estado | Ofertas / Creatividades | Julian confirmó catálogo real (guía general ya creada + serie regional planificada) y estado de campaña de Instagram (semana 1 lista, resto pendiente) |
+| 2026-08-13 | vako-research | Research / Guías PDF | Informe de ángulo y demanda para la Guía del Vino Español (primera guía de la serie regional): `research/2026-08-13-guia-vino-espanol-angulo-demanda.md` |
