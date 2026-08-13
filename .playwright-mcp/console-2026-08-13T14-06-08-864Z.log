@@ -1,0 +1,48 @@
+[    1438ms] [ERROR] Fetch error from :  @ http://localhost:3000/login:224
+[    1465ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[    1476ms] [WARNING] Error: The domain LOCALHOST is not authorized to show the cookie banner for domain group ID 4f2428e7-c9e2-4563-8df1-55bc2cfa635a. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/4f2428e7-c9e2-4563-8df1-55bc2cfa635a/cc.js?renew=false&referer=localhost&dnt=false&init=false:0
+[    1579ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/node_modules/.vite/deps/chunk-POWNFHBL.js?v=9fed9097:21579
+[    2168ms] [ERROR] Warning: Using UNSAFE_componentWillMount in strict mode is not recommended and may indicate bugs in your code. See https://reactjs.org/link/unsafe-component-lifecycles for details.
+
+* Move code with side effects to componentDidMount, and set initial state in the constructor.
+
+Please update the following components: %s SideEffect(NullComponent2) @ http://localhost:3000/login:224
+[    2227ms] [WARNING] ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[    2229ms] [WARNING] ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[    2363ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[    2435ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/login:0
+[    2626ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[    2629ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/login, sv: 0.1.3, sdkn: @vercel/analytics/react, sdkv: 1.5.0, ts: 1786629971491} /_vercel/insights/view @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[    2646ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/speed-insights/script.debug.js:0
+[    6393ms] [ERROR] Fetch error from :  @ http://localhost:3000/login:224
+[    6394ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[  135213ms] [ERROR] Warning: Invalid value for prop %s on <%s> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://reactjs.org/link/attribute-behavior %s `dismiss` li 
+    at li
+    at http://localhost:3000/node_modules/.vite/deps/chunk-UW62XLK5.js?v=9fed9097:43:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:80:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:56:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-UW62XLK5.js?v=9fed9097:43:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-PXFMOSQS.js?v=9fed9097:63:7
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:80:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:56:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-235Y6IXI.js?v=9fed9097:53:15
+    at Provider (http://localhost:3000/node_modules/.vite/deps/chunk-4STNQN6P.js?v=9fed9097:40:15)
+    at http://localhost:3000/node_modules/.vite/deps/@radix-ui_react-toast.js?v=9fed9097:333:7
+    at Presence (http://localhost:3000/node_modules/.vite/deps/chunk-CVMQALWZ.js?v=9fed9097:24:11)
+    at http://localhost:3000/node_modules/.vite/deps/@radix-ui_react-toast.js?v=9fed9097:280:13
+    at _c3 (http://localhost:3000/src/components/ui/toast.jsx:60:41)
+    at Provider (http://localhost:3000/node_modules/.vite/deps/chunk-4STNQN6P.js?v=9fed9097:40:15)
+    at Provider (http://localhost:3000/node_modules/.vite/deps/chunk-4STNQN6P.js?v=9fed9097:40:15)
+    at CollectionProvider (http://localhost:3000/node_modules/.vite/deps/chunk-235Y6IXI.js?v=9fed9097:31:13)
+    at ToastProvider (http://localhost:3000/node_modules/.vite/deps/@radix-ui_react-toast.js?v=9fed9097:57:5)
+    at Toaster (http://localhost:3000/src/components/ui/toaster.jsx:30:22)
+    at div
+    at App
+    at FavoritesProvider (http://localhost:3000/src/contexts/FavoritesContext.jsx:27:37)
+    at AuthProvider (http://localhost:3000/src/contexts/SupabaseAuthContext.jsx:23:32)
+    at Router (http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4517:15)
+    at BrowserRouter (http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:5266:5) @ http://localhost:3000/login:224
+[  135321ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[  136820ms] [ERROR] Fetch error from :  @ http://localhost:3000/login:224
+[  136824ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[ 1060852ms] [LOG] %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {speed: 4g, metrics: Array(4), scriptVersion: 0.1.3, sdkName: @vercel/speed-insights/react, sdkVersion: 1.2.0} /_vercel/speed-insights/vitals @ https://va.vercel-scripts.com/v1/speed-insights/script.debug.js:0

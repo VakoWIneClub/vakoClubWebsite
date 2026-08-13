@@ -1,0 +1,25 @@
+{
+  "name": "vako-club-e2e",
+  "version": "1.0.0",
+  "description": "Playwright end-to-end and smoke tests for Vako Club",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:report": "npm run allure:generate && npm run allure:open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2"
+  }
+}

@@ -1,0 +1,156 @@
+- generic:
+  - generic:
+    - generic:
+      - navigation:
+        - generic:
+          - generic:
+            - link:
+              - /url: /
+              - generic: Exclusiva Guía de Vinos
+            - generic:
+              - link:
+                - /url: /
+                - generic: Inicio
+              - link:
+                - /url: /guia
+                - generic: Guía
+              - link:
+                - /url: /noticias
+                - generic: Noticias
+              - link:
+                - /url: /tienda
+                - generic: Tienda
+              - link:
+                - /url: /eventos
+                - generic: Eventos
+              - link:
+                - /url: /comunidad
+                - generic: Comunidad
+              - link:
+                - /url: /contacto
+                - generic: Contacto
+              - generic:
+                - link:
+                  - /url: /login
+                  - button: Iniciar Sesión
+                - link:
+                  - /url: /suscripcion
+                  - button: Suscripción
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Hablemos de Vino
+              - paragraph: Estamos aquí para resolver tus dudas, escuchar tus sugerencias y compartir nuestra pasión.
+        - generic:
+          - generic:
+            - generic:
+              - link:
+                - /url: mailto:info@vakoclub.com
+                - heading [level=3]: Email
+                - paragraph: info@vakoclub.com
+                - paragraph: Respuesta en 24 horas
+              - link:
+                - /url: https://www.instagram.com/vakoclub
+                - heading [level=3]: Instagram
+                - paragraph: "@vakoclub"
+                - paragraph: Contenido exclusivo y catas
+              - link:
+                - /url: https://www.tiktok.com/@vako.club
+                - heading [level=3]: TikTok
+                - paragraph: "@vako.club"
+                - paragraph: Videos cortos y divertidos
+              - link:
+                - /url: https://www.youtube.com/@VakoWineClub
+                - heading [level=3]: YouTube
+                - paragraph: VakoWineClub
+                - paragraph: Tutoriales y entrevistas
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]: Preguntas Frecuentes
+              - generic:
+                - generic:
+                  - heading [level=3]: ¿Tienen envío a toda España?
+                  - paragraph: Sí, realizamos envíos a toda Europa y el mundo.
+                - generic:
+                  - heading [level=3]: ¿Los cursos incluyen certificación?
+                  - paragraph: Nuestros cursos avanzados incluyen certificación oficial reconocida internacionalmente.
+      - contentinfo:
+        - generic:
+          - generic:
+            - generic:
+              - link:
+                - /url: /
+                - heading [level=2]: Vako Club
+              - paragraph: Tu pasaporte al mundo del vino. Descubre, aprende y disfruta.
+            - generic:
+              - paragraph: Compañía
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /sobre-nosotros
+                    - text: Sobre Nosotros
+                - listitem:
+                  - link:
+                    - /url: /eventos
+                    - text: Eventos
+                - listitem:
+                  - link:
+                    - /url: /noticias
+                    - text: Noticias
+            - generic:
+              - paragraph: Comunidad
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /comunidad
+                    - text: Foro
+                - listitem:
+                  - link:
+                    - /url: /comunidad?tab=miembros
+                    - text: Miembros
+                - listitem:
+                  - link:
+                    - /url: /eventos
+                    - text: Eventos
+            - generic:
+              - paragraph: Soporte
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /contacto
+                    - text: Contacto
+                - listitem:
+                  - link:
+                    - /url: /contacto#faq
+                    - text: FAQs
+                - listitem:
+                  - link:
+                    - /url: /terminos
+                    - text: Términos de Uso
+                - listitem:
+                  - link:
+                    - /url: /politica-privacidad
+                    - text: Política de Privacidad
+          - generic:
+            - paragraph: © 2026 Vako Club. Todos los derechos reservados.
+            - generic:
+              - link:
+                - /url: https://www.tiktok.com/@vako.club
+              - link:
+                - /url: https://www.instagram.com/vakoclub
+              - link:
+                - /url: https://www.youtube.com/@VakoWineClub
+      - list
+  - iframe [ref=e163]:
+    
+  - dialog [ref=e165]:
+    - generic [ref=e166]:
+      - heading "Verificación de Edad" [level=2] [ref=e167]
+      - paragraph [ref=e170]: Debes tener la edad legal para consumir alcohol en tu país para poder ingresar a Vako Club.
+    - generic [ref=e172]:
+      - checkbox "Sí, tengo la edad necesaria" [checked] [ref=e173] [cursor=pointer]
+      - generic [ref=e174] [cursor=pointer]: Sí, tengo la edad necesaria
+    - button "Aceptar" [active] [ref=e181] [cursor=pointer]
+    - button "Close" [ref=e176] [cursor=pointer]

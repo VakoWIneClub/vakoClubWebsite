@@ -1,0 +1,112 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e3]:
+    - navigation [ref=f9e4]:
+      - generic [ref=f9e6]:
+        - link "Vako Club Logo Exclusiva Guía de Vinos" [ref=f9e7] [cursor=pointer]:
+          - /url: /
+          - generic:
+            - img "Vako Club Logo"
+          - generic [ref=f9e8]: Exclusiva Guía de Vinos
+        - generic [ref=f9e9]:
+          - link "Inicio" [ref=f9e10] [cursor=pointer]:
+            - /url: /
+          - link "Guía" [ref=f9e15] [cursor=pointer]:
+            - /url: /guia
+          - link "Noticias" [ref=f9e20] [cursor=pointer]:
+            - /url: /noticias
+          - link "Tienda" [ref=f9e25] [cursor=pointer]:
+            - /url: /tienda
+          - link "Eventos" [ref=f9e30] [cursor=pointer]:
+            - /url: /eventos
+          - link "Comunidad" [ref=f9e34] [cursor=pointer]:
+            - /url: /comunidad
+          - link "Contacto" [ref=f9e41] [cursor=pointer]:
+            - /url: /contacto
+          - generic [ref=f9e45]:
+            - link [ref=f9e46] [cursor=pointer]:
+              - /url: /login
+              - button "Iniciar Sesión" [ref=f9e47]
+            - link [ref=f9e51] [cursor=pointer]:
+              - /url: /suscripcion
+              - button "Suscripción" [ref=f9e52]
+    - main [ref=f9e56]:
+      - generic [ref=f9e59]:
+        - generic [ref=f9e60]:
+          - heading "Iniciar Sesión" [level=1] [ref=f9e64]
+          - paragraph [ref=f9e65]: Bienvenido de nuevo a la comunidad.
+        - generic [ref=f9e66]:
+          - generic [ref=f9e67]:
+            - text: Correo Electrónico
+            - textbox "Correo Electrónico" [ref=f9e72]:
+              - /placeholder: tu@email.com
+          - generic [ref=f9e73]:
+            - text: Contraseña
+            - generic [ref=f9e74]:
+              - textbox "Contraseña" [ref=f9e78]:
+                - /placeholder: ••••••••
+              - button [ref=f9e79] [cursor=pointer]
+          - button "Iniciar Sesión" [ref=f9e83] [cursor=pointer]
+        - paragraph [ref=f9e84]:
+          - text: ¿No tienes cuenta?
+          - link "Regístrate gratis" [ref=f9e85] [cursor=pointer]:
+            - /url: /suscripcion
+    - contentinfo [ref=f9e86]:
+      - generic [ref=f9e87]:
+        - generic [ref=f9e88]:
+          - generic [ref=f9e89]:
+            - link [ref=f9e90] [cursor=pointer]:
+              - /url: /
+              - heading "Vako Club" [level=2] [ref=f9e91]
+            - paragraph [ref=f9e92]: Tu pasaporte al mundo del vino. Descubre, aprende y disfruta.
+          - generic [ref=f9e93]:
+            - paragraph [ref=f9e94]: Compañía
+            - list [ref=f9e95]:
+              - listitem [ref=f9e96]:
+                - link "Sobre Nosotros" [ref=f9e97] [cursor=pointer]:
+                  - /url: /sobre-nosotros
+              - listitem [ref=f9e98]:
+                - link "Eventos" [ref=f9e99] [cursor=pointer]:
+                  - /url: /eventos
+              - listitem [ref=f9e100]:
+                - link "Noticias" [ref=f9e101] [cursor=pointer]:
+                  - /url: /noticias
+          - generic [ref=f9e102]:
+            - paragraph [ref=f9e103]: Comunidad
+            - list [ref=f9e104]:
+              - listitem [ref=f9e105]:
+                - link "Foro" [ref=f9e106] [cursor=pointer]:
+                  - /url: /comunidad
+              - listitem [ref=f9e107]:
+                - link "Miembros" [ref=f9e108] [cursor=pointer]:
+                  - /url: /comunidad?tab=miembros
+              - listitem [ref=f9e109]:
+                - link "Eventos" [ref=f9e110] [cursor=pointer]:
+                  - /url: /eventos
+          - generic [ref=f9e111]:
+            - paragraph [ref=f9e112]: Soporte
+            - list [ref=f9e113]:
+              - listitem [ref=f9e114]:
+                - link "Contacto" [ref=f9e115] [cursor=pointer]:
+                  - /url: /contacto
+              - listitem [ref=f9e116]:
+                - link "FAQs" [ref=f9e117] [cursor=pointer]:
+                  - /url: /contacto#faq
+              - listitem [ref=f9e118]:
+                - link "Términos de Uso" [ref=f9e119] [cursor=pointer]:
+                  - /url: /terminos
+              - listitem [ref=f9e120]:
+                - link "Política de Privacidad" [ref=f9e121] [cursor=pointer]:
+                  - /url: /politica-privacidad
+        - generic [ref=f9e122]:
+          - paragraph [ref=f9e123]: © 2026 Vako Club. Todos los derechos reservados.
+          - generic [ref=f9e124]:
+            - link "TikTok" [ref=f9e125] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@vako.club
+            - link "Instagram" [ref=f9e128] [cursor=pointer]:
+              - /url: https://www.instagram.com/vakoclub
+            - link "YouTube" [ref=f9e132] [cursor=pointer]:
+              - /url: https://www.youtube.com/@VakoWineClub
+    - region "Notifications (F8)":
+      - list
+  - iframe [ref=f9e136]:
+    
