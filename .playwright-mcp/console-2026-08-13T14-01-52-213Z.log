@@ -1,0 +1,44 @@
+[     976ms] [WARNING] Error: The domain LOCALHOST is not authorized to show the cookie banner for domain group ID 4f2428e7-c9e2-4563-8df1-55bc2cfa635a. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/4f2428e7-c9e2-4563-8df1-55bc2cfa635a/cc.js?renew=false&referer=localhost&dnt=false&init=false:0
+[    5965ms] [ERROR] Fetch error from :  @ http://localhost:3000/contacto:224
+[    5966ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[    9695ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/node_modules/.vite/deps/chunk-POWNFHBL.js?v=9fed9097:21579
+[    9912ms] [ERROR] Warning: Using UNSAFE_componentWillMount in strict mode is not recommended and may indicate bugs in your code. See https://reactjs.org/link/unsafe-component-lifecycles for details.
+
+* Move code with side effects to componentDidMount, and set initial state in the constructor.
+
+Please update the following components: %s SideEffect(NullComponent2) @ http://localhost:3000/contacto:224
+[    9929ms] [WARNING] ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[    9930ms] [WARNING] ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[   10101ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[   10264ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[   10265ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/contacto color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/contacto, sv: 0.1.3, sdkn: @vercel/analytics/react, sdkv: 1.5.0, ts: 1786629722477} /_vercel/insights/view @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[   10271ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/speed-insights/script.debug.js:0
+[   11959ms] [ERROR] Warning: React does not recognize the `%s` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `%s` instead. If you accidentally passed it from a parent component, remove it from the DOM element.%s hideCloseButton hideclosebutton 
+    at div
+    at http://localhost:3000/node_modules/.vite/deps/chunk-UW62XLK5.js?v=9fed9097:43:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-PXFMOSQS.js?v=9fed9097:63:7
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:80:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:56:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-UW62XLK5.js?v=9fed9097:43:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-GBCR5KAX.js?v=9fed9097:57:5
+    at http://localhost:3000/node_modules/.vite/deps/chunk-D6WTAQ3H.js?v=9fed9097:238:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-D6WTAQ3H.js?v=9fed9097:157:58
+    at Presence (http://localhost:3000/node_modules/.vite/deps/chunk-CVMQALWZ.js?v=9fed9097:24:11)
+    at http://localhost:3000/node_modules/.vite/deps/chunk-D6WTAQ3H.js?v=9fed9097:148:64
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:80:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-BYLFG62C.js?v=9fed9097:56:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-UW62XLK5.js?v=9fed9097:43:13
+    at http://localhost:3000/node_modules/.vite/deps/chunk-PXFMOSQS.js?v=9fed9097:270:22
+    at Presence (http://localhost:3000/node_modules/.vite/deps/chunk-CVMQALWZ.js?v=9fed9097:24:11)
+    at Provider (http://localhost:3000/node_modules/.vite/deps/chunk-4STNQN6P.js?v=9fed9097:40:15)
+    at DialogPortal (http://localhost:3000/node_modules/.vite/deps/chunk-D6WTAQ3H.js?v=9fed9097:110:11)
+    at _c3 (http://localhost:3000/src/components/ui/dialog.jsx:49:12)
+    at Provider (http://localhost:3000/node_modules/.vite/deps/chunk-4STNQN6P.js?v=9fed9097:40:15)
+    at Dialog (http://localhost:3000/node_modules/.vite/deps/chunk-D6WTAQ3H.js?v=9fed9097:50:5)
+    at AgeVerificationPopup (http://localhost:3000/src/components/AgeVerificationPopup.jsx:26:31)
+    at App
+    at FavoritesProvider (http://localhost:3000/src/contexts/FavoritesContext.jsx:27:37)
+    at AuthProvider (http://localhost:3000/src/contexts/SupabaseAuthContext.jsx:23:32)
+    at Router (http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4517:15)
+    at BrowserRouter (http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:5266:5) @ http://localhost:3000/contacto:224
+[   12043ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1

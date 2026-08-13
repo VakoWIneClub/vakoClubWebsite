@@ -1,0 +1,18 @@
+[     426ms] [WARNING] Error: The domain LOCALHOST is not authorized to show the cookie banner for domain group ID 4f2428e7-c9e2-4563-8df1-55bc2cfa635a. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/4f2428e7-c9e2-4563-8df1-55bc2cfa635a/cc.js?renew=false&referer=localhost&dnt=false&init=false:0
+[     458ms] [ERROR] Fetch error from :  @ http://localhost:3000/login:224
+[     459ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[     516ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/node_modules/.vite/deps/chunk-POWNFHBL.js?v=9fed9097:21579
+[     711ms] [ERROR] Warning: Using UNSAFE_componentWillMount in strict mode is not recommended and may indicate bugs in your code. See https://reactjs.org/link/unsafe-component-lifecycles for details.
+
+* Move code with side effects to componentDidMount, and set initial state in the constructor.
+
+Please update the following components: %s SideEffect(NullComponent2) @ http://localhost:3000/login:224
+[     723ms] [WARNING] ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[     725ms] [WARNING] ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath. @ http://localhost:3000/node_modules/.vite/deps/react-router-dom.js?v=9fed9097:4408
+[     823ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
+[     875ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/login:0
+[     999ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/speed-insights/script.debug.js:0
+[    1000ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[    1002ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/login, sv: 0.1.3, sdkn: @vercel/analytics/react, sdkv: 1.5.0, ts: 1786629801931} /_vercel/insights/view @ https://va.vercel-scripts.com/v1/script.debug.js:0
+[    5453ms] [ERROR] Fetch error from :  @ http://localhost:3000/login:224
+[    5455ms] [WARNING] Ignoring Unsecure message event origin: http://localhost:3000 @ https://consent.cookiebot.com/uc.js:1
