@@ -97,18 +97,14 @@ jobs:
       - name: Write results summary
         if: always()
         run: |
-          STATS=$(node -pe "JSON.stringify(require('./allure-report/widgets/summary.json').statistic)")
-          PASSED=$(node -pe "$STATS.passed || 0")
-          FAILED=$(node -pe "$STATS.failed || 0")
-          BROKEN=$(node -pe "$STATS.broken || 0")
-          SKIPPED=$(node -pe "$STATS.skipped || 0")
-          TOTAL=$(node -pe "$STATS.total || 0")
-          {
-            echo "## 🎭 Smoke test results"
-            echo ""
-            echo "| Passed | Failed | Broken | Skipped | Total |"
-            echo "|---|---|---|---|---|"
-            echo "| ✅ $PASSED | ❌ $FAILED | ⚠️ $BROKEN | ⏭️ $SKIPPED | $TOTAL |"
-            echo ""
-            echo "Full interactive reports (Playwright trace viewer + Allure) are attached as workflow artifacts below."
-          } >> "$GITHUB_STEP_SUMMARY"
+          node -e "
+            const { statistic } = require('./allure-report/widgets/summary.json');
+            const { passed = 0, failed = 0, broken = 0, skipped = 0, total = 0 } = statistic;
+            console.log('## 🎭 Smoke test results');
+            console.log('');
+            console.log('| Passed | Failed | Broken | Skipped | Total |');
+            console.log('|---|---|---|---|---|');
+            console.log(\`| ✅ \${passed} | ❌ \${failed} | ⚠️ \${broken} | ⏭️ \${skipped} | \${total} |\`);
+            console.log('');
+            console.log('Full interactive reports (Playwright trace viewer + Allure) are attached as workflow artifacts below.');
+          " >> "$GITHUB_STEP_SUMMARY"
