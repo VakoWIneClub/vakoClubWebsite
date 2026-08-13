@@ -4,30 +4,107 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch:
+
 jobs:
   test:
     timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2]
+        shardTotal: [2]
+    defaults:
+      run:
+        working-directory: e2e/playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install app dependencies
+        run: npm ci
+        working-directory: .
+      - name: Install test dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      - name: Upload blob report (shard ${{ matrix.shardIndex }})
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: e2e/playwright/blob-report/
+          retention-days: 5
+      - name: Upload allure results (shard ${{ matrix.shardIndex }})
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.shardIndex }}
+          path: e2e/playwright/allure-results/
+          retention-days: 5
+
+  report:
+    # Runs even if a shard failed, so the report always reflects what ran.
+    if: ${{ !cancelled() }}
+    needs: test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: e2e/playwright
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    - name: Install app dependencies
-      run: npm ci
-      working-directory: .
-    - name: Install test dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: e2e/playwright/playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install test dependencies
+        run: npm ci
+
+      - name: Download blob reports
+        uses: actions/download-artifact@v4
+        with:
+          path: e2e/playwright/all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+      - name: Merge into one Playwright HTML report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Download Allure results
+        uses: actions/download-artifact@v4
+        with:
+          path: e2e/playwright/allure-results
+          pattern: allure-results-*
+          merge-multiple: true
+      - name: Generate Allure report
+        run: npx allure generate allure-results --clean -o allure-report
+
+      - name: Upload merged Playwright HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/playwright/playwright-report/
+          retention-days: 30
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: e2e/playwright/allure-report/
+          retention-days: 30
+
+      - name: Write results summary
+        if: always()
+        run: |
+          node -e "
+            const { statistic } = require('./allure-report/widgets/summary.json');
+            const { passed = 0, failed = 0, broken = 0, skipped = 0, total = 0 } = statistic;
+            console.log('## 🎭 Smoke test results');
+            console.log('');
+            console.log('| Passed | Failed | Broken | Skipped | Total |');
+            console.log('|---|---|---|---|---|');
+            console.log(\`| ✅ \${passed} | ❌ \${failed} | ⚠️ \${broken} | ⏭️ \${skipped} | \${total} |\`);
+            console.log('');
+            console.log('Full interactive reports (Playwright trace viewer + Allure) are attached as workflow artifacts below.');
+          " >> "$GITHUB_STEP_SUMMARY"

@@ -22,11 +22,19 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html', { open: 'never' }],
-    ['allure-playwright', { resultsDir: 'allure-results' }],
-    ['list'],
-  ],
+  reporter: process.env.CI
+    ? [
+        // 'blob' lets the CI workflow merge per-shard results into one HTML report.
+        ['blob', { outputDir: 'blob-report' }],
+        ['allure-playwright', { resultsDir: 'allure-results' }],
+        // Annotates failures directly on the GitHub Actions run.
+        ['github'],
+      ]
+    : [
+        ['html', { open: 'never' }],
+        ['allure-playwright', { resultsDir: 'allure-results' }],
+        ['list'],
+      ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
