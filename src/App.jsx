@@ -30,7 +30,6 @@ import ArticleEditor from '@/pages/noticias/ArticleEditor';
 import EventoPage from '@/pages/eventos/EventoPage';
 import EventoEditor from '@/pages/eventos/EventoEditor';
 import SobreNosotros from '@/pages/SobreNosotros';
-import GuiaVinoEspanol from '@/pages/GuiaVinoEspanol';
 import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 import PerfilSuscripcion from '@/pages/perfil/PerfilSuscripcion';
 
@@ -74,7 +73,6 @@ function App() {
             <Route path="/email-verification" element={<EmailVerification />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-            <Route path="/guias/vino-espanol" element={<GuiaVinoEspanol />} />
           </Routes>
         </main>
         

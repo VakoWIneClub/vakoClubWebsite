@@ -17,6 +17,7 @@ import {
 import ProductGrid from "@/components/tienda/ProductGrid";
 import TiendaFeatures from "@/components/tienda/TiendaFeatures";
 import DiscountPopup from "@/components/tienda/DiscountPopup";
+import GuiasSection from "@/components/tienda/GuiasSection";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { useToast } from "@/components/ui/use-toast";
@@ -369,10 +370,10 @@ const Tienda = () => {
           type="image/png"
           sizes="32x32"
         />
-        <title>Tienda Exclusiva - Vako Club | Vinos, Arte y Accesorios</title>
+        <title>Tienda Exclusiva - Vako Club | Guías, Vinos, Arte y Accesorios</title>
         <meta
           name="description"
-          content="Explora la tienda de Vako Club. Encuentra vinos seleccionados, merchandising exclusivo, arte y accesorios para amantes del vino."
+          content="Explora la tienda de Vako Club. Guías de vino en PDF, merchandising exclusivo, arte y accesorios para amantes del vino."
         />
       </Helmet>
 
@@ -443,6 +444,8 @@ const Tienda = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <GuiasSection />
+        <div className="border-t border-amber-500/10"></div>
         {user && <MemberCouponSection />}
         <Section
           title="Arte y Deco"
