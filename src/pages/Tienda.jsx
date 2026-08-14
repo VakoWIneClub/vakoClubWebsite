@@ -381,7 +381,7 @@ const Tienda = () => {
       {/* <DiscountPopup isOpen={isPopupOpen} onOpenChange={setPopupOpen} /> */}
 
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      {/* <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 wine-pattern opacity-20"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -442,7 +442,7 @@ const Tienda = () => {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Showing only the Guías PDF section as requested */}
