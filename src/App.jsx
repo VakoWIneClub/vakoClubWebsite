@@ -2,7 +2,7 @@
 import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Toaster } from '@/components/ui/toaster';
 import Navbar from '@/components/Navbar';
@@ -15,6 +15,7 @@ import Noticias from '@/pages/Noticias';
 import Eventos from '@/pages/Eventos';
 import Comunidad from '@/pages/Comunidad';
 import Tienda from '@/pages/Tienda';
+import ElMundoDeLaCopaLanding from '@/pages/tienda/ElMundoDeLaCopaLanding';
 import Contacto from '@/pages/Contacto';
 import Suscripcion from '@/pages/Suscripcion';
 import Perfil from '@/pages/Perfil';
@@ -34,19 +35,25 @@ import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 import PerfilSuscripcion from '@/pages/perfil/PerfilSuscripcion';
 
 function App() {
+  const location = useLocation();
+  // "El mundo de la copa" is a standalone sales landing with its own approved
+  // crema/borgoña/oro system and minimal chrome — it opts out of the site-wide
+  // dark Navbar/Footer instead of fighting them with overrides.
+  const isCopaLanding = location.pathname === '/tienda/el-mundo-de-la-copa';
+
   return (
     <>
       <ScrollToTop />
       <AgeVerificationPopup />
-      <div className="min-h-screen wine-pattern flex flex-col">
+      <div className={isCopaLanding ? 'min-h-screen flex flex-col' : 'min-h-screen wine-pattern flex flex-col'}>
         <Helmet>
           <title>Vako Club - Descubre el Mundo del Vino</title>
           <meta name="description" content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales." />
         </Helmet>
-        
-        <Navbar />
-        
-        <main className="pt-20 flex-grow">
+
+        {!isCopaLanding && <Navbar />}
+
+        <main className={isCopaLanding ? 'flex-grow' : 'pt-20 flex-grow'}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/guia" element={<ProtectedRoute><Guia /></ProtectedRoute>} />
@@ -63,6 +70,7 @@ function App() {
             <Route path="/eventos/:slug" element={<EventoPage />} />
             <Route path="/comunidad" element={<Comunidad />} />
             <Route path="/tienda" element={<Tienda />} />
+            <Route path="/tienda/el-mundo-de-la-copa" element={<ElMundoDeLaCopaLanding />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/suscripcion" element={<Suscripcion />} />
             <Route path="/login" element={<Login />} />
@@ -75,8 +83,8 @@ function App() {
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           </Routes>
         </main>
-        
-        <Footer />
+
+        {!isCopaLanding && <Footer />}
         <Toaster />
           <SpeedInsights />
           <Analytics />

@@ -19,8 +19,21 @@ module.exports = {
       fontFamily: {
         playfair: ['"Playfair Display"', 'serif'],
         inter: ['Inter', 'sans-serif'],
+        cormorant: ['"Cormorant Garamond"', 'serif'],
+        ebgaramond: ['"EB Garamond"', 'serif'],
+        jost: ['Jost', 'sans-serif'],
       },
       colors: {
+        // "El mundo de la copa" landing — its own approved system (crema/borgoña/oro),
+        // deliberately separate from the site-wide wine-* tokens in index.css.
+        copa: {
+          cream: '#F7F1E6',
+          creamDeep: '#EFE6D6',
+          burgundy: '#6B1F2A',
+          burgundyDark: '#4A1119',
+          gold: '#B08D57',
+          ink: '#2B2320',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

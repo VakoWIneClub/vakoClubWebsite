@@ -88,3 +88,11 @@ body {
 .wine-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--wine-cream);
 }
+
+/* "El mundo de la copa" landing (/tienda/el-mundo-de-la-copa) is a standalone product
+   page with its own approved crema/borgoña/oro system — it opts out of the site-wide
+   dark wine-pattern background. Toggled by the page itself via document.body class. */
+body.copa-landing-active {
+  background: #F7F1E6;
+  background-image: none;
+}
