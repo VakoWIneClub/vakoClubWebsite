@@ -2,7 +2,7 @@
 
 > Este archivo es la "memoria compartida" del equipo. Cada agente lo lee antes de trabajar y actualiza su propia sección al terminar (nunca borra el trabajo de otro agente). Así el equipo funciona coordinado aunque cada agente se ejecute por separado, en momentos distintos.
 
-**Última actualización:** 2026-08-14 — `vako-research` entregó el informe de ángulo/demanda para la Guía del Vino Argentino (segunda guía de la serie regional).
+**Última actualización:** 2026-08-14 — `vako-email` escribió la secuencia de lanzamiento (6 emails: anticipación → apertura → urgencia real de cierre) para la Guía del Vino Español, sobre la oferta Precio Fundador €12 → €19 ya definida por `vako-ofertas`.
 
 ## 📘 Catálogo de guías PDF activas
 | Título | Tema | Precio | Estado | Enlace de venta / cobro |
@@ -25,6 +25,7 @@
 - **Bonos:** ficha de maridaje imprimible "Tapas & Vino Español", mapa visual imprimible de las DO de España, estatus de "Fundador/a de la Colección" (acceso anticipado a Argentina/Francia + invitación a la membresía Gratuita).
 - **Garantía:** devolución de 14 días.
 - **Vigencia:** todavía no está activa de verdad — lista para ejecutarse en cuanto (a) se escriba el contenido de la guía y (b) Julian confirme la herramienta de cobro externo. No bloquea seguir preparando landing/email/creatividades mientras tanto.
+- **Secuencia de email de lanzamiento:** ya escrita y lista para cargar — 6 emails (anticipación → apertura → urgencia real de cierre de la ventana de 14 días), dirigida a la lista de email ya existente de Vako Club (no a la campaña de Instagram): `email/2026-08-14-lanzamiento-guia-vino-espanol.md`. Pendiente: conectar un ESP de email marketing para poder cargarla y automatizar el envío (ver "Próximas acciones sugeridas").
 
 ## 📅 Campaña de Instagram (plan de 3 meses)
 - **Estado:** la Semana 1 ya está creada por Julian (fuera de este repositorio) y se lanza el lunes 2026-08-17. Las semanas siguientes (hasta completar ~12-13 semanas de campaña) todavía no se han creado.
@@ -44,6 +45,7 @@
 5. Confirmar con Julian el índice/contenido real de la Guía General ya creada, para evitar solapamiento con la Guía del Vino Español y la Guía del Vino Argentino (ambos informes de investigación tuvieron que inferir el hueco de contenido porque el índice real no está documentado en este repositorio).
 6. Con el ángulo y la oferta ya validados para España, siguiente paso natural: escribir el contenido de la Guía del Vino Español (incluye verificar contra el reglamento oficial los tiempos exactos de Crianza/Reserva/Gran Reserva) y que `vako-landing` prepare su página de venta con el precio y los bonos ya definidos. En paralelo, `vako-ofertas` puede diseñar ya la oferta de la Guía del Vino Argentino con el ángulo validado (ver hallazgos del 2026-08-14), y luego escribirse su contenido.
 7. Decidir con Julian el calendario de lanzamiento de la Guía del Vino Argentino: sus ganchos de estacionalidad más fuertes (vendimia enero-abril, Día Mundial del Malbec 17 de abril) ya pasaron en 2026 y no vuelven hasta 2027 — o se lanza ahora apoyándose en ángulos evergreen ("más allá del Malbec", maridaje de asado, regalo de fin de año), o se reserva el mayor esfuerzo de marketing para enero–abril de 2027.
+8. Conectar un ESP de email marketing (ej. Brevo, MailerLite, Mailchimp o ConvertKit — cualquiera con plan gratuito para listas pequeñas sirve para empezar) para poder cargar y automatizar las secuencias ya escritas, empezando por la secuencia de lanzamiento de la Guía del Vino Español ya lista en `email/2026-08-14-lanzamiento-guia-vino-espanol.md`.
 
 ## 🗂️ Historial de sprints y lanzamientos
 | Fecha | Playbook / agente | Sector | Resultado / archivo |
@@ -53,3 +55,4 @@
 | 2026-08-13 | vako-research | Research / Guías PDF | Informe de ángulo y demanda para la Guía del Vino Español (primera guía de la serie regional): `research/2026-08-13-guia-vino-espanol-angulo-demanda.md` |
 | 2026-08-14 | vako-ofertas | Ofertas / Guías PDF | Oferta de lanzamiento (Precio Fundador €12 → €19, bonos, garantía y escasez real) para la Guía del Vino Español: `ofertas/2026-08-14-lanzamiento-guia-vino-espanol.md` |
 | 2026-08-14 | vako-research | Research / Guías PDF | Informe de ángulo y demanda para la Guía del Vino Argentino (segunda guía de la serie regional): `research/2026-08-14-guia-vino-argentino-angulo-demanda.md` |
+| 2026-08-14 | vako-email | Email / Guías PDF | Secuencia de lanzamiento (6 emails: anticipación → apertura → urgencia real de cierre de la ventana de 14 días) para la Guía del Vino Español, sobre la oferta Precio Fundador €12 → €19 de `vako-ofertas`, dirigida a la lista de email existente: `email/2026-08-14-lanzamiento-guia-vino-espanol.md` |
