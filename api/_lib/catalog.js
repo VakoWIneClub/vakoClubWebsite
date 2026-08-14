@@ -7,8 +7,7 @@ export const GUIAS_CATALOG = {
     amountCents: 2999,
     currency: 'usd',
     disponible: true,
-    // TODO: falta el PDF real (o un link de descarga) — Julian debe proveerlo.
-    downloadUrl: null,
+    downloadUrl: '/guias/Vako-Club_El-mundo-de-la-copa_1.pdf',
   },
   'guia-espanol': {
     nombre: 'Guía del Vino Español',

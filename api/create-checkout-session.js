@@ -24,7 +24,9 @@ export default async function handler(req, res) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      // Managed Payments (habilitado por defecto en la cuenta) exige un tax_code de producto que
+      // implica decisiones de impuestos que Julian no definió — se desactiva para este checkout simple.
+      managed_payments: { enabled: false },
       line_items: [
         {
           price_data: {
