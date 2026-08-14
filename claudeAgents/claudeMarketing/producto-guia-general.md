@@ -9,8 +9,10 @@ anterior sobre el contenido de la Guía General — úsalo como fuente de verdad
 - **Posicionamiento:** "Guía del entusiasta" — Edición 2026 · Volumen I
 - **Extensión:** 82 páginas
 - **Tipografías del PDF (distintas a las del sitio):** Cormorant Garamond, EB Garamond y Jost — el sitio usa Playfair Display + Inter. No asumir que son la misma identidad tipográfica al diseñar piezas que mezclen ambas.
-- **Precio:** `[PENDIENTE — preguntar a Julian]`
+- **Precio:** **$29.99 USD** (confirmado por Julian el 2026-08-14)
 - **Estado:** ✅ Ya creada y terminada (a diferencia de las guías regionales, que siguen sin escribirse)
+- **Contenido completo:** Julian compartió el texto íntegro de las 83 páginas el 2026-08-14 — transcripción completa guardada en `producto-guia-general-CONTENIDO-COMPLETO.md` (misma carpeta). Úsalo para citar datos, cifras y afirmaciones reales del producto sin parafrasear de memoria.
+- **⚠️ Archivo del producto (PDF real para vender):** todavía no está en el repositorio — lo que Julian compartió es el texto, no el archivo binario con su diseño real (tipografías, colores, portada). Falta que Julian coloque el PDF real en `public/guias/el-mundo-de-la-copa.pdf` para que la descarga automática post-compra funcione.
 
 ## Índice completo
 **Introducción:** Cómo usar esta guía
