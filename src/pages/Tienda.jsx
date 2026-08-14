@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import ProductGrid from "@/components/tienda/ProductGrid";
 import TiendaFeatures from "@/components/tienda/TiendaFeatures";
-import DiscountPopup from "@/components/tienda/DiscountPopup";
+// import DiscountPopup from "@/components/tienda/DiscountPopup";
 import GuiasSection from "@/components/tienda/GuiasSection";
 import CompraResultBanner from "@/components/tienda/CompraResultBanner";
 import { Button } from "@/components/ui/button";
@@ -378,7 +378,7 @@ const Tienda = () => {
         />
       </Helmet>
 
-      <DiscountPopup isOpen={isPopupOpen} onOpenChange={setPopupOpen} />
+      {/* <DiscountPopup isOpen={isPopupOpen} onOpenChange={setPopupOpen} /> */}
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
