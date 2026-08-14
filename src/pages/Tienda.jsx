@@ -419,7 +419,7 @@ const Tienda = () => {
             </motion.div>
 
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Tienda Vako Club
+              Tienda
             </h1>
 
             <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
@@ -444,42 +444,10 @@ const Tienda = () => {
         </div>
       </section>
 
-      <CompraResultBanner />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Showing only the Guías PDF section as requested */}
         <GuiasSection />
-        <div className="border-t border-amber-500/10"></div>
-        {user && <MemberCouponSection />}
-        <Section
-          title="Arte y Deco"
-          icon={Paintbrush}
-          products={arteYDeco}
-          showEtsyButton
-        />
-        {/* <div className="border-t border-amber-500/10"></div>
-        <Section
-          title="Vinos Seleccionados"
-          icon={Wine}
-          products={vinosSeleccionados}
-        /> */}
-        <div className="border-t border-amber-500/10"></div>
-        <Section
-          title="Merchandising"
-          icon={Shirt}
-          products={merchandising}
-          showEtsyButton
-        />
-        <div className="border-t border-amber-500/10"></div>
-        <Section
-          title="Accesorios"
-          icon={GlassWater}
-          products={accesorios}
-          showEtsyButton
-        />
       </div>
-
-      {/* Features Section */}
-      <TiendaFeatures />
     </>
   );
 };
