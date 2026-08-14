@@ -59,7 +59,7 @@ const INCLUYE = [
 const FAQS = [
   { q: '¿En qué formato llega?', a: 'PDF. Se lee en celular, tablet, computadora o impreso.' },
   { q: '¿Necesito saber algo de vino para empezar?', a: 'No. La guía arranca desde cero y llega lejos.' },
-  { q: '¿Sirve si no vivo en Argentina?', a: 'Sí. Los criterios son universales y hay ediciones en inglés y portugués.' },
+  { q: '¿Hay en otros idiomas?', a: 'Sí. Los criterios son universales y hay ediciones en inglés y portugués.' },
   { q: '¿Cómo la recibo?', a: 'Por email, apenas se acredita el pago.' },
   { q: '¿Puedo regalarla?', a: 'Sí. Comprás igual que siempre y nos escribís a quién mandarle el enlace.' },
   { q: '¿Se actualiza?', a: 'Sí, y las actualizaciones te llegan sin costo.' },
