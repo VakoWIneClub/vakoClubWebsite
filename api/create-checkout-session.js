@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { GUIAS_CATALOG } from './_lib/catalog.js';
+import { GUIAS_CATALOG, normalizarIdioma } from './_lib/catalog.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -12,11 +12,14 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Stripe no está configurado todavía en el servidor.' });
   }
 
-  const { guideId } = req.body || {};
+  const { guideId, lang } = req.body || {};
   const guia = GUIAS_CATALOG[guideId];
   if (!guia || !guia.disponible) {
     return res.status(400).json({ error: 'Esta guía no está disponible para compra todavía.' });
   }
+  // El idioma viaja en los metadatos de la sesión de Stripe — es lo único que
+  // /api/download-guide puede consultar después, ya que el checkout redirige afuera del sitio.
+  const idioma = normalizarIdioma(lang);
 
   const stripe = new Stripe(secretKey);
   const origin = req.headers.origin || `https://${req.headers.host}`;
@@ -39,7 +42,7 @@ export default async function handler(req, res) {
       ],
       success_url: `${origin}/tienda?compra=exito&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/tienda?compra=cancelada`,
-      metadata: { guideId },
+      metadata: { guideId, lang: idioma },
     });
 
     return res.status(200).json({ url: session.url });
