@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Wine, Sparkles, Check } from 'lucide-react';
+import { BookOpen, Wine, Sparkles, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import NotifyGuideDialog from '@/components/tienda/NotifyGuideDialog';
 
 const guias = [
@@ -13,8 +14,7 @@ const guias = [
       'Uvas, regiones y maridajes para entender qué estás bebiendo. 82 páginas: de los cinco componentes del vino a un recorrido completo por Francia, Italia, España, Argentina, Chile, Estados Unidos, Australia y más.',
     estado: 'disponible',
     etiqueta: 'Guía General',
-    precio: null,
-    precioNota: 'Precio por confirmar',
+    precio: 29.99,
   },
   {
     id: 'guia-espanol',
@@ -51,8 +51,9 @@ const guias = [
   },
 ];
 
-const GuiaCard = ({ guia, index, onQuiero }) => {
+const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
   const disponible = guia.estado === 'disponible';
+  const procesando = comprando === guia.id;
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -101,9 +102,9 @@ const GuiaCard = ({ guia, index, onQuiero }) => {
           <div>
             {guia.precio ? (
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold wine-text-gradient">€{guia.precio}</span>
+                <span className="text-2xl font-bold wine-text-gradient">${guia.precio}</span>
                 {guia.precioRegular && (
-                  <span className="text-amber-100/50 line-through text-sm">€{guia.precioRegular}</span>
+                  <span className="text-amber-100/50 line-through text-sm">${guia.precioRegular}</span>
                 )}
               </div>
             ) : (
@@ -114,10 +115,12 @@ const GuiaCard = ({ guia, index, onQuiero }) => {
             )}
           </div>
           <Button
-            onClick={() => onQuiero(guia.nombre)}
-            className="wine-gradient text-stone-900 font-semibold hover:opacity-90"
+            onClick={() => (disponible ? onComprar(guia.id) : onAvisame(guia.nombre))}
+            disabled={procesando}
+            className="wine-gradient text-stone-900 font-semibold hover:opacity-90 disabled:opacity-70"
           >
-            {disponible ? 'Quiero esta guía' : 'Avísame'}
+            {procesando && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {procesando ? 'Redirigiendo...' : disponible ? 'Quiero esta guía' : 'Avísame'}
           </Button>
         </div>
       </div>
@@ -126,10 +129,35 @@ const GuiaCard = ({ guia, index, onQuiero }) => {
 };
 
 const GuiasSection = () => {
+  const { toast } = useToast();
   const [dialogState, setDialogState] = useState({ open: false, guideName: '' });
+  const [comprando, setComprando] = useState(null);
 
-  const handleQuiero = (guideName) => {
+  const handleAvisame = (guideName) => {
     setDialogState({ open: true, guideName });
+  };
+
+  const handleComprar = async (guideId) => {
+    setComprando(guideId);
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guideId }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || 'No se pudo iniciar el pago.');
+      }
+      window.location.href = data.url;
+    } catch (error) {
+      toast({
+        title: 'No se pudo iniciar el pago',
+        description: error.message || 'Intenta de nuevo en unos minutos.',
+        variant: 'destructive',
+      });
+      setComprando(null);
+    }
   };
 
   return (
@@ -163,7 +191,14 @@ const GuiasSection = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
         {guias.map((guia, index) => (
-          <GuiaCard key={guia.id} guia={guia} index={index} onQuiero={handleQuiero} />
+          <GuiaCard
+            key={guia.id}
+            guia={guia}
+            index={index}
+            onComprar={handleComprar}
+            onAvisame={handleAvisame}
+            comprando={comprando}
+          />
         ))}
       </div>
 

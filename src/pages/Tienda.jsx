@@ -18,6 +18,7 @@ import ProductGrid from "@/components/tienda/ProductGrid";
 import TiendaFeatures from "@/components/tienda/TiendaFeatures";
 import DiscountPopup from "@/components/tienda/DiscountPopup";
 import GuiasSection from "@/components/tienda/GuiasSection";
+import CompraResultBanner from "@/components/tienda/CompraResultBanner";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { useToast } from "@/components/ui/use-toast";
@@ -442,6 +443,8 @@ const Tienda = () => {
           </motion.div>
         </div>
       </section>
+
+      <CompraResultBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GuiasSection />

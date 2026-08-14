@@ -16,7 +16,7 @@ Este es el producto prioritario del negocio ahora mismo. Todo el equipo de marke
 **Catálogo de guías actuales:** ⚠️ PENDIENTE DE COMPLETAR. Julian ya ha creado guías en PDF con ayuda de Claude en conversaciones anteriores, pero no quedaron documentadas en este repositorio. Antes de generar una oferta, landing page o email sobre una guía concreta, el agente correspondiente debe: (a) revisar `01-ESTADO-ACTUAL.md`, y (b) si sigue vacío, preguntarle a Julian por título(s), tema, precio, formato y público objetivo de cada guía. Nunca inventar estos datos.
 
 ## Modelo de negocio (fuentes de ingreso, por prioridad real)
-1. **Guías en PDF** (producto estrella / objetivo #1) — venta directa. No existe todavía checkout propio en el sitio (ver "Limitaciones técnicas" abajo), así que hoy se vendería vía un enlace de cobro externo.
+1. **Guías en PDF** (producto estrella / objetivo #1) — venta directa vía Stripe Checkout, integrado en el sitio (ver "Limitaciones técnicas" abajo). Precios en USD.
 2. **Suscripción Vako Club** — copy y planes definidos, pero **hoy en día solo el plan Gratuito está realmente implementado** en `/suscripcion` (formulario de registro gratuito). Los planes de pago existen en el contenido del sitio pero no son seleccionables todavía:
 
    | Plan | Precio | Incluye | Estado real en el sitio |
@@ -38,10 +38,10 @@ Aficionados al vino de nivel principiante-intermedio que quieren aprender sin se
 - **Idiomas:** español (principal), inglés, portugués.
 
 ## Canales y limitaciones técnicas conocidas (verificado en el código, no supuesto)
-- **Pagos:** no hay ningún procesador de pago integrado en el sitio (sin Stripe, sin PayPal, sin checkout propio). Para vender una guía en PDF hoy hace falta un enlace de cobro externo (ej. Gumroad, Stripe Payment Links, Lemon Squeezy). `vako-ofertas` y `vako-landing` deben preguntar a Julian qué herramienta de cobro usa o prefiere en vez de asumir una.
+- **Pagos:** Stripe Checkout integrado desde el 2026-08-14 (`/api/create-checkout-session`, `/api/verify-session`). Solo la Guía General es comprable hoy; ver `01-ESTADO-ACTUAL.md` para el detalle técnico y lo que falta (archivo PDF real, claves live activas).
 - **Email:** solo está integrado EmailJS, y únicamente para el formulario de contacto (transaccional). No hay un ESP de email marketing (tipo Brevo, Mailchimp, ConvertKit, MailerLite) conectado todavía. `vako-email` debe seguir redactando secuencias completas y listas para cargar, señalando este hueco como acción pendiente.
 - **Guías en PDF — dónde se venden:** viven dentro de `/tienda` (sección "Guías en PDF", `src/components/tienda/GuiasSection.jsx`), no en landing pages independientes — decisión de Julian del 2026-08-14. `vako-landing` trabaja el copy/estructura de esa sección y de cualquier vista de detalle futura, no páginas dedicadas por guía.
-- **Pago:** todavía no hay ningún proveedor conectado (ver detalle y opciones evaluadas en `01-ESTADO-ACTUAL.md`); mientras tanto, el CTA de compra de cada guía captura el email en una lista de espera vía EmailJS (`NotifyGuideDialog.jsx`).
+- **Pago:** Stripe Checkout ya está integrado (decisión de Julian del 2026-08-14) — ver detalle técnico y lo que falta en `01-ESTADO-ACTUAL.md`. Toda la tienda cotiza en **USD** (decisión explícita de Julian: unificar moneda, aunque el resto del sitio use € en otras secciones). Solo "El Mundo de la Copa" (Guía General) está realmente comprable hoy — **$29.99**. Las 3 guías regionales siguen en lista de espera vía EmailJS (`NotifyGuideDialog.jsx`) porque todavía no están escritas, no por falta de cobro.
 - **Instagram:** ya existe una campaña de 3 meses creada previamente con Claude para captar leads. Su contenido detallado no quedó guardado en este repositorio — debe recuperarse (pedírselo a Julian) antes de continuar o generar el mes 2/3, para no contradecirla ni repetirla.
 - **Investigación de competencia:** ya se hizo una auditoría de Wine Folly (winefolly.com) como referencia competitiva (ver historial en `01-ESTADO-ACTUAL.md`). Puede regenerarse o ampliarse con `vako-research`.
 
