@@ -16,7 +16,7 @@ const guias = [
     etiqueta: 'Guía General',
     precio: 29.99,
     // image path — place the provided cover image at public/images/guias/el-mundo-en-una-copa.png
-    image: '/images/guias/el-mundo-en-una-copa.png',
+    image: '/images/art.png',
   },
   {
     id: 'guia-espanol',
