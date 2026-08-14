@@ -416,13 +416,13 @@ const Tienda = () => {
               <div className="p-6 wine-gradient rounded-full wine-shadow">
                 <ShoppingBag className="h-16 w-16 text-white" />
               </div>
-            </motion.div>
+            </motion.div> */}
 
             <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
               Tienda
             </h1>
 
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
+            {/* <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
               Una selección de productos que celebran la cultura del vino.
             </p>
 
