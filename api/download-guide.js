@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Stripe from 'stripe';
-import { GUIAS_CATALOG } from './_lib/catalog.js';
+import { GUIAS_CATALOG, getGuideFilePath, normalizarIdioma } from './_lib/catalog.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -35,11 +35,13 @@ export default async function handler(req, res) {
 
   const guideId = session.metadata?.guideId;
   const guia = GUIAS_CATALOG[guideId];
-  if (!guia?.filePath) {
+  const idioma = normalizarIdioma(session.metadata?.lang);
+  const filePath = getGuideFilePath(guia, idioma);
+  if (!filePath) {
     return res.status(404).json({ error: 'No hay un archivo disponible para esta guía todavía.' });
   }
 
-  const absolutePath = path.join(process.cwd(), guia.filePath);
+  const absolutePath = path.join(process.cwd(), filePath);
   let fileBuffer;
   try {
     fileBuffer = fs.readFileSync(absolutePath);

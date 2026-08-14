@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Wine, Sparkles, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import NotifyGuideDialog from '@/components/tienda/NotifyGuideDialog';
+
+// Guías con su propia landing de venta dedicada — el título y la imagen llevan ahí
+// en vez de ir directo al checkout.
+const LANDING_PATH = { 'guia-general': '/tienda/el-mundo-de-la-copa' };
 
 const guias = [
   {
@@ -15,8 +20,7 @@ const guias = [
     estado: 'disponible',
     etiqueta: 'Guía General',
     precio: 29.99,
-    // image path — place the provided cover image at public/images/guias/el-mundo-en-una-copa.png
-    image: '/images/art.png',
+    image: '/images/guias/el-mundo-de-la-copa-tapa.jpg',
   },
   {
     id: 'guia-espanol',
@@ -56,6 +60,7 @@ const guias = [
 const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
   const disponible = guia.estado === 'disponible';
   const procesando = comprando === guia.id;
+  const landingPath = LANDING_PATH[guia.id];
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -80,7 +85,13 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
 
       <div className="relative h-56 bg-gradient-to-br from-amber-900/30 to-red-900/30 flex items-center justify-center overflow-hidden">
         {guia.image ? (
-          <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+          landingPath ? (
+            <Link to={landingPath} aria-label={guia.nombre} className="block w-full h-full">
+              <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+            </Link>
+          ) : (
+            <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+          )
         ) : (
           <div className="p-6 wine-gradient rounded-full wine-shadow">
             {disponible ? (
@@ -95,7 +106,11 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
       <div className="p-6 space-y-4 flex-grow flex flex-col justify-between">
         <div>
           <h3 className="font-playfair text-xl font-semibold text-amber-200">
-            {guia.nombre}
+            {landingPath ? (
+              <Link to={landingPath} className="hover:text-amber-100 transition-colors">{guia.nombre}</Link>
+            ) : (
+              guia.nombre
+            )}
           </h3>
           <p className="text-amber-300/80 text-sm">{guia.subtitulo}</p>
         </div>
