@@ -15,6 +15,8 @@ const guias = [
     estado: 'disponible',
     etiqueta: 'Guía General',
     precio: 29.99,
+    // image path — place the provided cover image at public/images/guias/el-mundo-en-una-copa.png
+    image: '/images/guias/el-mundo-en-una-copa.png',
   },
   {
     id: 'guia-espanol',
@@ -76,14 +78,18 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
         </div>
       )}
 
-      <div className="relative h-56 bg-gradient-to-br from-amber-900/30 to-red-900/30 flex items-center justify-center">
-        <div className="p-6 wine-gradient rounded-full wine-shadow">
-          {disponible ? (
-            <BookOpen className="h-12 w-12 text-stone-900" />
-          ) : (
-            <Wine className="h-12 w-12 text-stone-900" />
-          )}
-        </div>
+      <div className="relative h-56 bg-gradient-to-br from-amber-900/30 to-red-900/30 flex items-center justify-center overflow-hidden">
+        {guia.image ? (
+          <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+        ) : (
+          <div className="p-6 wine-gradient rounded-full wine-shadow">
+            {disponible ? (
+              <BookOpen className="h-12 w-12 text-stone-900" />
+            ) : (
+              <Wine className="h-12 w-12 text-stone-900" />
+            )}
+          </div>
+        )}
       </div>
 
       <div className="p-6 space-y-4 flex-grow flex flex-col justify-between">
