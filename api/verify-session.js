@@ -29,7 +29,9 @@ export default async function handler(req, res) {
     return res.status(200).json({
       paid: true,
       guideName: guia?.nombre || null,
-      downloadUrl: guia?.downloadUrl || null,
+      // El link ya lleva el session_id verificado: /api/download-guide lo vuelve a comprobar
+      // contra Stripe antes de entregar el archivo, nunca sirve el PDF como link público estático.
+      downloadUrl: guia?.filePath ? `/api/download-guide?session_id=${encodeURIComponent(sessionId)}` : null,
     });
   } catch (error) {
     console.error('Error verificando sesión de Stripe:', error);
