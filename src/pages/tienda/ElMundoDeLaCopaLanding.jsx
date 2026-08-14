@@ -410,11 +410,10 @@ const ElMundoDeLaCopaLanding = () => {
             </Reveal>
             <Reveal delay={0.1} className="mt-10 py-7 pl-6 border-l-2 border-dashed border-copa-burgundy/60">
               <div className="font-jost text-[11px] tracking-[0.18em] uppercase text-copa-burgundy">
-                Pendiente — falta tu texto
+                Experiencia
               </div>
               <p className="max-w-[34em] text-copa-ink/70 mt-3.5" style={{ fontSize: 18, lineHeight: 1.65 }}>
-                Tres párrafos, en primera persona: por qué armaste la guía, desde dónde escribís y qué te trajo
-                hasta acá. Reemplazá este bloque tal cual — no se inventó ninguna biografía en tu nombre.
+                Sin escuela y sin atajos: leyendo, probando, preguntando y volviendo a probar. Nos llevó diez años llegar hasta acá, y buena parte de ese camino fue dar vueltas de más por no tener a nadie que me dijera por dónde empezar.
               </p>
             </Reveal>
           </div>
@@ -585,7 +584,7 @@ const ElMundoDeLaCopaLanding = () => {
             <Link to="/politica-privacidad" className="text-copa-cream/80 hover:text-copa-gold transition-colors">Privacidad</Link>
             <Link to="/contacto" className="text-copa-cream/80 hover:text-copa-gold transition-colors">Contacto</Link>
           </div>
-          <span className="text-copa-cream/60">© {new Date().getFullYear()} Vako Club · Argentina</span>
+          <span className="text-copa-cream/60">© {new Date().getFullYear()} Vako Club</span>
         </div>
       </footer>
     </div>
