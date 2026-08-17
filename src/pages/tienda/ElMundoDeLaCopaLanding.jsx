@@ -79,6 +79,9 @@ const COPY = {
       ctaSecondary: 'Ver páginas de adentro',
       microcopy: 'Descarga inmediata · PDF para leer en cualquier dispositivo · Pago seguro',
       coverAlt: 'Tapa de la guía El mundo de la copa, de Vako Club',
+      coverSrc: '/images/guias/el-mundo-de-la-copa-tapa.jpg',
+      coverWidth: 451,
+      coverHeight: 627,
     },
     dataBar: {
       ariaLabel: 'Datos de la guía',
@@ -192,6 +195,9 @@ const COPY = {
       ctaSecondary: 'See the inside pages',
       microcopy: 'Instant download · PDF readable on any device · Secure payment',
       coverAlt: 'Cover of The World of the Glass guide, by Vako Club',
+      coverSrc: '/images/guias/el-mundo-de-la-copa-tapa-en.jpg',
+      coverWidth: 642,
+      coverHeight: 902,
     },
     dataBar: {
       ariaLabel: 'Guide details',
@@ -305,6 +311,9 @@ const COPY = {
       ctaSecondary: 'Ver páginas internas',
       microcopy: 'Download imediato · PDF para ler em qualquer dispositivo · Pagamento seguro',
       coverAlt: 'Capa do guia O Mundo da Taça, da Vako Club',
+      coverSrc: '/images/guias/el-mundo-de-la-copa-tapa-pt.png',
+      coverWidth: 1632,
+      coverHeight: 2112,
     },
     dataBar: {
       ariaLabel: 'Dados do guia',
@@ -863,10 +872,11 @@ const ElMundoDeLaCopaLanding = () => {
           </div>
           <div className="flex-[0_1_380px] min-w-[280px] flex justify-center p-7 sm:p-12 bg-copa-creamDeep">
             <img
-              src="/images/guias/el-mundo-de-la-copa-tapa.jpg"
+              key={t.hero.coverSrc}
+              src={t.hero.coverSrc}
               alt={t.hero.coverAlt}
-              width="451"
-              height="627"
+              width={t.hero.coverWidth}
+              height={t.hero.coverHeight}
               className="w-full max-w-[340px] h-auto block"
               style={{ boxShadow: '14px 14px 0 rgba(43,35,32,.14)' }}
             />
