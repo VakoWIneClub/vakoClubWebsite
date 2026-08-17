@@ -1,6 +1,10 @@
 import Stripe from 'stripe';
 import { GUIAS_CATALOG, normalizarIdioma } from './_lib/catalog.js';
 
+// A dónde puede volver Stripe después del pago. Se valida contra esta lista en vez de confiar en
+// el `returnPath` que manda el cliente, para no abrir un open-redirect vía el body del POST.
+const RETURN_PATHS = ['/tienda', '/tienda/el-mundo-de-la-copa'];
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -12,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Stripe no está configurado todavía en el servidor.' });
   }
 
-  const { guideId, lang } = req.body || {};
+  const { guideId, lang, returnPath } = req.body || {};
   const guia = GUIAS_CATALOG[guideId];
   if (!guia || !guia.disponible) {
     return res.status(400).json({ error: 'Esta guía no está disponible para compra todavía.' });
@@ -20,6 +24,7 @@ export default async function handler(req, res) {
   // El idioma viaja en los metadatos de la sesión de Stripe — es lo único que
   // /api/download-guide puede consultar después, ya que el checkout redirige afuera del sitio.
   const idioma = normalizarIdioma(lang);
+  const basePath = RETURN_PATHS.includes(returnPath) ? returnPath : '/tienda';
 
   const stripe = new Stripe(secretKey);
   const origin = req.headers.origin || `https://${req.headers.host}`;
@@ -40,8 +45,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${origin}/tienda?compra=exito&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/tienda?compra=cancelada`,
+      success_url: `${origin}${basePath}?compra=exito&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}${basePath}?compra=cancelada`,
       metadata: { guideId, lang: idioma },
     });
 

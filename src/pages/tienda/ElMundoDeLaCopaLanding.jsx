@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { useToast } from '@/components/ui/use-toast';
@@ -136,6 +136,17 @@ const COPY = {
         'Actualizaciones futuras sin costo',
       ],
     },
+    compra: {
+      verificando: 'Confirmando tu pago…',
+      exitoTitle: '¡Gracias por tu compra!',
+      exitoParagraph: 'Tu descarga debería haber empezado sola. Si no pasó nada, usá este botón.',
+      descargar: 'Descargar guía',
+      errorTitle: 'No pudimos confirmar el pago',
+      errorParagraph: 'Si te hicieron un cobro, escribinos a info@vakoclub.com con tu comprobante y te mandamos la guía al toque.',
+      canceladaTitle: 'Compra cancelada',
+      canceladaParagraph: 'No se realizó ningún cobro. Podés intentarlo de nuevo cuando quieras.',
+      cerrar: 'Cerrar',
+    },
     email: {
       title: '¿Todavía lo estás pensando?',
       paragraph: 'Dejanos tu email y te mandamos la primera parte completa, gratis. Si te sirve, ya sabés dónde está el resto.',
@@ -237,6 +248,17 @@ const COPY = {
         'Instant access, no expiration',
         'Future updates at no extra cost',
       ],
+    },
+    compra: {
+      verificando: 'Confirming your payment…',
+      exitoTitle: 'Thank you for your purchase!',
+      exitoParagraph: 'Your download should have started on its own. If nothing happened, use this button.',
+      descargar: 'Download guide',
+      errorTitle: "We couldn't confirm the payment",
+      errorParagraph: "If you were charged, email us at info@vakoclub.com with your receipt and we'll send you the guide right away.",
+      canceladaTitle: 'Purchase cancelled',
+      canceladaParagraph: 'No charge was made. You can try again anytime.',
+      cerrar: 'Close',
     },
     email: {
       title: 'Still thinking it over?',
@@ -340,6 +362,17 @@ const COPY = {
         'Atualizações futuras sem custo',
       ],
     },
+    compra: {
+      verificando: 'Confirmando seu pagamento…',
+      exitoTitle: 'Obrigado pela sua compra!',
+      exitoParagraph: 'Seu download deveria ter começado sozinho. Se nada aconteceu, use este botão.',
+      descargar: 'Baixar guia',
+      errorTitle: 'Não conseguimos confirmar o pagamento',
+      errorParagraph: 'Se você foi cobrado, escreva para info@vakoclub.com com seu comprovante e mandamos o guia na hora.',
+      canceladaTitle: 'Compra cancelada',
+      canceladaParagraph: 'Nenhuma cobrança foi feita. Você pode tentar de novo quando quiser.',
+      cerrar: 'Fechar',
+    },
     email: {
       title: 'Ainda está pensando?',
       paragraph: 'Deixe seu email e mandamos a primeira parte completa, de graça. Se gostar, você já sabe onde está o resto.',
@@ -416,9 +449,16 @@ const ElMundoDeLaCopaLanding = () => {
   const [fillY, setFillY] = useState(8);
   const [trazoOro, setTrazoOro] = useState(true);
   const reducedRef = useRef(false);
+  const autoDownloadRef = useRef(false);
 
   const problemaRef = useRef(null);
   const ofertaRef = useRef(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const compra = searchParams.get('compra');
+  const sessionId = searchParams.get('session_id');
+  const [compraStatus, setCompraStatus] = useState(compra === 'exito' ? 'verificando' : null);
+  const [compraResultado, setCompraResultado] = useState(null);
 
   const t = COPY[lang];
   const gateT = GATE_COPY[gateLang || 'es'];
@@ -449,6 +489,38 @@ const ElMundoDeLaCopaLanding = () => {
       // localStorage puede fallar en modo privado — no es crítico, sólo vuelve a preguntar.
     }
     setGateOpen(false);
+  };
+
+  // Stripe redirige de vuelta acá con ?compra=exito&session_id=... — se verifica el pago contra
+  // el servidor (nunca se confía en el query param solo) y, si está pagado, se dispara la
+  // descarga del PDF automáticamente. El botón "Descargar guía" del banner queda como respaldo
+  // manual por si el navegador bloquea la descarga automática.
+  useEffect(() => {
+    if (compra !== 'exito' || !sessionId) return;
+    let cancelado = false;
+    fetch(`/api/verify-session?session_id=${encodeURIComponent(sessionId)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelado) return;
+        setCompraResultado(data);
+        setCompraStatus(data.paid ? 'pagado' : 'no-pagado');
+        if (data.paid && data.downloadUrl && !autoDownloadRef.current) {
+          autoDownloadRef.current = true;
+          window.location.href = data.downloadUrl;
+        }
+      })
+      .catch(() => {
+        if (!cancelado) setCompraStatus('error');
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, [compra, sessionId]);
+
+  const cerrarCompra = () => {
+    searchParams.delete('compra');
+    searchParams.delete('session_id');
+    setSearchParams(searchParams, { replace: true });
   };
 
   useEffect(() => {
@@ -503,7 +575,7 @@ const ElMundoDeLaCopaLanding = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guideId: GUIDE_ID, lang }),
+        body: JSON.stringify({ guideId: GUIDE_ID, lang, returnPath: '/tienda/el-mundo-de-la-copa' }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || t.toastError.fallbackError);
@@ -712,6 +784,47 @@ const ElMundoDeLaCopaLanding = () => {
           </div>
         </div>
       </header>
+
+      {/* Resultado de la compra — Stripe redirige acá con ?compra=exito&session_id=... */}
+      {compra && (
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 pt-8">
+          <div className="border border-copa-gold bg-copa-creamDeep px-6 py-5 flex flex-wrap items-start gap-4">
+            {compra === 'cancelada' && (
+              <div className="flex-1 min-w-[240px]">
+                <h3 className="font-cormorant" style={{ fontSize: 22 }}>{t.compra.canceladaTitle}</h3>
+                <p className="text-copa-ink/70 mt-1" style={{ fontSize: 15 }}>{t.compra.canceladaParagraph}</p>
+              </div>
+            )}
+            {compra === 'exito' && compraStatus === 'verificando' && (
+              <p className="font-jost text-xs tracking-[0.14em] uppercase text-copa-ink/70">{t.compra.verificando}</p>
+            )}
+            {compra === 'exito' && compraStatus === 'pagado' && (
+              <div className="flex-1 min-w-[240px]">
+                <h3 className="font-cormorant" style={{ fontSize: 22 }}>{t.compra.exitoTitle}</h3>
+                <p className="text-copa-ink/70 mt-1" style={{ fontSize: 15 }}>{t.compra.exitoParagraph}</p>
+                {compraResultado?.downloadUrl && (
+                  <a href={compraResultado.downloadUrl} download className={`${btnPrimary} mt-4 inline-flex`}>
+                    {t.compra.descargar}
+                  </a>
+                )}
+              </div>
+            )}
+            {compra === 'exito' && (compraStatus === 'no-pagado' || compraStatus === 'error') && (
+              <div className="flex-1 min-w-[240px]">
+                <h3 className="font-cormorant text-copa-burgundy" style={{ fontSize: 22 }}>{t.compra.errorTitle}</h3>
+                <p className="text-copa-ink/70 mt-1" style={{ fontSize: 15 }}>{t.compra.errorParagraph}</p>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={cerrarCompra}
+              className="ml-auto font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/50 hover:text-copa-ink"
+            >
+              {t.compra.cerrar}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 1 · Hero */}
       <section id="top" className="max-w-[1160px] mx-auto px-6 sm:px-8 pt-20 sm:pt-28 lg:pt-[132px] pb-16 sm:pb-24 lg:pb-[110px]">

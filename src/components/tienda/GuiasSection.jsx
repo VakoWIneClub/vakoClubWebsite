@@ -164,7 +164,7 @@ const GuiasSection = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guideId }),
+        body: JSON.stringify({ guideId, returnPath: '/tienda' }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) {

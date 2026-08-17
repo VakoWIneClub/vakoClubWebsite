@@ -380,6 +380,8 @@ const Tienda = () => {
 
       {/* <DiscountPopup isOpen={isPopupOpen} onOpenChange={setPopupOpen} /> */}
 
+      <CompraResultBanner />
+
       {/* Hero Section */}
       {/* <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 wine-pattern opacity-20"></div>
