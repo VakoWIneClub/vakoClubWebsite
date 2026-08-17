@@ -44,7 +44,10 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <AgeVerificationPopup />
+      {/* "El mundo de la copa" has its own language + 18+ gate baked into the landing itself
+          (src/pages/tienda/ElMundoDeLaCopaLanding.jsx), so it opts out of the generic
+          site-wide age gate to avoid showing two age checks back to back. */}
+      {!isCopaLanding && <AgeVerificationPopup />}
       <div className={isCopaLanding ? 'min-h-screen flex flex-col' : 'min-h-screen wine-pattern flex flex-col'}>
         <Helmet>
           <title>Vako Club - Descubre el Mundo del Vino</title>

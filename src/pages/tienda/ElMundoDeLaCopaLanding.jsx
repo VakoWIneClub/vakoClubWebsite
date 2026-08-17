@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { useToast } from '@/components/ui/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 // Same EmailJS project already used by the contact form and the "notify me" waitlist
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
@@ -19,6 +21,28 @@ const EASE = [0.2, 0.8, 0.2, 1];
 const LANGS = ['es', 'en', 'pt'];
 const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
 const LANG_STORAGE_KEY = 'copa-landing-lang';
+
+// Puerta de entrada: el visitante elige idioma y confirma que es mayor de edad antes de ver la
+// landing. Se guarda aparte de LANG_STORAGE_KEY porque es un gate de una sola vez — una vez
+// pasado, el selector de idioma del header sigue funcionando libremente sin volver a preguntar.
+const GATE_STORAGE_KEY = 'copa-landing-gate-passed';
+const GATE_COPY = {
+  es: {
+    ageLabel: 'Confirmo que soy mayor de 18 años.',
+    continueLabel: 'Continuar',
+    hint: 'Elegí un idioma y confirmá tu edad para continuar.',
+  },
+  en: {
+    ageLabel: 'I confirm I am 18 years of age or older.',
+    continueLabel: 'Continue',
+    hint: 'Choose a language and confirm your age to continue.',
+  },
+  pt: {
+    ageLabel: 'Confirmo que tenho 18 anos ou mais.',
+    continueLabel: 'Continuar',
+    hint: 'Escolha um idioma e confirme sua idade para continuar.',
+  },
+};
 
 const Reveal = ({ children, className, delay = 0, as: Tag = 'div', ...rest }) => (
   <motion.div
@@ -369,9 +393,21 @@ const readStoredLang = () => {
   }
 };
 
+const readGatePassed = () => {
+  if (typeof window === 'undefined') return true;
+  try {
+    return window.localStorage.getItem(GATE_STORAGE_KEY) === 'true';
+  } catch {
+    return true;
+  }
+};
+
 const ElMundoDeLaCopaLanding = () => {
   const { toast } = useToast();
   const [lang, setLang] = useState(readStoredLang);
+  const [gateOpen, setGateOpen] = useState(() => !readGatePassed());
+  const [gateLang, setGateLang] = useState(null);
+  const [gateAge, setGateAge] = useState(false);
   const [comprando, setComprando] = useState(false);
   const [email, setEmail] = useState('');
   const [enviandoEmail, setEnviandoEmail] = useState(false);
@@ -385,6 +421,7 @@ const ElMundoDeLaCopaLanding = () => {
   const ofertaRef = useRef(null);
 
   const t = COPY[lang];
+  const gateT = GATE_COPY[gateLang || 'es'];
   const paginas = useMemo(
     () => PAGINAS_SRC.map((src, i) => ({ src, alt: t.adentro.pageAlts[i] })),
     [t]
@@ -394,6 +431,25 @@ const ElMundoDeLaCopaLanding = () => {
     document.body.classList.add('copa-landing-active');
     return () => document.body.classList.remove('copa-landing-active');
   }, []);
+
+  // Mientras la puerta de idioma/edad está abierta, bloqueamos el scroll de fondo.
+  useEffect(() => {
+    document.body.style.overflow = gateOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [gateOpen]);
+
+  const confirmGate = () => {
+    if (!gateLang || !gateAge) return;
+    setLang(gateLang);
+    try {
+      window.localStorage.setItem(GATE_STORAGE_KEY, 'true');
+    } catch {
+      // localStorage puede fallar en modo privado — no es crítico, sólo vuelve a preguntar.
+    }
+    setGateOpen(false);
+  };
 
   useEffect(() => {
     try {
@@ -505,6 +561,83 @@ const ElMundoDeLaCopaLanding = () => {
         <title>{t.meta.title}</title>
         <meta name="description" content={t.meta.description} />
       </Helmet>
+
+      {/* Puerta de entrada — idioma + confirmación de mayoría de edad, ambos en el mismo paso.
+          No tiene botón de cerrar ni se cierra clickeando afuera: hay que completar los dos
+          campos para ver la landing. */}
+      <AnimatePresence>
+        {gateOpen && (
+          <motion.div
+            key="copa-gate"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-copa-ink/70 backdrop-blur-sm px-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Idioma / Language / Idioma"
+          >
+            <motion.div
+              className="w-full max-w-[440px] bg-copa-cream border border-copa-gold px-7 sm:px-10 py-10 sm:py-12 text-center"
+              initial={{ opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: EASE }}
+            >
+              <svg width="34" height="56" viewBox="0 0 62 120" fill="none" stroke="#B08D57" strokeWidth="1" className="mx-auto" style={{ display: 'block' }}>
+                <path d="M13 8 C13 45 20 60 31 63 C42 60 49 45 49 8 Z" />
+                <path d="M13 8 H49" />
+                <path d="M31 63 V104" />
+                <path d="M18 110 C18 105 44 105 44 110" />
+                <path d="M18 110 H44" />
+              </svg>
+
+              <div className={`${eyebrow} mt-6`}>Vako Club</div>
+              <h2 className="font-cormorant leading-[1.05] mt-3" style={{ fontSize: 'clamp(24px,3.2vw,30px)' }}>
+                Elegí tu idioma · Choose your language · Escolha seu idioma
+              </h2>
+
+              <div className="flex flex-wrap gap-3 justify-center mt-8">
+                {LANGS.map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => setGateLang(code)}
+                    aria-pressed={gateLang === code}
+                    className={
+                      gateLang === code
+                        ? 'font-jost text-xs tracking-[0.14em] uppercase px-5 py-3 border border-copa-burgundy bg-copa-burgundy text-copa-cream transition-colors'
+                        : 'font-jost text-xs tracking-[0.14em] uppercase px-5 py-3 border border-copa-gold text-copa-ink/80 hover:border-copa-burgundy hover:text-copa-burgundy transition-colors'
+                    }
+                  >
+                    {LANG_NAMES[code]}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-start gap-3 mt-9 text-left">
+                <Checkbox id="copa-gate-age" checked={gateAge} onCheckedChange={setGateAge} className="mt-1 flex-none" />
+                <Label htmlFor="copa-gate-age" className="text-copa-ink/80 cursor-pointer font-normal" style={{ fontSize: 15, lineHeight: 1.5 }}>
+                  {gateT.ageLabel}
+                </Label>
+              </div>
+
+              <button
+                type="button"
+                onClick={confirmGate}
+                disabled={!gateLang || !gateAge}
+                className={`${btnPrimary} mt-9 w-full`}
+              >
+                {gateT.continueLabel}
+              </button>
+              <div className="font-jost text-[10px] tracking-[0.12em] uppercase text-copa-ink/45 mt-4">
+                {gateT.hint}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* La copa que se llena — hilo visual fijo en el margen derecho, indicador de avance */}
       <div
