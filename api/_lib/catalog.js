@@ -13,12 +13,12 @@ export const GUIAS_CATALOG = {
     currency: 'usd',
     disponible: true,
     // Español es el archivo por defecto (`filePath`, usado si el idioma pedido no tiene edición
-    // propia). El portugués todavía no está escrito — hasta que exista, se entrega en inglés.
+    // propia).
     filePath: 'private/guias/el-mundo-de-la-copa.pdf',
     filePathByLang: {
       es: 'private/guias/el-mundo-de-la-copa.pdf',
       en: 'private/guias/Vako-Club_The-World-of-the-Glass_EN.pdf',
-      pt: 'private/guias/Vako-Club_The-World-of-the-Glass_EN.pdf',
+      pt: 'private/guias/Vako-Club_O-Mundo-da-Taca_PT.pdf',
     },
   },
   'guia-espanol': {

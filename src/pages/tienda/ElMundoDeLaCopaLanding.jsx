@@ -36,7 +36,7 @@ const Reveal = ({ children, className, delay = 0, as: Tag = 'div', ...rest }) =>
 // Diccionario completo de la landing. Las páginas de muestra ("adentro") y la tapa son artes ya
 // diseñados en español — no existen versiones en inglés/portugués de esas imágenes todavía, así
 // que se muestran igual en los tres idiomas y se lo aclaramos al usuario donde importa (sección
-// "adentro" y, para portugués, también cerca del botón de compra).
+// "adentro").
 const COPY = {
   es: {
     meta: {
@@ -129,7 +129,7 @@ const COPY = {
       items: [
         { q: '¿En qué formato llega?', a: 'PDF. Se lee en celular, tablet, computadora o impreso.' },
         { q: '¿Necesito saber algo de vino para empezar?', a: 'No. La guía arranca desde cero y llega lejos.' },
-        { q: '¿Hay en otros idiomas?', a: 'Sí, en inglés ya está disponible. La edición en portugués está en camino — por ahora se entrega en inglés.' },
+        { q: '¿Hay en otros idiomas?', a: 'Sí, está disponible en inglés y en portugués además de español.' },
         { q: '¿Cómo la recibo?', a: 'Por email, apenas se acredita el pago.' },
         { q: '¿Puedo regalarla?', a: 'Sí. Comprás igual que siempre y nos escribís a quién mandarle el enlace.' },
         { q: '¿Se actualiza?', a: 'Sí, y las actualizaciones te llegan sin costo.' },
@@ -231,7 +231,7 @@ const COPY = {
       items: [
         { q: 'What format does it come in?', a: 'PDF. Readable on your phone, tablet, computer, or printed.' },
         { q: 'Do I need to know anything about wine to start?', a: 'No. The guide starts from zero and goes far.' },
-        { q: 'Is it available in other languages?', a: 'Yes — Spanish is the original edition. The Portuguese edition is on its way; for now it ships in English.' },
+        { q: 'Is it available in other languages?', a: 'Yes — it\'s available in English and Portuguese as well as Spanish.' },
         { q: 'How do I receive it?', a: 'By email, as soon as the payment is confirmed.' },
         { q: 'Can I gift it?', a: 'Yes. Buy it the same way as always and let us know who to send the link to.' },
         { q: 'Does it get updated?', a: 'Yes, and updates reach you at no extra cost.' },
@@ -287,7 +287,7 @@ const COPY = {
       eyebrow: 'Uma prévia',
       title: 'Por dentro é assim.',
       dragHint: 'Arraste para ver mais',
-      previewNote: 'Estas páginas de amostra estão em espanhol — por enquanto, seu download será a edição em inglês.',
+      previewNote: 'Estas páginas de amostra estão em espanhol — seu download será a edição completa em português.',
       pageAlts: [
         'Página interna: abertura de parte',
         'Página interna: texto e diagrama',
@@ -307,7 +307,7 @@ const COPY = {
       eyebrow: 'O guia completo',
       paymentNote: 'Pagamento único · Sem vencimento',
       secureNote: 'Pagamento seguro com Stripe · Você recebe o link de download na hora, por email',
-      langNotice: 'A versão em português está a caminho — por enquanto, você recebe a edição em inglês.',
+      langNotice: null,
       incluye: [
         'As 83 páginas em PDF de alta qualidade',
         'Disponível em espanhol, inglês ou português — escolha antes de comprar',
@@ -333,7 +333,7 @@ const COPY = {
       items: [
         { q: 'Em que formato chega?', a: 'PDF. Pode ler no celular, tablet, computador ou impresso.' },
         { q: 'Preciso saber algo de vinho para começar?', a: 'Não. O guia começa do zero e vai longe.' },
-        { q: 'Está disponível em outros idiomas?', a: 'Sim — em inglês já está disponível. A edição em português está a caminho; por enquanto, você recebe em inglês.' },
+        { q: 'Está disponível em outros idiomas?', a: 'Sim — está disponível em inglês e em português, além do espanhol.' },
         { q: 'Como recebo?', a: 'Por email, assim que o pagamento é confirmado.' },
         { q: 'Posso presentear?', a: 'Sim. Compre normalmente e nos escreva para quem enviar o link.' },
         { q: 'É atualizado?', a: 'Sim, e as atualizações chegam sem custo.' },
