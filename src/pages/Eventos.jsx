@@ -10,6 +10,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import DeleteEventDialog from '@/components/eventos/DeleteEventDialog';
 import Reveal from '@/components/copa/Reveal';
+import DOMPurify from 'dompurify';
+
+// Plain-text snippet for the card preview — mirrors ArticleList.jsx's createSnippet. Replaces a
+// hand-rolled `.replace(/<[^>]+>/g, '')` regex tag-stripper (the one spot in the codebase not
+// using the real sanitizer despite dangerouslySetInnerHTML) that also crashed the whole Eventos
+// grid if any single event's description was null/undefined.
+const createSnippet = (htmlContent) => {
+  const cleanHtml = DOMPurify.sanitize(htmlContent || '', { ALLOWED_TAGS: ['p', 'br'] });
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = cleanHtml;
+  return tempDiv.textContent || tempDiv.innerText || '';
+};
 
 const copaInput = 'h-10 w-full rounded-none border border-copa-gold bg-copa-cream px-3 py-2 text-sm text-copa-ink placeholder:text-copa-ink/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-copa-burgundy';
 const copaLabel = 'block font-jost text-[10px] tracking-[0.14em] uppercase text-copa-ink/70 mb-1.5';
@@ -43,8 +55,9 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
             <p
               className="text-copa-ink/70 leading-relaxed mt-3 mb-4 line-clamp-3"
               style={{ fontSize: 15 }}
-              dangerouslySetInnerHTML={{ __html: event.description.replace(/<[^>]+>/g, '') }}
-            />
+            >
+              {createSnippet(event.description)}
+            </p>
             <div className="mt-auto space-y-2 border-t border-copa-gold/30 pt-4 font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50">
               <div className="flex items-center">
                 <Calendar className="h-3.5 w-3.5 mr-2 text-copa-gold" />

@@ -36,6 +36,17 @@ const ArticleEditor = () => {
   const isAdmin = user && user.role === 'admin';
 
   const tag1Value = watch('tag1');
+  const tag2Value = watch('tag2');
+
+  // Etiqueta 2's own dropdown already filters out whatever tag1 currently is, but that never
+  // touched an *already-selected* tag2 value — changing tag1 to match a tag2 picked earlier let
+  // a submit save tag1 === tag2 despite the UI's own intent to prevent picking the same tag
+  // twice.
+  useEffect(() => {
+    if (tag1Value && tag2Value && tag1Value === tag2Value) {
+      setValue('tag2', null);
+    }
+  }, [tag1Value, tag2Value, setValue]);
 
   useEffect(() => {
     const fetchArticle = async () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { UserPlus, UserCheck, Loader2, Tag, Award, Users, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -27,6 +27,9 @@ const MemberCard = ({ member, currentUser, onFollowToggle }) => {
   const [isFollowing, setIsFollowing] = useState(member.is_followed_by_current_user);
   const [followersCount, setFollowersCount] = useState(member.followers_count);
   const [isLoading, setIsLoading] = useState(false);
+  // Ref, not state: closes the race window before React commits the `disabled` prop, so a very
+  // fast double-click can't fire two concurrent insert/delete mutations for the same follow pair.
+  const isMutatingRef = useRef(false);
 
   const handleFollow = async () => {
     if (!currentUser) {
@@ -46,6 +49,8 @@ const MemberCard = ({ member, currentUser, onFollowToggle }) => {
       return;
     }
 
+    if (isMutatingRef.current) return;
+    isMutatingRef.current = true;
     setIsLoading(true);
 
     if (isFollowing) {
@@ -74,6 +79,7 @@ const MemberCard = ({ member, currentUser, onFollowToggle }) => {
         onFollowToggle(member.id, true, followersCount + 1);
       }
     }
+    isMutatingRef.current = false;
     setIsLoading(false);
   };
 
@@ -133,8 +139,13 @@ const MiembrosTab = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  // The 300ms debounce below prevents most redundant calls, but not an older request resolving
+  // after a newer one (e.g. clearing the search box mid-flight) — this id lets a response that's
+  // no longer the latest be discarded instead of overwriting fresher results.
+  const latestRequestIdRef = useRef(0);
 
   const fetchMembers = useCallback(async (search) => {
+    const requestId = ++latestRequestIdRef.current;
     setLoading(true);
 
     const params = { search_term: search };
@@ -143,6 +154,8 @@ const MiembrosTab = () => {
     }
 
     const { data, error } = await supabase.rpc('get_profiles_with_follow_status', params);
+
+    if (requestId !== latestRequestIdRef.current) return;
 
     if (error) {
       toast({

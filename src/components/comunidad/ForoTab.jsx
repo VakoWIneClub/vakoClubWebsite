@@ -105,6 +105,8 @@ const ForoTab = () => {
   const [replyContent, setReplyContent] = useState({});
   const [showAll, setShowAll] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [isSubmittingThread, setIsSubmittingThread] = useState(false);
+  const [submittingReplyFor, setSubmittingReplyFor] = useState(null);
 
   const fetchThreads = useCallback(async () => {
     setLoading(true);
@@ -157,15 +159,17 @@ const ForoTab = () => {
       toast({ title: "Acceso denegado", description: "Debes iniciar sesión para crear un tema.", variant: "destructive" });
       return;
     }
-    if (newThread.title && newThread.category && newThread.content) {
+    if (isSubmittingThread) return;
+
+    const title = newThread.title.trim();
+    const category = newThread.category.trim();
+    const content = newThread.content.trim();
+
+    if (title && category && content) {
+      setIsSubmittingThread(true);
       const { error } = await supabase
         .from('threads')
-        .insert([{
-          title: newThread.title,
-          content: newThread.content,
-          category: newThread.category,
-          user_id: user.id
-        }]);
+        .insert([{ title, content, category, user_id: user.id }]);
 
       if (error) {
         toast({ title: "Error al crear tema", description: error.message, variant: "destructive" });
@@ -176,6 +180,7 @@ const ForoTab = () => {
         fetchThreads();
         refreshUser();
       }
+      setIsSubmittingThread(false);
     } else {
       toast({ title: "Campos incompletos", description: "Por favor, rellena todos los campos.", variant: "destructive" });
     }
@@ -190,12 +195,14 @@ const ForoTab = () => {
       toast({ title: "Acceso denegado", description: "Debes iniciar sesión para responder.", variant: "destructive" });
       return;
     }
-    const content = replyContent[threadId];
-    if (content && content.trim()) {
+    if (submittingReplyFor === threadId) return;
+    const content = (replyContent[threadId] || '').trim();
+    if (content) {
+      setSubmittingReplyFor(threadId);
       const { error } = await supabase
         .from('replies')
         .insert([{
-          content: content,
+          content,
           thread_id: threadId,
           user_id: user.id
         }]);
@@ -208,6 +215,7 @@ const ForoTab = () => {
         fetchThreads();
         refreshUser();
       }
+      setSubmittingReplyFor(null);
     }
   };
 
@@ -294,8 +302,8 @@ const ForoTab = () => {
                   ></textarea>
                 </div>
                 <div className="text-right">
-                  <button type="submit" className="copa-btn-nav inline-flex items-center">
-                    <Send className="mr-2 h-4 w-4" />
+                  <button type="submit" disabled={isSubmittingThread} className="copa-btn-nav inline-flex items-center">
+                    {isSubmittingThread ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Publicar Tema
                   </button>
                 </div>
@@ -364,8 +372,13 @@ const ForoTab = () => {
                     placeholder="Escribe una respuesta..."
                     className={copaInput}
                   />
-                  <button type="button" onClick={() => handlePostReply(thread.id)} className="copa-btn-nav h-10 w-10 flex items-center justify-center px-0">
-                    <Send className="h-4 w-4" />
+                  <button
+                    type="button"
+                    onClick={() => handlePostReply(thread.id)}
+                    disabled={submittingReplyFor === thread.id}
+                    className="copa-btn-nav h-10 w-10 flex items-center justify-center px-0"
+                  >
+                    {submittingReplyFor === thread.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </button>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Helmet } from 'react-helmet';
@@ -11,16 +11,6 @@ import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 import DOMPurify from 'dompurify';
 import { Loader2, Upload, Save, ArrowLeft, Calendar, MapPin, Globe, Map } from 'lucide-react';
-
-const quillModules = {
-  toolbar: [
-    [{ 'header': [1, 2, 3, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-    ['link', 'image'],
-    ['clean']
-  ],
-};
 
 const quillFormats = [
   'header',
@@ -44,6 +34,7 @@ const EventoEditor = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const quillRef = useRef(null);
 
   const isEditing = !!slug;
 
@@ -133,6 +124,56 @@ const EventoEditor = () => {
 
     return newImageUrl;
   };
+
+  // Without a custom handler, ReactQuill's default image-toolbar button embeds the picked file
+  // as a base64 data URI directly in the description HTML — a single inline photo can add
+  // several MB of base64 text to one `events` row. This uploads to storage and inserts a URL
+  // instead, matching the pattern already used in ArticleEditor.jsx.
+  const imageHandler = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        setIsSubmitting(true);
+        try {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `events/${user.id}_content_${Date.now()}.${fileExt}`;
+
+          const { error: uploadError } = await supabase.storage.from('article-images').upload(fileName, file);
+          if (uploadError) throw uploadError;
+
+          const { data } = supabase.storage.from('article-images').getPublicUrl(fileName);
+          const quill = quillRef.current.getEditor();
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', data.publicUrl);
+          quill.setSelection(range.index + 1);
+        } catch (error) {
+          toast({ variant: "destructive", title: "Error al subir imagen", description: error.message });
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
+    };
+  };
+
+  const quillModules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler,
+      },
+    },
+  }), []);
 
   const onSubmit = async (formData) => {
     if (!user) {
@@ -224,6 +265,7 @@ const EventoEditor = () => {
                   rules={{ required: 'La descripción es obligatoria.' }}
                   render={({ field }) => (
                     <ReactQuill
+                      ref={quillRef}
                       theme="snow"
                       value={field.value}
                       onChange={field.onChange}
