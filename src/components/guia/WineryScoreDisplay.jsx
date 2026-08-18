@@ -6,8 +6,8 @@ const WineryScoreDisplay = ({ score, className }) => {
   if (!score) return null;
 
   return (
-    <div className={cn("flex items-center gap-1.5 text-amber-200 text-sm font-semibold", className)}>
-      <Star className="h-5 w-5 text-purple-400" fill="currentColor" />
+    <div className={cn("flex items-center gap-1.5 text-copa-ink text-sm font-semibold", className)}>
+      <Star className="h-4 w-4 text-copa-gold" fill="currentColor" />
       <span className="font-bold">{Number(score).toFixed(1)}</span>
     </div>
   );
