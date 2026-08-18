@@ -39,28 +39,27 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-stone-950 text-amber-100/70 border-t-2 border-amber-900/50 wine-glass-effect mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+    <footer className="bg-copa-burgundy text-copa-cream/80 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
           <div className="col-span-2 lg:col-span-1">
-            <Link to="/" className="inline-block">
-              <h2 className="text-2xl font-playfair font-bold wine-text-gradient">
-                Vako Club
-              </h2>
+            <Link to="/" className="inline-flex items-center gap-2">
+              <img src="/images/VakoLogo.png" alt="" className="h-8 w-8 rounded-full" />
+              <span className="font-cormorant text-2xl text-copa-cream">Vako Club</span>
             </Link>
-            <p className="mt-4 text-sm">
+            <p className="mt-4 text-sm text-copa-cream/70" style={{ fontFamily: "'EB Garamond', serif" }}>
               Tu pasaporte al mundo del vino. Descubre, aprende y disfruta.
             </p>
           </div>
           {footerSections.map((section, index) => (
             <div key={index}>
-              <p className="font-semibold text-amber-200 uppercase tracking-wider">{section.title}</p>
-              <ul className="mt-4 space-y-2">
+              <p className="copa-eyebrow">{section.title}</p>
+              <ul className="mt-4 space-y-2.5">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <Link
                       to={link.path}
-                      className="text-sm hover:text-amber-200 transition-colors duration-300"
+                      className="text-sm text-copa-cream/80 hover:text-copa-gold transition-colors duration-300"
                     >
                       {link.name}
                     </Link>
@@ -70,21 +69,21 @@ const Footer = () => {
             </div>
           ))}
         </div>
-        <div className="mt-12 pt-8 border-t border-amber-900/30 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-center md:text-left">
+        <div className="mt-12 pt-8 border-t border-copa-gold/25 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-copa-cream/60 text-center md:text-left">
             &copy; {new Date().getFullYear()} Vako Club. Todos los derechos reservados.
           </p>
-          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+          <div className="flex items-center gap-5">
             {socialLinks.map((social, index) => (
               <a
                 key={index}
                 href={social.href}
-                className="hover:text-amber-200 transition-colors duration-300"
+                className="text-copa-gold hover:text-copa-cream transition-colors duration-300"
                 aria-label={social.name}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <social.icon className="h-6 w-6" />
+                <social.icon className="h-5 w-5" />
               </a>
             ))}
           </div>

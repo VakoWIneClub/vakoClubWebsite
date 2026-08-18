@@ -114,7 +114,15 @@ body.copa-landing-active {
     @apply font-jost text-xs tracking-[0.14em] uppercase text-copa-ink border-b border-copa-gold pb-1.5 transition-colors hover:text-copa-burgundy hover:border-copa-burgundy;
   }
 
+  .copa-btn-nav {
+    @apply font-jost text-[11px] font-medium tracking-[0.14em] uppercase text-copa-cream bg-copa-burgundy px-[18px] py-[11px] whitespace-nowrap transition-colors duration-300 hover:bg-copa-ink disabled:opacity-60;
+  }
+
   .copa-link-nav {
     @apply text-copa-ink/50 hover:text-copa-ink transition-colors cursor-pointer;
+  }
+
+  .copa-header {
+    @apply sticky top-0 z-50 bg-copa-cream/90 backdrop-saturate-150 backdrop-blur-sm border-b border-copa-gold;
   }
 }

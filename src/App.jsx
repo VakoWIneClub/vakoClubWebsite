@@ -36,9 +36,10 @@ import PerfilSuscripcion from '@/pages/perfil/PerfilSuscripcion';
 
 function App() {
   const location = useLocation();
-  // "El mundo de la copa" is a standalone sales landing with its own approved
-  // crema/borgoña/oro system and minimal chrome — it opts out of the site-wide
-  // dark Navbar/Footer instead of fighting them with overrides.
+  // "El mundo de la copa" is a standalone sales landing with its own minimal chrome
+  // (language + CTA header, no multi-page nav) — it opts out of the site-wide Navbar/Footer
+  // instead of fighting them with overrides, even though both now share its crema/borgoña/oro
+  // design system.
   const isCopaLanding = location.pathname === '/tienda/el-mundo-de-la-copa';
 
   return (
@@ -56,7 +57,9 @@ function App() {
 
         {!isCopaLanding && <Navbar />}
 
-        <main className={isCopaLanding ? 'flex-grow' : 'pt-20 flex-grow'}>
+        {/* Navbar is sticky (not fixed), same as the copa landing's own header, so no
+            top-padding spacer is needed here anymore. */}
+        <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/guia" element={<ProtectedRoute><Guia /></ProtectedRoute>} />

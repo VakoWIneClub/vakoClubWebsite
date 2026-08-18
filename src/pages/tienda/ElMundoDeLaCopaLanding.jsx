@@ -632,13 +632,8 @@ const ElMundoDeLaCopaLanding = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
+      {/* Cormorant/EB Garamond/Jost now load globally from index.html — no per-page <link> needed. */}
       <Helmet htmlAttributes={{ lang }}>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap"
-        />
         <title>{t.meta.title}</title>
         <meta name="description" content={t.meta.description} />
       </Helmet>
@@ -755,7 +750,7 @@ const ElMundoDeLaCopaLanding = () => {
       </div>
 
       {/* 0 · Barra superior */}
-      <header className="sticky top-0 z-50 bg-copa-cream/90 backdrop-saturate-150 backdrop-blur-sm border-b border-copa-gold">
+      <header className="copa-header">
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-3.5 flex items-center justify-between gap-6">
           <a href="#top" className="flex items-center gap-3">
             <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="rounded-full" />
@@ -786,7 +781,7 @@ const ElMundoDeLaCopaLanding = () => {
               type="button"
               onClick={irACheckout}
               disabled={comprando}
-              className="font-jost text-[11px] font-medium tracking-[0.14em] uppercase text-copa-cream bg-copa-burgundy px-[18px] py-[11px] whitespace-nowrap transition-colors duration-300 hover:bg-copa-ink disabled:opacity-60"
+              className="copa-btn-nav"
             >
               {comprando ? t.nav.redirecting : t.nav.cta}
             </button>
