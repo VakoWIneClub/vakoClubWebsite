@@ -2,12 +2,34 @@ import { test, expect, skipIfNoAdminCreds, loginAsAdmin, testRunId } from '../fi
 
 /**
  * End-to-end coverage of the Guía admin CRUD flow against the real backend (see
- * tests/fixtures/admin-auth.ts). Every winery this spec creates is deleted before the test ends.
+ * tests/fixtures/admin-auth.ts). There is no separate test environment yet — only production —
+ * so every winery this spec creates is tracked in `wineryUrl` and deleted in `afterEach`, not
+ * just inline after the assertions. That way cleanup still runs even if a step between creation
+ * and the old inline cleanup throws.
  */
 test.describe('Guía — admin winery CRUD', () => {
+  let wineryUrl: string | null = null;
+
   test.beforeEach(async ({ page }) => {
     skipIfNoAdminCreds();
     await loginAsAdmin(page);
+  });
+
+  test.afterEach(async ({ page }) => {
+    if (!wineryUrl) return;
+    // wineryUrl is only ever set after creation is confirmed, and the test body never deletes
+    // its own winery — so it's guaranteed to still exist here. Deliberately no isVisible()-style
+    // soft check: that's a one-shot, non-retrying read that can catch the page mid-render under
+    // load and wrongly conclude there's nothing to clean up, silently leaving real data behind
+    // with no failure to signal it. expect(...).toBeVisible() retries instead, and if the button
+    // genuinely isn't there, this hook SHOULD fail loudly rather than skip.
+    await page.goto(wineryUrl);
+    const eliminarButton = page.getByRole('button', { name: 'Eliminar' });
+    await expect(eliminarButton).toBeVisible();
+    await eliminarButton.click();
+    await page.getByRole('button', { name: 'Sí, eliminar' }).click();
+    await expect(page).toHaveURL(/\/guia$/);
+    wineryUrl = null;
   });
 
   test('create, edit, and delete a winery', async ({ page }) => {
@@ -26,34 +48,24 @@ test.describe('Guía — admin winery CRUD', () => {
     // WineryEditor navigates to /guia/:slug on success.
     await expect(page).toHaveURL(/\/guia\/[^/]+$/);
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
-    const wineryUrl = page.url();
+    // Recorded immediately so afterEach can always find and delete it, even if an assertion
+    // below throws.
+    wineryUrl = page.url();
 
-    try {
-      // Edit: change the city and confirm the change persists.
-      await page.getByRole('link', { name: 'Editar' }).click();
-      await expect(page).toHaveURL(/\/guia\/editar\//);
-      const cityInput = page.locator('#city');
-      await expect(cityInput).toHaveValue('Test City');
-      await cityInput.fill(updatedCity);
-      await page.getByRole('button', { name: 'Guardar' }).click();
+    // Edit: change the city and confirm the change persists.
+    await page.getByRole('link', { name: 'Editar' }).click();
+    await expect(page).toHaveURL(/\/guia\/editar\//);
+    const cityInput = page.locator('#city');
+    await expect(cityInput).toHaveValue('Test City');
+    await cityInput.fill(updatedCity);
+    await page.getByRole('button', { name: 'Guardar' }).click();
 
-      await expect(page).toHaveURL(/\/guia\/[^/]+$/);
-      await expect(page.getByText(updatedCity)).toBeVisible();
+    await expect(page).toHaveURL(/\/guia\/[^/]+$/);
+    await expect(page.getByText(updatedCity)).toBeVisible();
 
-      // The winery must also show up in the public list.
-      await page.goto('/guia');
-      await expect(page.getByRole('heading', { name: title })).toBeVisible();
-    } finally {
-      // Delete: clean up regardless of whether the edit assertions above passed.
-      await page.goto(wineryUrl);
-      const eliminarButton = page.getByRole('button', { name: 'Eliminar' });
-      if (await eliminarButton.isVisible().catch(() => false)) {
-        await eliminarButton.click();
-        await page.getByRole('button', { name: 'Sí, eliminar' }).click();
-        await expect(page).toHaveURL(/\/guia$/);
-        await expect(page.getByRole('heading', { name: title })).toHaveCount(0);
-      }
-    }
+    // The winery must also show up in the public list.
+    await page.goto('/guia');
+    await expect(page.getByRole('heading', { name: title })).toBeVisible();
   });
 
   test('the create form rejects missing required fields', async ({ page }) => {
