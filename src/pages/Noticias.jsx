@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Newspaper, Loader2, PlusCircle, Tag, ChevronsDown } from 'lucide-react';
+import { Loader2, PlusCircle, ChevronsDown } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Button } from '@/components/ui/button';
 import ArticleList from '@/components/noticias/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Reveal from '@/components/copa/Reveal';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 const ARTICLES_PER_PAGE = 6;
@@ -95,90 +94,80 @@ const Noticias = () => {
   const isAdmin = user && user.role === 'admin';
 
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>Noticias del Vino - Vako Club</title>
         <meta name="description" content="Mantente al día con las últimas noticias, artículos y tendencias del mundo del vino. Descubre bodegas, maridajes y más en Vako Club." />
       </Helmet>
 
-      <div className="min-h-screen wine-pattern pt-24 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
+        <Reveal className="text-center mb-12">
+          <div className="copa-eyebrow">Vako Club</div>
+          <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
+            Noticias del Vino
+          </h1>
+          <p className="mt-5 text-copa-ink/75 max-w-3xl mx-auto" style={{ fontSize: 18, lineHeight: 1.6 }}>
+            Tu fuente de información sobre bodegas, maridajes, regiones y todo lo relacionado con el fascinante universo del vino.
+          </p>
+        </Reveal>
+
+        {isAdmin && (
+          <Reveal delay={0.05} className="mb-8 text-center">
+            <Link to="/noticias/crear" className="copa-btn-primary inline-flex items-center">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Crear Artículo
+            </Link>
+          </Reveal>
+        )}
+
+        <Reveal delay={0.1} className="mb-12 flex flex-wrap justify-center items-center gap-3 font-jost text-[11px] tracking-[0.14em] uppercase">
+          <button
+            type="button"
+            onClick={() => handleTagClick('Todos')}
+            className={activeTag === 'Todos' ? 'copa-btn-nav' : 'border border-copa-gold text-copa-ink/70 hover:border-copa-burgundy hover:text-copa-burgundy transition-colors px-[18px] py-[11px]'}
           >
-            <Newspaper className="h-16 w-16 mx-auto wine-text-gradient mb-4" />
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Noticias del Vino
-            </h1>
-            <p className="mt-4 text-xl text-amber-100/80 max-w-3xl mx-auto">
-              Tu fuente de información sobre bodegas, maridajes, regiones y todo lo relacionado con el fascinante universo del vino.
-            </p>
-          </motion.div>
-
-          {isAdmin && (
-            <div className="mb-8 text-center">
-              <Button asChild size="lg">
-                <Link to="/noticias/crear">
-                  <PlusCircle className="mr-2 h-5 w-5" />
-                  Crear Artículo
-                </Link>
-              </Button>
-            </div>
-          )}
-
-          <div className="mb-12 flex flex-wrap justify-center items-center gap-3">
-            <Button
-              variant={activeTag === 'Todos' ? 'default' : 'outline'}
-              onClick={() => handleTagClick('Todos')}
-              className="transition-all"
+            Todos
+          </button>
+          {TAGS.map(tag => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => handleTagClick(tag)}
+              className={activeTag === tag ? 'copa-btn-nav' : 'border border-copa-gold text-copa-ink/70 hover:border-copa-burgundy hover:text-copa-burgundy transition-colors px-[18px] py-[11px]'}
             >
-              Todos
-            </Button>
-            {TAGS.map(tag => (
-              <Button
-                key={tag}
-                variant={activeTag === tag ? 'default' : 'outline'}
-                onClick={() => handleTagClick(tag)}
-                className="transition-all"
-              >
-                <Tag className="mr-2 h-4 w-4" />
-                {tag}
-              </Button>
-            ))}
-          </div>
+              {tag}
+            </button>
+          ))}
+        </Reveal>
 
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
-            </div>
-          ) : (
-            <>
-              <ArticleList
-                articles={articles}
-                isAdmin={isAdmin}
-                onArticleDeleted={handleArticleDeleted}
-                onTagClick={handleTagClick}
-              />
-              {hasMore && (
-                <div className="mt-12 text-center">
-                  <Button onClick={handleLoadMore} disabled={loadingMore} size="lg">
-                    {loadingMore ? (
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    ) : (
-                      <ChevronsDown className="mr-2 h-5 w-5" />
-                    )}
-                    Cargar más artículos
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-10 w-10 text-copa-burgundy animate-spin" />
+          </div>
+        ) : (
+          <>
+            <ArticleList
+              articles={articles}
+              isAdmin={isAdmin}
+              onArticleDeleted={handleArticleDeleted}
+              onTagClick={handleTagClick}
+            />
+            {hasMore && (
+              <div className="mt-12 text-center">
+                <button type="button" onClick={handleLoadMore} disabled={loadingMore} className="copa-btn-primary inline-flex items-center">
+                  {loadingMore ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <ChevronsDown className="mr-2 h-4 w-4" />
+                  )}
+                  Cargar más artículos
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
