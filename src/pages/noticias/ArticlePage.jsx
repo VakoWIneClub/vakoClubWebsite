@@ -90,7 +90,10 @@ const ArticlePage = () => {
   }
 
   const formattedDate = format(new Date(article.created_at), "d 'de' MMMM, yyyy", { locale: es });
-  const sanitizedContent = DOMPurify.sanitize(article.content);
+  // FORBID_ATTR strips legacy inline color spans (baked in from the old dark theme) that
+  // would otherwise override the copa prose-* classes below, since inline styles always
+  // win over CSS classes regardless of specificity.
+  const sanitizedContent = DOMPurify.sanitize(article.content, { FORBID_ATTR: ['style'] });
   const tags = [article.tag1, article.tag2].filter(Boolean);
 
   return (

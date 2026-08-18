@@ -11,6 +11,7 @@ import { Loader2, Upload, Save, ArrowLeft, Tag } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
+import DOMPurify from 'dompurify';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 
@@ -55,7 +56,10 @@ const ArticleEditor = () => {
       } else {
         setArticle(data);
         setValue('title', data.title);
-        setValue('content', data.content);
+        // Strips legacy inline color spans from the old dark theme so editing/re-saving
+        // permanently cleans up articles that still carry them (the toolbar has no color
+        // picker, so no inline color here is ever intentional admin formatting).
+        setValue('content', DOMPurify.sanitize(data.content, { FORBID_ATTR: ['style'] }));
         setValue('tag1', data.tag1);
         setValue('tag2', data.tag2);
         setImagePreview(data.image_url);
