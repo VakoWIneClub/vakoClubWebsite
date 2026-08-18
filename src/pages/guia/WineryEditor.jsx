@@ -6,12 +6,13 @@ import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactQuill from 'react-quill';
+
+const copaInput = 'rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy';
+const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70 flex items-center';
 
 const WineryEditor = () => {
   const { slug } = useParams();
@@ -21,13 +22,13 @@ const WineryEditor = () => {
   const { register, handleSubmit, setValue, control, formState: { errors } } = useForm({
     defaultValues: { description: '' }
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [winery, setWinery] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  
+
   const isEditing = !!slug;
 
   const quillModules = {
@@ -53,7 +54,7 @@ const WineryEditor = () => {
         setIsLoading(false);
         return;
       }
-      
+
       const { data, error } = await supabase.from('wineries').select('*').eq('slug', slug).single();
 
       if (error || !data) {
@@ -87,7 +88,7 @@ const WineryEditor = () => {
   const removeImage = (index) => {
     const newPreviews = [...imagePreviews];
     const newFiles = [...imageFiles];
-    
+
     const removedPreview = newPreviews.splice(index, 1)[0];
     setImagePreviews(newPreviews);
 
@@ -109,11 +110,11 @@ const WineryEditor = () => {
 
       const { error } = await supabase.storage.from('winery-images').upload(filePath, file);
       if (error) throw new Error(`Error al subir imagen: ${error.message}`);
-      
+
       const { data } = supabase.storage.from('winery-images').getPublicUrl(filePath);
       uploadedUrls.push(data.publicUrl);
     }
-    
+
     return [...existingUrls, ...uploadedUrls];
   };
 
@@ -186,104 +187,104 @@ const WineryEditor = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-10rem)]">
-        <Loader2 className="h-16 w-16 text-amber-300 animate-spin" />
+      <div className="flex justify-center items-center min-h-[calc(100vh-10rem)] bg-copa-cream">
+        <Loader2 className="h-14 w-14 text-copa-burgundy animate-spin" />
       </div>
     );
   }
 
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet><title>{isEditing ? 'Editar Bodega' : 'Crear Bodega'} - Vako Club</title></Helmet>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <div className="flex justify-between items-center">
-            <Button type="button" variant="ghost" onClick={() => navigate('/guia')} className="text-amber-200">
+          <div className="flex justify-between items-center flex-wrap gap-4">
+            <button type="button" onClick={() => navigate('/guia')} className="copa-link-nav font-jost text-[11px] tracking-[0.14em] uppercase inline-flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" /> Volver
-            </Button>
-            <h1 className="font-playfair text-3xl md:text-4xl font-bold wine-text-gradient text-center">
+            </button>
+            <h1 className="font-cormorant font-light text-center" style={{ fontSize: 'clamp(26px,3.6vw,36px)' }}>
               {isEditing ? 'Editar Bodega' : 'Nueva Bodega'}
             </h1>
-            <Button type="submit" disabled={isSubmitting} size="lg">
+            <button type="submit" disabled={isSubmitting} className="copa-btn-nav inline-flex items-center">
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
               {isEditing ? 'Guardar' : 'Publicar'}
-            </Button>
+            </button>
           </div>
 
-          <div className="wine-card p-8 rounded-2xl space-y-6">
+          <div className="border border-copa-gold p-8 space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-amber-200 text-lg">Nombre de la Bodega</Label>
-              <Input id="title" {...register('title', { required: 'El nombre es obligatorio' })} className="wine-input text-xl" placeholder="Ej: Bodega Catena Zapata" />
-              {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>}
+              <label htmlFor="title" className={copaLabel}>Nombre de la Bodega</label>
+              <Input id="title" {...register('title', { required: 'El nombre es obligatorio' })} className={`${copaInput} text-xl`} placeholder="Ej: Bodega Catena Zapata" />
+              {errors.title && <p className="text-red-600 text-sm mt-1">{errors.title.message}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                <div className="space-y-2">
-                <Label htmlFor="country" className="text-amber-200 text-lg"><Globe className="inline-block mr-2 h-5 w-5"/>País</Label>
-                <Input id="country" {...register('country', { required: 'El país es obligatorio' })} className="wine-input" placeholder="Ej: Argentina"/>
-                {errors.country && <p className="text-red-400 text-sm mt-1">{errors.country.message}</p>}
+                <label htmlFor="country" className={copaLabel}><Globe className="mr-2 h-4 w-4"/>País</label>
+                <Input id="country" {...register('country', { required: 'El país es obligatorio' })} className={copaInput} placeholder="Ej: Argentina"/>
+                {errors.country && <p className="text-red-600 text-sm mt-1">{errors.country.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="city" className="text-amber-200 text-lg"><MapPin className="inline-block mr-2 h-5 w-5"/>Ciudad</Label>
-                <Input id="city" {...register('city', { required: 'La ciudad es obligatoria' })} className="wine-input" placeholder="Ej: Mendoza"/>
-                {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city.message}</p>}
+                <label htmlFor="city" className={copaLabel}><MapPin className="mr-2 h-4 w-4"/>Ciudad</label>
+                <Input id="city" {...register('city', { required: 'La ciudad es obligatoria' })} className={copaInput} placeholder="Ej: Mendoza"/>
+                {errors.city && <p className="text-red-600 text-sm mt-1">{errors.city.message}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address" className="text-amber-200 text-lg">Dirección Completa</Label>
-              <Input id="address" {...register('address')} className="wine-input" placeholder="Para mostrar en el mapa (Ej: Cobos s/n, Luján de Cuyo, Mendoza, Argentina)"/>
+              <label htmlFor="address" className={copaLabel}>Dirección Completa</label>
+              <Input id="address" {...register('address')} className={copaInput} placeholder="Para mostrar en el mapa (Ej: Cobos s/n, Luján de Cuyo, Mendoza, Argentina)"/>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="website_url" className="text-amber-200 text-lg"><LinkIcon className="inline-block mr-2 h-5 w-5"/>Sitio Web</Label>
-              <Input id="website_url" {...register('website_url')} className="wine-input" placeholder="https://www.bodega.com"/>
+              <label htmlFor="website_url" className={copaLabel}><LinkIcon className="mr-2 h-4 w-4"/>Sitio Web</label>
+              <Input id="website_url" {...register('website_url')} className={copaInput} placeholder="https://www.bodega.com"/>
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-amber-200 text-lg">Descripción</Label>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
-                  <ReactQuill
-                    theme="snow"
-                    value={field.value}
-                    onChange={field.onChange}
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Describe la bodega, su historia, sus vinos destacados, etc."
-                  />
-                )}
-              />
+              <label className={copaLabel}>Descripción</label>
+              <div className="copa-quill">
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field }) => (
+                    <ReactQuill
+                      theme="snow"
+                      value={field.value}
+                      onChange={field.onChange}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Describe la bodega, su historia, sus vinos destacados, etc."
+                    />
+                  )}
+                />
+              </div>
             </div>
 
             <div className="space-y-4">
-              <Label className="text-amber-200 text-lg">Imágenes</Label>
+              <label className={copaLabel}>Imágenes</label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <AnimatePresence>
                   {imagePreviews.map((src, index) => (
                     <motion.div key={src} layout initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} className="relative group aspect-square">
-                      <img src={src} alt={`Vista previa ${index + 1}`} className="w-full h-full object-cover rounded-lg" />
-                      <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeImage(index)}>
+                      <img src={src} alt={`Vista previa ${index + 1}`} className="w-full h-full object-cover" />
+                      <button type="button" onClick={() => removeImage(index)} aria-label="Quitar imagen" className="absolute top-1 right-1 h-7 w-7 flex items-center justify-center bg-copa-burgundy text-copa-cream opacity-0 group-hover:opacity-100 transition-opacity">
                         <Trash2 className="h-4 w-4" />
-                      </Button>
+                      </button>
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                <Button asChild variant="outline" className="aspect-square flex-col h-full">
-                  <label className="cursor-pointer w-full h-full flex flex-col items-center justify-center">
-                    <ImagePlus className="h-8 w-8 text-amber-300/70 mb-2" />
-                    <span className="text-center text-sm">Añadir</span>
-                    <input id="images" type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" />
-                  </label>
-                </Button>
+                <label className="aspect-square border border-copa-gold flex flex-col items-center justify-center cursor-pointer hover:border-copa-burgundy transition-colors">
+                  <ImagePlus className="h-7 w-7 text-copa-gold mb-2" />
+                  <span className="text-center text-sm text-copa-ink/70">Añadir</span>
+                  <input id="images" type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" />
+                </label>
               </div>
             </div>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

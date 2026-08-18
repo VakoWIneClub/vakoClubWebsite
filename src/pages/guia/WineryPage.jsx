@@ -5,7 +5,6 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { Loader2, MapPin, Pencil, Trash2, ChevronLeft, ChevronRight, ExternalLink, Heart, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
@@ -55,17 +54,17 @@ const WineryPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen wine-pattern">
-        <Loader2 className="h-16 w-16 text-amber-300 animate-spin" />
+      <div className="flex justify-center items-center min-h-screen bg-copa-cream">
+        <Loader2 className="h-14 w-14 text-copa-burgundy animate-spin" />
       </div>
     );
   }
 
   if (!winery) {
     return (
-      <div className="text-center py-20 wine-pattern">
-        <h2 className="text-2xl font-bold text-white">Bodega no encontrada</h2>
-        <Link to="/guia" className="text-amber-400 hover:underline mt-4 inline-block">
+      <div className="text-center py-20 bg-copa-cream min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
+        <h2 className="font-cormorant" style={{ fontSize: 28 }}>Bodega no encontrada</h2>
+        <Link to="/guia" className="copa-btn-secondary mt-6 inline-flex">
           Volver a la guía
         </Link>
       </div>
@@ -80,112 +79,105 @@ const WineryPage = () => {
     : winery.website_url;
 
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>{`${winery.title} - Guía de Bodegas Vako Club`}</title>
         <meta name="description" content={winery.description.substring(0, 160)} />
       </Helmet>
 
-      <div className="min-h-screen wine-pattern pt-24 pb-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="mb-6">
-              <Button asChild variant="outline">
-                <Link to="/guia">
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Volver a la Guía
-                </Link>
-              </Button>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="mb-6">
+            <Link to="/guia" className="copa-btn-secondary inline-flex items-center">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Volver a la Guía
+            </Link>
+          </div>
+          <div className="border border-copa-gold overflow-hidden">
+            <div className="relative h-96 group">
+              <motion.img
+                key={currentImageIndex}
+                src={images[currentImageIndex]}
+                alt={`${winery.title} - imagen ${currentImageIndex + 1}`}
+                className="w-full h-full object-cover"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-copa-ink/80 to-transparent" />
+              {images.length > 1 && (
+                <>
+                  <button type="button" className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center bg-copa-ink/40 hover:bg-copa-ink/70 text-copa-cream opacity-0 group-hover:opacity-100 transition-opacity" onClick={prevImage} aria-label="Imagen anterior">
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+                  <button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center bg-copa-ink/40 hover:bg-copa-ink/70 text-copa-cream opacity-0 group-hover:opacity-100 transition-opacity" onClick={nextImage} aria-label="Imagen siguiente">
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </>
+              )}
+              <div className="absolute bottom-6 left-6 right-6 text-copa-cream">
+                <h1 className="font-cormorant font-light" style={{ fontSize: 'clamp(30px,4.5vw,44px)' }}>
+                  {winery.title}
+                </h1>
+                <div className="flex items-center text-copa-cream/85 text-lg mt-3">
+                  <MapPin className="h-5 w-5 mr-2" />
+                  <span>{winery.city}, {winery.country}</span>
+                </div>
+              </div>
             </div>
-            <div className="wine-card rounded-2xl overflow-hidden">
-              <div className="relative h-96 group">
-                <motion.img
-                  key={currentImageIndex}
-                  src={images[currentImageIndex]}
-                  alt={`${winery.title} - imagen ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                {images.length > 1 && (
+
+            <div className="p-8">
+              <div className="flex items-center gap-4 mb-8 flex-wrap">
+                <button type="button" onClick={() => toggleFavorite(winery.id)} className="copa-btn-secondary inline-flex items-center">
+                  <Heart className={`mr-2 h-4 w-4 transition-all duration-300 ${isFavorite(winery.id) ? 'fill-current text-copa-burgundy' : ''}`} />
+                  {isFavorite(winery.id) ? 'Quitar de Favoritos' : 'Añadir a Favoritos'}
+                </button>
+                {isAdmin && (
                   <>
-                    <Button size="icon" variant="ghost" className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity" onClick={prevImage}>
-                      <ChevronLeft className="h-6 w-6" />
-                    </Button>
-                    <Button size="icon" variant="ghost" className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity" onClick={nextImage}>
-                      <ChevronRight className="h-6 w-6" />
-                    </Button>
+                    <Link to={`/guia/editar/${winery.slug}`} className="copa-btn-nav inline-flex items-center">
+                      <Pencil className="mr-2 h-4 w-4" /> Editar
+                    </Link>
+                    <DeleteWineryDialog
+                      wineryId={winery.id}
+                      wineryTitle={winery.title}
+                      onDeleted={() => window.location.href = '/guia'}
+                      trigger={
+                        <button type="button" className="copa-btn-nav inline-flex items-center">
+                          <Trash2 className="mr-2 h-4 w-4" /> Eliminar
+                        </button>
+                      }
+                    />
                   </>
                 )}
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <h1 className="font-playfair text-4xl md:text-5xl font-bold text-amber-100">
-                    {winery.title}
-                  </h1>
-                  <div className="flex items-center justify-between mt-4">
-                    <div className="flex items-center text-amber-100/80 text-lg">
-                      <MapPin className="h-5 w-5 mr-2" />
-                      <span>{winery.city}, {winery.country}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-8">
-                <div className="flex items-center gap-4 mb-6 flex-wrap">
-                  <Button variant="outline" onClick={() => toggleFavorite(winery.id)}>
-                    <Heart className={`mr-2 h-4 w-4 transition-all duration-300 ${isFavorite(winery.id) ? 'fill-current text-red-800' : ''}`} />
-                    {isFavorite(winery.id) ? 'Quitar de Favoritos' : 'Añadir a Favoritos'}
-                  </Button>
-                  {isAdmin && (
-                    <>
-                      <Button asChild>
-                        <Link to={`/guia/editar/${winery.slug}`}>
-                          <Pencil className="mr-2 h-4 w-4" /> Editar
-                        </Link>
-                      </Button>
-                      <DeleteWineryDialog 
-                        wineryId={winery.id} 
-                        wineryTitle={winery.title}
-                        onDeleted={() => window.location.href = '/guia'}
-                        trigger={
-                          <Button variant="destructive">
-                            <Trash2 className="mr-2 h-4 w-4" /> Eliminar
-                          </Button>
-                        }
-                      />
-                    </>
-                  )}
-                  {websiteUrl && (
-                    <Button asChild variant="outline">
-                      <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" /> Visitar Web
-                      </a>
-                    </Button>
-                  )}
-                </div>
-                
-                <div 
-                  className="prose prose-invert prose-lg max-w-none prose-p:text-amber-100/80 prose-headings:text-amber-200 prose-headings:font-playfair prose-a:text-amber-300 prose-strong:text-amber-100"
-                  dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-                />
-
-                {winery.latitude && winery.longitude && (
-                  <div className="mt-8">
-                    <h2 className="font-playfair text-3xl font-bold text-amber-200 mb-4">Ubicación</h2>
-                    <WineryMap lat={winery.latitude} lon={winery.longitude} title={winery.title} />
-                  </div>
+                {websiteUrl && (
+                  <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className="copa-btn-secondary inline-flex items-center">
+                    <ExternalLink className="mr-2 h-4 w-4" /> Visitar Web
+                  </a>
                 )}
               </div>
+
+              <div
+                className="max-w-none text-copa-ink/80"
+                style={{ fontSize: 18, lineHeight: 1.75 }}
+                dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+              />
+
+              {winery.latitude && winery.longitude && (
+                <div className="mt-10">
+                  <h2 className="font-cormorant font-light" style={{ fontSize: 28 }}>Ubicación</h2>
+                  <div className="mt-4">
+                    <WineryMap lat={winery.latitude} lon={winery.longitude} title={winery.title} />
+                  </div>
+                </div>
+              )}
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 
