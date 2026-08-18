@@ -1,63 +1,39 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
 import { MailCheck } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import Reveal from '@/components/copa/Reveal';
 
 const EmailVerification = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleRedirect = () => {
-        navigate('/');
-    };
+  const handleRedirect = () => {
+    navigate('/');
+  };
 
-    return (
-        <>
-            <Helmet>
-                <title>¡Verificación Exitosa! - Vako Club</title>
-                <meta name="description" content="Tu correo electrónico ha sido verificado con éxito." />
-            </Helmet>
-            <div className="min-h-screen wine-pattern flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full max-w-md text-center"
-                >
-                    <div className="wine-glass-effect rounded-2xl p-8 md:p-12 shadow-2xl">
-                         <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                            className="inline-block"
-                        >
-                            <MailCheck className="h-20 w-20 mx-auto wine-text-gradient mb-6" />
-                        </motion.div>
-                        <h1 className="font-playfair text-4xl font-bold wine-text-gradient">
-                           ¡Verificación Exitosa!
-                        </h1>
-                        <p className="mt-4 text-lg text-amber-100/80">
-                            Tu cuenta ha sido verificada. ¡Bienvenido a Vako Club!
-                        </p>
-                        <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.5, duration: 0.5 }}
-                        >
-                            <Button
-                                onClick={handleRedirect}
-                                className="w-full text-lg py-6 mt-8"
-                                variant="default"
-                            >
-                                Continuar
-                            </Button>
-                        </motion.div>
-                    </div>
-                </motion.div>
-            </div>
-        </>
-    );
+  return (
+    <div className="bg-copa-cream text-copa-ink min-h-screen flex items-center justify-center py-16 px-4" style={{ fontFamily: "'EB Garamond', serif" }}>
+      <Helmet>
+        <title>¡Verificación Exitosa! - Vako Club</title>
+        <meta name="description" content="Tu correo electrónico ha sido verificado con éxito." />
+      </Helmet>
+      <Reveal className="w-full max-w-md text-center">
+        <div className="border border-copa-gold p-8 md:p-12">
+          <MailCheck className="h-14 w-14 text-copa-burgundy mx-auto mb-6" />
+          <div className="copa-eyebrow">Vako Club</div>
+          <h1 className="font-cormorant font-light mt-3" style={{ fontSize: 'clamp(30px,4vw,40px)' }}>
+            ¡Verificación Exitosa!
+          </h1>
+          <p className="mt-4 text-copa-ink/75" style={{ fontSize: 17 }}>
+            Tu cuenta ha sido verificada. ¡Bienvenido a Vako Club!
+          </p>
+          <button type="button" onClick={handleRedirect} className="copa-btn-primary w-full mt-8">
+            Continuar
+          </button>
+        </div>
+      </Reveal>
+    </div>
+  );
 };
 
 export default EmailVerification;
