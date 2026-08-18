@@ -72,7 +72,10 @@ const WineryPage = () => {
     );
   }
 
-  const sanitizedDescription = DOMPurify.sanitize(winery.description);
+  // FORBID_ATTR strips legacy inline color spans (baked in from the old dark theme) that would
+  // otherwise override the copa prose-* classes below, since inline styles always win over CSS
+  // classes — same fix already applied to Noticias/Eventos content.
+  const sanitizedDescription = DOMPurify.sanitize(winery.description || '', { FORBID_ATTR: ['style'] });
 
   // Ensure website_url has a protocol
   const websiteUrl = winery.website_url && !winery.website_url.startsWith('http://') && !winery.website_url.startsWith('https://')
@@ -83,7 +86,7 @@ const WineryPage = () => {
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>{`${winery.title} - Guía de Bodegas Vako Club`}</title>
-        <meta name="description" content={winery.description.substring(0, 160)} />
+        <meta name="description" content={(winery.description || '').substring(0, 160)} />
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
@@ -144,6 +147,7 @@ const WineryPage = () => {
                     <DeleteWineryDialog
                       wineryId={winery.id}
                       wineryTitle={winery.title}
+                      imageUrls={winery.image_urls}
                       onDeleted={() => window.location.href = '/guia'}
                       trigger={
                         <button type="button" className="copa-btn-nav inline-flex items-center">
@@ -174,7 +178,7 @@ const WineryPage = () => {
                 dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
               />
 
-              {winery.latitude && winery.longitude && (
+              {winery.latitude != null && winery.longitude != null && (
                 <div className="mt-10">
                   <h2 className="font-cormorant font-light" style={{ fontSize: 28 }}>Ubicación</h2>
                   <div className="mt-4">
