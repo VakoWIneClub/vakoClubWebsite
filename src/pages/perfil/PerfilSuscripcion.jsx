@@ -1,23 +1,17 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Star, CheckCircle, RefreshCw, XCircle, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { Star, CheckCircle, ArrowLeft } from 'lucide-react';
 import Reveal from '@/components/copa/Reveal';
 
+// There is currently only one membership tier (free), so this page is informational — no
+// plan data model exists yet to change to or cancel out of. Previously showed "Cambiar Plan"
+// (which bounced straight back to /perfil, since Suscripcion.jsx redirects away any signed-in
+// visitor) and "Cancelar Suscripción" (permanently unreachable dead code, since its own
+// condition compared the hardcoded plan name against itself).
+const currentPlan = 'Plan Aficionado';
+
 const PerfilSuscripcion = () => {
-  const { toast } = useToast();
-
-  // This would come from user data in a real scenario
-  const currentPlan = 'Plan Aficionado';
-
-  const handleCancelAction = () => {
-    toast({
-      title: "Función en desarrollo",
-      description: "Esta funcionalidad estará disponible próximamente. ¡Gracias por tu paciencia!",
-    });
-  };
-
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
@@ -36,7 +30,7 @@ const PerfilSuscripcion = () => {
           <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
             Mi Suscripción
           </h1>
-          <p className="mt-5 text-copa-ink/75" style={{ fontSize: 18 }}>Gestiona tu plan y accede a tus beneficios.</p>
+          <p className="mt-5 text-copa-ink/75" style={{ fontSize: 18 }}>Tu plan y tus beneficios en Vako Club.</p>
         </Reveal>
 
         <Reveal delay={0.05} className="border border-copa-gold p-8 md:p-12">
@@ -56,7 +50,7 @@ const PerfilSuscripcion = () => {
 
           <div className="border-t border-copa-gold/40 pt-8">
             <h3 className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70 mb-4">Beneficios del plan</h3>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3">
               <li className="flex items-center gap-3">
                 <CheckCircle className="h-4 w-4 text-copa-burgundy shrink-0" />
                 <span className="text-copa-ink/80">Acceso a la Guía Exclusiva de Bodegas</span>
@@ -70,21 +64,6 @@ const PerfilSuscripcion = () => {
                 <span className="text-copa-ink/80">Creación de tu perfil de miembro personalizado</span>
               </li>
             </ul>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/suscripcion" className="copa-btn-primary w-full inline-flex items-center justify-center">
-                <RefreshCw className="mr-2 h-4 w-4" /> Cambiar Plan
-              </Link>
-              {currentPlan !== 'Plan Aficionado' && (
-                <button
-                  type="button"
-                  onClick={handleCancelAction}
-                  className="w-full inline-flex items-center justify-center font-jost text-xs font-medium tracking-[0.14em] uppercase text-copa-cream bg-red-700 px-8 py-[19px] transition-colors duration-300 hover:bg-red-800"
-                >
-                  <XCircle className="mr-2 h-4 w-4" /> Cancelar Suscripción
-                </button>
-              )}
-            </div>
           </div>
         </Reveal>
       </div>
