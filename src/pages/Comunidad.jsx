@@ -1,220 +1,128 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { Users, MessageCircle, Heart, Share2, Instagram, Youtube, UserPlus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ForoTab from '@/components/comunidad/ForoTab';
 import MiembrosTab from '@/components/comunidad/MiembrosTab';
 import { TikTokIcon } from '@/components/ui/TikTokIcon';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import Reveal from '@/components/copa/Reveal';
+
+const socialLinks = [
+  { icon: Instagram, href: 'https://www.instagram.com/vakoclub', label: 'Instagram' },
+  { icon: TikTokIcon, href: 'https://www.tiktok.com/@vako.club', label: 'TikTok' },
+  { icon: Youtube, href: 'https://www.youtube.com/@VakoWineClub', label: 'YouTube' },
+];
 
 const Comunidad = () => {
   const { toast } = useToast();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('foro');
-  
-  const tabs = [{
-    id: 'foro',
-    name: 'Foro de Debate',
-    icon: MessageCircle
-  }, {
-    id: 'miembros',
-    name: 'Miembros del Club',
-    icon: Users
-  }];
-
-  const socialLinks = [{
-    icon: Instagram,
-    href: 'https://www.instagram.com/vakoclub',
-    label: 'Instagram',
-    color: 'from-pink-500 to-rose-500'
-  }, {
-    icon: TikTokIcon,
-    href: 'https://www.tiktok.com/@vako.club',
-    label: 'TikTok',
-    color: 'from-gray-700 to-black'
-  }, {
-    icon: Youtube,
-    href: 'https://www.youtube.com/@VakoWineClub',
-    label: 'YouTube',
-    color: 'from-red-500 to-red-600'
-  }];
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') === 'miembros' ? 'miembros' : 'foro');
 
   const handleInteraction = () => {
     toast({
-      title: "🚧 ¡Próximamente!",
+      title: "¡Próximamente!",
       description: "Esta función estará disponible muy pronto para que puedas invitar a tus amigos."
     });
   };
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'foro':
-        return <ForoTab />;
-      case 'miembros':
-        return <MiembrosTab />;
-      default:
-        return null;
-    }
-  };
-
-  return <>
+  return (
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>Comunidad - Vako Club</title>
         <meta name="description" content="Únete a la comunidad de Vako Club. Participa en nuestro foro de vinos, conoce a otros miembros y comparte tu pasión." />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 wine-pattern opacity-20"></div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{
-          opacity: 0,
-          y: 50
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8
-        }} className="text-center space-y-8">
-            <motion.div initial={{
-            scale: 0
-          }} animate={{
-            scale: 1
-          }} transition={{
-            delay: 0.2,
-            type: "spring",
-            stiffness: 200
-          }} className="flex justify-center">
-              <div className="p-6 wine-gradient rounded-full wine-shadow">
-                <Users className="h-16 w-16 text-white" />
-              </div>
-            </motion.div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
+        <Reveal className="text-center mb-16">
+          <div className="copa-eyebrow">Vako Club</div>
+          <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
+            Nuestra Comunidad
+          </h1>
+          <p className="mt-5 text-copa-ink/75 max-w-2xl mx-auto" style={{ fontSize: 18, lineHeight: 1.6 }}>
+            Un lugar para conectar, debatir y compartir tu amor por el vino.
+          </p>
+          {!user && (
+            <Link to="/suscripcion" className="copa-btn-primary inline-flex items-center mt-8">
+              <UserPlus className="mr-2 h-5 w-5" />
+              Únete al Club
+            </Link>
+          )}
+        </Reveal>
 
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Nuestra Comunidad
-            </h1>
-
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">Un lugar para conectar, debatir y compartir tu amor por el vino.</p>
-            {!user && <Link to="/suscripcion">
-                <Button size="lg">
-                  <UserPlus className="mr-2 h-5 w-5" />
-                  Únete al Club
-                </Button>
-              </Link>}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Social Media Section */}
-      <section className="py-16 wine-glass-effect">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{
-          opacity: 0,
-          y: 50
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8
-        }} className="text-center mb-12">
-            <h2 className="font-playfair text-3xl md:text-4xl font-bold wine-text-gradient mb-4">
-              Síguenos en Redes
-            </h2>
-            <p className="text-lg text-amber-100/70 max-w-2xl mx-auto">
-              No te pierdas nuestras últimas noticias, catas en vivo y contenido exclusivo.
-            </p>
-          </motion.div>
-          <div className="flex justify-center gap-6">
-            {socialLinks.map((social, index) => {
-            const Icon = social.icon;
-            return <motion.a key={index} href={social.href} target="_blank" rel="noopener noreferrer" whileHover={{
-              scale: 1.1,
-              y: -5
-            }} whileTap={{
-              scale: 0.95
-            }} className={`flex items-center gap-3 px-6 py-3 rounded-full font-medium text-white transition-all duration-300 bg-gradient-to-r ${social.color} wine-shadow`}>
-                  <Icon className="h-6 w-6" />
+        <Reveal delay={0.05} className="border border-copa-gold bg-copa-creamDeep p-8 mb-16 text-center">
+          <h2 className="font-cormorant font-light" style={{ fontSize: 30 }}>Síguenos en Redes</h2>
+          <p className="text-copa-ink/70 max-w-2xl mx-auto mt-3" style={{ fontSize: 16 }}>
+            No te pierdas nuestras últimas noticias, catas en vivo y contenido exclusivo.
+          </p>
+          <div className="flex justify-center gap-4 mt-8">
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink border border-copa-gold px-5 py-3 transition-colors hover:border-copa-burgundy hover:text-copa-burgundy"
+                >
+                  <Icon className="h-4 w-4" />
                   <span className="hidden sm:inline">{social.label}</span>
-                </motion.a>;
-          })}
+                </a>
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </Reveal>
 
-      {/* Tabs Navigation */}
-      <section className="py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {tabs.map(tab => {
-            const Icon = tab.icon;
-            return <motion.button key={tab.id} whileHover={{
-              scale: 1.05
-            }} whileTap={{
-              scale: 0.95
-            }} onClick={() => setActiveTab(tab.id)} className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === tab.id ? 'wine-gradient text-white wine-shadow' : 'wine-card text-amber-200 hover:text-white hover:bg-white/10'}`}>
-                  <Icon className="h-5 w-5" />
-                  <span>{tab.name}</span>
-                </motion.button>;
-          })}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:w-96 mx-auto mb-12 h-11 rounded-none border border-copa-gold bg-copa-cream p-1">
+            <TabsTrigger
+              value="foro"
+              className="rounded-none font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 data-[state=active]:bg-copa-burgundy data-[state=active]:text-copa-cream data-[state=active]:shadow-none"
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />Foro de Debate
+            </TabsTrigger>
+            <TabsTrigger
+              value="miembros"
+              className="rounded-none font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 data-[state=active]:bg-copa-burgundy data-[state=active]:text-copa-cream data-[state=active]:shadow-none"
+            >
+              <Users className="mr-2 h-4 w-4" />Miembros del Club
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="foro">
+            <ForoTab />
+          </TabsContent>
+          <TabsContent value="miembros">
+            <MiembrosTab />
+          </TabsContent>
+        </Tabs>
+
+        <Reveal className="border border-copa-gold p-12 mt-20 text-center">
+          <Heart className="h-10 w-10 text-copa-burgundy mx-auto" />
+          <h2 className="font-cormorant font-light mt-6" style={{ fontSize: 'clamp(28px,3.6vw,40px)' }}>
+            ¿Te unes a la conversación?
+          </h2>
+          <p className="text-copa-ink/75 max-w-2xl mx-auto mt-4" style={{ fontSize: 17, lineHeight: 1.6 }}>
+            Regístrate gratis para empezar a participar en el foro, seguir a otros miembros y crear tu propio perfil de cata.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            {!user && (
+              <Link to="/suscripcion" className="copa-btn-primary inline-flex items-center justify-center">
+                <Users className="mr-2 h-5 w-5" />
+                Unirme Gratis
+              </Link>
+            )}
+            <button type="button" onClick={handleInteraction} className="copa-btn-secondary inline-flex items-center justify-center">
+              <Share2 className="mr-2 h-5 w-5" />
+              Invitar a un amigo
+            </button>
           </div>
-
-          {/* Tab Content */}
-          <motion.div key={activeTab} initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.5
-        }}>
-            {renderTabContent()}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 wine-glass-effect">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{
-          opacity: 0,
-          y: 50
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8
-        }} className="space-y-8">
-            <Heart className="h-16 w-16 text-red-400 mx-auto" />
-            
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient">
-              ¿Te unes a la conversación?
-            </h2>
-            
-            <p className="text-xl text-amber-100/80 max-w-2xl mx-auto">
-              Regístrate gratis para empezar a participar en el foro, seguir a otros miembros y crear tu propio perfil de cata.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {!user && <Link to="/suscripcion">
-                  <Button className="px-8 py-4 text-lg wine-gradient hover:opacity-90 transition-all duration-300 wine-shadow">
-                    <Users className="mr-2 h-5 w-5" />
-                    Unirme Gratis
-                  </Button>
-                </Link>}
-              
-              <Button variant="outline" className="px-8 py-4 text-lg border-amber-400 text-amber-200 hover:bg-amber-400 hover:text-amber-900 transition-all duration-300" onClick={handleInteraction}>
-                <Share2 className="mr-2 h-5 w-5" />
-                Invitar a un amigo
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </>;
+        </Reveal>
+      </div>
+    </div>
+  );
 };
 export default Comunidad;
