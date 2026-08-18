@@ -160,8 +160,16 @@ const WineryPage = () => {
               </div>
 
               <div
-                className="max-w-none text-copa-ink/80"
-                style={{ fontSize: 18, lineHeight: 1.75 }}
+                className="prose prose-lg max-w-none
+                  prose-headings:font-cormorant prose-headings:font-normal prose-headings:text-copa-ink prose-headings:mb-4 prose-headings:mt-10
+                  prose-p:text-copa-ink/80 prose-p:leading-relaxed
+                  prose-a:text-copa-burgundy prose-a:no-underline hover:prose-a:underline
+                  prose-strong:text-copa-ink prose-strong:font-semibold
+                  prose-blockquote:border-l-copa-gold prose-blockquote:text-copa-ink/60 prose-blockquote:pl-4 prose-blockquote:italic
+                  prose-ul:list-disc prose-ul:pl-6 prose-li:text-copa-ink/80 prose-li:my-2
+                  prose-ol:list-decimal prose-ol:pl-6
+                  prose-img:rounded-none prose-img:shadow-md prose-img:shadow-copa-ink/20 prose-img:mx-auto prose-img:my-8"
+                style={{ fontFamily: "'EB Garamond', serif" }}
                 dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
               />
 
