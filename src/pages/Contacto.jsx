@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { MessageCircle } from 'lucide-react';
 import ContactInfo from '@/components/contacto/ContactInfo';
-import FaqSection from '@/components/contacto/FaqSection';
 import Reveal from '@/components/copa/Reveal';
 
 const Contacto = () => {
@@ -26,7 +25,6 @@ const Contacto = () => {
         </Reveal>
 
         <ContactInfo />
-        <FaqSection />
       </div>
     </div>
   );

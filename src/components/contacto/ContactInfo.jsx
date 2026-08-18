@@ -36,7 +36,7 @@ const contactInfo = [
 
 const ContactInfo = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
       {contactInfo.map((info, index) => {
         const Icon = info.icon;
         return (

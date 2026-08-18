@@ -25,7 +25,6 @@ const Footer = () => {
       title: "Soporte",
       links: [
         { name: "Contacto", path: '/contacto' },
-        { name: "FAQs", path: '/contacto#faq' },
         { name: "Términos de Uso", path: '/terminos' },
         { name: "Política de Privacidad", path: '/politica-privacidad' },
       ],
