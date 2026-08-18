@@ -7,19 +7,29 @@ const CompraResultBanner = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const compra = searchParams.get('compra');
   const sessionId = searchParams.get('session_id');
-  const [status, setStatus] = useState(compra === 'exito' ? 'verificando' : null);
+  // A missing session_id (mistyped/truncated link, tracking-param stripper) must resolve to
+  // the error state immediately — otherwise it stays 'verificando' forever, since the effect
+  // below only runs when sessionId is present.
+  const [status, setStatus] = useState(compra === 'exito' ? (sessionId ? 'verificando' : 'error') : null);
   const [resultado, setResultado] = useState(null);
 
   useEffect(() => {
+    let cancelado = false;
     if (compra === 'exito' && sessionId) {
       fetch(`/api/verify-session?session_id=${encodeURIComponent(sessionId)}`)
         .then((r) => r.json())
         .then((data) => {
+          if (cancelado) return;
           setStatus(data.paid ? 'pagado' : 'no-pagado');
           setResultado(data);
         })
-        .catch(() => setStatus('error'));
+        .catch(() => {
+          if (!cancelado) setStatus('error');
+        });
     }
+    return () => {
+      cancelado = true;
+    };
   }, [compra, sessionId]);
 
   if (!compra) return null;
