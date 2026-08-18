@@ -118,6 +118,16 @@ body.copa-landing-active {
     @apply font-jost text-[11px] font-medium tracking-[0.14em] uppercase text-copa-cream bg-copa-burgundy px-[18px] py-[11px] whitespace-nowrap transition-colors duration-300 hover:bg-copa-ink disabled:opacity-60;
   }
 
+  /* For a primary CTA sitting on a copa-burgundy background (cream fills, burgundy text) —
+     .copa-btn-primary's burgundy fill would disappear against that same background. */
+  .copa-btn-invert {
+    @apply inline-flex items-center justify-center font-jost text-xs font-medium tracking-[0.14em] uppercase text-copa-burgundy bg-copa-cream px-8 py-[19px] transition-colors duration-300 hover:bg-copa-gold disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .copa-card {
+    @apply bg-copa-cream border border-copa-gold/40 transition-colors duration-300 hover:border-copa-burgundy;
+  }
+
   .copa-link-nav {
     @apply text-copa-ink/50 hover:text-copa-ink transition-colors cursor-pointer;
   }

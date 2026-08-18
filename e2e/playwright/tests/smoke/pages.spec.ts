@@ -10,7 +10,7 @@ const publicPages = [
   { path: '/noticias', title: 'Noticias del Vino - Vako Club' },
   { path: '/eventos', title: 'Eventos de Vino - Vako Club' },
   { path: '/comunidad', title: 'Comunidad - Vako Club' },
-  { path: '/tienda', title: 'Tienda Exclusiva - Vako Club | Guías, Vinos, Arte y Accesorios' },
+  { path: '/tienda', title: 'Tienda - Vako Club | Guías de Vino en PDF' },
   { path: '/contacto', title: 'Contacto - Vako Club' },
   { path: '/suscripcion', title: 'Suscripción - Vako Club' },
   { path: '/login', title: 'Iniciar Sesión - Vako Club' },
