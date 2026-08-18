@@ -1,12 +1,31 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * Minimal, dependency-free .env loader (no `dotenv` package in this project's devDependencies).
+ * Used for E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD, which authenticated specs read to log in as an
+ * admin against the real Supabase backend (there is no separate test/staging project — see
+ * tests/fixtures/admin-auth.ts). The file itself is gitignored (matches the root .gitignore's
+ * `.env` pattern); CI supplies the same two vars as repository secrets instead.
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return;
+  for (const line of fs.readFileSync(filePath, 'utf-8').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eqIndex = trimmed.indexOf('=');
+    if (eqIndex === -1) continue;
+    const key = trimmed.slice(0, eqIndex).trim();
+    let value = trimmed.slice(eqIndex + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (!(key in process.env)) process.env[key] = value;
+  }
+}
+
+loadEnvFile(path.resolve(__dirname, '.env'));
 
 /**
  * See https://playwright.dev/docs/test-configuration.

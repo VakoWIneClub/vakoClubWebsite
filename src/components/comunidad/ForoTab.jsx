@@ -376,6 +376,7 @@ const ForoTab = () => {
                     type="button"
                     onClick={() => handlePostReply(thread.id)}
                     disabled={submittingReplyFor === thread.id}
+                    aria-label="Enviar respuesta"
                     className="copa-btn-nav h-10 w-10 flex items-center justify-center px-0"
                   >
                     {submittingReplyFor === thread.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
