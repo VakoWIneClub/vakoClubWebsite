@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { UserPlus, UserCheck, Loader2, Tag, Award, Users, Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 
@@ -18,9 +17,9 @@ const getInitials = (name) => {
 };
 
 const levelInfo = {
-  'Novato': { color: 'text-green-400', bgColor: 'bg-green-500/10' },
-  'Aficionado': { color: 'text-blue-400', bgColor: 'bg-blue-500/10' },
-  'Experto': { color: 'text-violet-400', bgColor: 'bg-violet-500/10' }
+  'Novato': { color: 'text-copa-ink/70', border: 'border-copa-ink/30' },
+  'Aficionado': { color: 'text-copa-gold', border: 'border-copa-gold' },
+  'Experto': { color: 'text-copa-burgundy', border: 'border-copa-burgundy' }
 };
 
 const MemberCard = ({ member, currentUser, onFollowToggle }) => {
@@ -82,42 +81,47 @@ const MemberCard = ({ member, currentUser, onFollowToggle }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="wine-card rounded-2xl p-6 text-center flex flex-col items-center"
+      className="copa-card p-6 text-center flex flex-col items-center"
     >
-      <Avatar className="h-24 w-24 mb-4 border-4 border-amber-400/50">
+      <Avatar className="h-20 w-20 mb-4 border-2 border-copa-gold">
         <AvatarImage src={member.avatar_url} alt={member.name} />
-        <AvatarFallback className="text-3xl bg-amber-800 text-amber-200">{getInitials(member.name)}</AvatarFallback>
+        <AvatarFallback className="text-2xl bg-copa-burgundy text-copa-cream">{getInitials(member.name)}</AvatarFallback>
       </Avatar>
-      <h4 className="text-xl font-bold text-amber-200">{member.name || 'Miembro de Vako'}</h4>
-      <p className="text-amber-100/70 capitalize text-sm">{member.profile || 'Entusiasta del Vino'}</p>
-      
-      <div className={`mt-2 flex items-center gap-2 ${levelData.bgColor} ${levelData.color} px-3 py-1 rounded-full text-xs font-semibold`}>
-        <Award className="h-4 w-4" />
+      <h4 className="font-cormorant" style={{ fontSize: 22 }}>{member.name || 'Miembro de Vako'}</h4>
+      <p className="text-copa-ink/60 capitalize text-sm mt-0.5">{member.profile || 'Entusiasta del Vino'}</p>
+
+      <div className={`mt-3 flex items-center gap-1.5 border ${levelData.border} ${levelData.color} px-3 py-1 font-jost text-[10px] tracking-[0.1em] uppercase`}>
+        <Award className="h-3.5 w-3.5" />
         <span>{member.level}</span>
       </div>
 
       {member.interest_topic && (
-        <div className="mt-2 flex items-center gap-1 bg-amber-500/10 text-amber-300 px-2 py-1 rounded-full text-xs">
+        <div className="mt-2 flex items-center gap-1 font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/60">
           <Tag className="h-3 w-3" />
           <span>{member.interest_topic}</span>
         </div>
       )}
-      
-      <p className="text-amber-100/60 text-sm mt-3 flex-grow min-h-[40px]">{member.bio || 'Descubriendo el mundo del vino.'}</p>
-      
-      <div className="flex items-center justify-center gap-2 text-amber-100/60 text-sm mt-3">
-        <Users className="h-4 w-4" />
+
+      <p className="text-copa-ink/70 text-sm mt-3 flex-grow min-h-[40px]">{member.bio || 'Descubriendo el mundo del vino.'}</p>
+
+      <div className="flex items-center justify-center gap-2 font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50 mt-3">
+        <Users className="h-3.5 w-3.5" />
         <span>{followersCount} seguidores</span>
       </div>
 
       {currentUser?.id !== member.id && (
-        <Button onClick={handleFollow} className="mt-4 w-full" variant={isFollowing ? "secondary" : "outline"} disabled={isLoading}>
+        <button
+          type="button"
+          onClick={handleFollow}
+          disabled={isLoading}
+          className={`mt-4 w-full inline-flex items-center justify-center ${isFollowing ? 'copa-btn-secondary' : 'copa-btn-nav'}`}
+        >
           {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (isFollowing ? <UserCheck className="mr-2 h-4 w-4" /> : <UserPlus className="mr-2 h-4 w-4" />)}
           {isFollowing ? 'Siguiendo' : 'Seguir'}
-        </Button>
+        </button>
       )}
     </motion.div>
   );
@@ -132,16 +136,13 @@ const MiembrosTab = () => {
 
   const fetchMembers = useCallback(async (search) => {
     setLoading(true);
-    
-    let query;
+
     const params = { search_term: search };
     if (user) {
       params.current_user_id = user.id;
     }
-    
-    query = supabase.rpc('get_profiles_with_follow_status', params);
 
-    const { data, error } = await query;
+    const { data, error } = await supabase.rpc('get_profiles_with_follow_status', params);
 
     if (error) {
       toast({
@@ -175,28 +176,32 @@ const MiembrosTab = () => {
 
   return (
     <div>
-      <div className="mb-8 max-w-lg mx-auto">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-          <Input
-            type="text"
-            placeholder="Buscar miembros por nombre..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
+      <div className="mb-8 max-w-lg mx-auto relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-copa-ink/40" />
+        <Input
+          type="text"
+          placeholder="Buscar miembros por nombre..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10 rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy"
+        />
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center p-16">
-          <Loader2 className="h-12 w-12 animate-spin text-amber-400" />
+          <Loader2 className="h-10 w-10 animate-spin text-copa-burgundy" />
         </div>
-      ) : (
+      ) : members.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {members.map(member => (
             <MemberCard key={member.id} member={member} currentUser={user} onFollowToggle={handleFollowToggle} />
           ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <Users className="mx-auto h-12 w-12 text-copa-gold/60" />
+          <h3 className="font-cormorant mt-3" style={{ fontSize: 22 }}>No se encontraron miembros</h3>
+          <p className="text-copa-ink/60 mt-1">Prueba con otro nombre de búsqueda.</p>
         </div>
       )}
     </div>
