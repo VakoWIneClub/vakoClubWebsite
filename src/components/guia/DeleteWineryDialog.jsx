@@ -56,7 +56,13 @@ const DeleteWineryDialog = ({ wineryId, wineryTitle, onDeleted, trigger }) => {
           </button>
         )}
       </AlertDialogTrigger>
-      <AlertDialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
+      {/* AlertDialogContent's base classes bake in .wine-glass-effect (a plain, un-layered CSS
+          rule that beats any className override on background/blur regardless of order) — style
+          forces it off, same workaround used in Home.jsx's WelcomePopup. */}
+      <AlertDialogContent
+        className="bg-copa-cream border-copa-gold rounded-none text-copa-ink"
+        style={{ backgroundColor: '#F7F1E6', backdropFilter: 'none' }}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
             ¿Estás seguro?
@@ -66,20 +72,32 @@ const DeleteWineryDialog = ({ wineryId, wineryTitle, onDeleted, trigger }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <button type="button" disabled={isLoading} className="copa-btn-secondary">Cancelar</button>
+          {/* Not using asChild + a plain <button> here: AlertDialogAction/Cancel always inject
+              buttonVariants()'s amber classes via cn(buttonVariants(), className), and when
+              asChild hands that off to Radix's Slot, the merge is a plain class-string
+              concatenation (not twMerge) — so Tailwind's utilities layer beats our
+              copa-btn-* component-layer classes no matter what. Passing real utility classes
+              straight to className here instead runs through one cn()/twMerge call inside the
+              wrapper itself, which does dedupe correctly against buttonVariants(). */}
+          <AlertDialogCancel
+            disabled={isLoading}
+            className="rounded-none h-auto bg-transparent hover:bg-transparent border-0 border-b border-copa-gold px-0 py-1.5 font-jost text-xs tracking-[0.14em] uppercase text-copa-ink hover:text-copa-burgundy hover:border-copa-burgundy"
+          >
+            Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <button type="button" onClick={handleDelete} disabled={isLoading} className="copa-btn-primary">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />
-                  Eliminando…
-                </>
-              ) : (
-                'Sí, eliminar'
-              )}
-            </button>
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={isLoading}
+            className="rounded-none h-auto bg-copa-burgundy hover:bg-copa-ink text-copa-cream px-8 py-[19px] font-jost text-xs font-medium tracking-[0.14em] uppercase"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />
+                Eliminando…
+              </>
+            ) : (
+              'Sí, eliminar'
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
