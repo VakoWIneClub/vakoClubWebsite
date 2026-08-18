@@ -430,10 +430,18 @@ const readGatePassed = () => {
   }
 };
 
+// A returning buyer opening their Stripe success/cancel link fresh (new browser, cleared
+// storage, another device) must never have the fixed, viewport-covering language/age gate
+// hide their purchase confirmation and manual download-fallback link behind it.
+const readHasCompraParam = () => {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).has('compra');
+};
+
 const ElMundoDeLaCopaLanding = () => {
   const { toast } = useToast();
   const [lang, setLang] = useState(readStoredLang);
-  const [gateOpen, setGateOpen] = useState(() => !readGatePassed());
+  const [gateOpen, setGateOpen] = useState(() => !readGatePassed() && !readHasCompraParam());
   const [gateLang, setGateLang] = useState(null);
   const [gateAge, setGateAge] = useState(false);
   const [comprando, setComprando] = useState(false);
@@ -452,7 +460,10 @@ const ElMundoDeLaCopaLanding = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const compra = searchParams.get('compra');
   const sessionId = searchParams.get('session_id');
-  const [compraStatus, setCompraStatus] = useState(compra === 'exito' ? 'verificando' : null);
+  // A missing session_id (mistyped/truncated link, tracking-param stripper) must resolve to
+  // the error state immediately — otherwise it stays 'verificando' forever, since the effect
+  // below only runs when sessionId is present.
+  const [compraStatus, setCompraStatus] = useState(compra === 'exito' ? (sessionId ? 'verificando' : 'error') : null);
   const [compraResultado, setCompraResultado] = useState(null);
 
   const t = COPY[lang];

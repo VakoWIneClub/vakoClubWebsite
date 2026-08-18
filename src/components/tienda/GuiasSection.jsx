@@ -121,15 +121,25 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
               <p className="font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50 mt-1">Precio Fundador</p>
             )}
           </div>
-          <button
-            type="button"
-            onClick={() => (disponible ? onComprar(guia.id) : onAvisame(guia.nombre))}
-            disabled={procesando}
-            className="copa-btn-nav inline-flex items-center"
-          >
-            {procesando && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
-            {procesando ? 'Redirigiendo…' : disponible ? 'Quiero esta guía' : 'Avísame'}
-          </button>
+          {disponible && landingPath ? (
+            // Guides with a dedicated landing page must go through it — that's where the
+            // language is selected before checkout. Buying straight from this grid skipped
+            // that step entirely and always shipped the Spanish PDF regardless of the
+            // visitor's language.
+            <Link to={landingPath} className="copa-btn-nav inline-flex items-center">
+              Quiero esta guía
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => (disponible ? onComprar(guia.id) : onAvisame(guia.nombre))}
+              disabled={procesando}
+              className="copa-btn-nav inline-flex items-center"
+            >
+              {procesando && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
+              {procesando ? 'Redirigiendo…' : disponible ? 'Quiero esta guía' : 'Avísame'}
+            </button>
+          )}
         </div>
       </div>
     </Reveal>

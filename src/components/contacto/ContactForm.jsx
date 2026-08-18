@@ -60,15 +60,13 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form.current, EMAILJS_PUBLIC_KEY)
-      .then((result) => {
-          console.log(result.text);
+      .then(() => {
           toast({
             title: "¡Mensaje Enviado!",
             description: "Gracias por contactarnos. Te responderemos pronto.",
           });
           setFormData({ nombre: '', email: '', asunto: '', mensaje: '' });
-      }, (error) => {
-          console.log(error.text);
+      }, () => {
           toast({
             title: "Error al enviar",
             description: "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.",
