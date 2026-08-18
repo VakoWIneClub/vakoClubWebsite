@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 import { useToast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 
 // Same EmailJS project already used by the contact form and the "notify me" waitlist
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
@@ -15,8 +16,6 @@ const EMAILJS_PUBLIC_KEY = 'G7BJcfLPx0PBVWBOT';
 
 const GUIDE_ID = 'guia-general';
 const PRICE_LABEL = 'USD 29.99';
-
-const EASE = [0.2, 0.8, 0.2, 1];
 
 const LANGS = ['es', 'en', 'pt'];
 const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
@@ -43,19 +42,6 @@ const GATE_COPY = {
     hint: 'Escolha um idioma e confirme sua idade para continuar.',
   },
 };
-
-const Reveal = ({ children, className, delay = 0, as: Tag = 'div', ...rest }) => (
-  <motion.div
-    className={className}
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-    transition={{ duration: 0.7, ease: EASE, delay }}
-    {...rest}
-  >
-    {children}
-  </motion.div>
-);
 
 // Diccionario completo de la landing. Las páginas de muestra ("adentro") y la tapa son artes ya
 // diseñados en español — no existen versiones en inglés/portugués de esas imágenes todavía, así
@@ -649,7 +635,7 @@ const ElMundoDeLaCopaLanding = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: EASE }}
+            transition={{ duration: 0.3, ease: COPA_EASE }}
             role="dialog"
             aria-modal="true"
             aria-label="Idioma / Language / Idioma"
@@ -659,7 +645,7 @@ const ElMundoDeLaCopaLanding = () => {
               initial={{ opacity: 0, y: 16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
-              transition={{ duration: 0.35, ease: EASE }}
+              transition={{ duration: 0.35, ease: COPA_EASE }}
             >
               <svg width="34" height="56" viewBox="0 0 62 120" fill="none" stroke="#B08D57" strokeWidth="1" className="mx-auto" style={{ display: 'block' }}>
                 <path d="M13 8 C13 45 20 60 31 63 C42 60 49 45 49 8 Z" />
@@ -1126,7 +1112,7 @@ const ElMundoDeLaCopaLanding = () => {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: EASE }}
+                      transition={{ duration: 0.35, ease: COPA_EASE }}
                       style={{ overflow: 'hidden' }}
                     >
                       <p className="max-w-[34em] text-copa-ink/80 m-0 pb-7" style={{ fontSize: 18, lineHeight: 1.65 }}>
