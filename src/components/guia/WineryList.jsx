@@ -39,7 +39,9 @@ const WineryCard = ({
     e.stopPropagation();
     setCurrentImageIndex(prev => (prev - 1 + images.length) % images.length);
   };
-  const sanitizedDescription = DOMPurify.sanitize(winery.description);
+  // FORBID_ATTR strips legacy inline color spans (baked in from the old dark theme) that would
+  // otherwise render illegibly against the card's light background — same fix as WineryPage.
+  const sanitizedDescription = DOMPurify.sanitize(winery.description || '', { FORBID_ATTR: ['style'] });
   return (
     <Reveal delay={Math.min(index * 0.06, 0.24)} className="relative group">
       <Link to={`/guia/${winery.slug}`} className="block h-full">
@@ -91,7 +93,7 @@ const WineryCard = ({
            <Link to={`/guia/editar/${winery.slug}`} className="h-9 w-9 flex items-center justify-center bg-copa-ink/40 hover:bg-copa-ink/70 text-copa-cream transition-colors" aria-label="Editar bodega">
               <Pencil className="h-4 w-4" />
            </Link>
-           <DeleteWineryDialog wineryId={winery.id} wineryTitle={winery.title} onDeleted={() => onWineryDeleted(winery.id)} />
+           <DeleteWineryDialog wineryId={winery.id} wineryTitle={winery.title} imageUrls={winery.image_urls} onDeleted={() => onWineryDeleted(winery.id)} />
         </div>}
     </Reveal>
   );

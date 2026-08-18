@@ -14,7 +14,13 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';
 import { Trash2, Loader2 } from 'lucide-react';
 
-const DeleteWineryDialog = ({ wineryId, wineryTitle, onDeleted, trigger }) => {
+const storagePathFromUrl = (url) => {
+  const marker = '/winery-images/';
+  const idx = url.indexOf(marker);
+  return idx === -1 ? null : url.slice(idx + marker.length);
+};
+
+const DeleteWineryDialog = ({ wineryId, wineryTitle, imageUrls, onDeleted, trigger }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -24,6 +30,16 @@ const DeleteWineryDialog = ({ wineryId, wineryTitle, onDeleted, trigger }) => {
       .from('wineries')
       .delete()
       .eq('id', wineryId);
+
+    if (!error && imageUrls?.length > 0) {
+      // Best-effort cleanup — the row is already gone either way, so a storage error here
+      // shouldn't block the delete flow the admin is waiting on, just leak a file at worst.
+      const paths = imageUrls.map(storagePathFromUrl).filter(Boolean);
+      if (paths.length > 0) {
+        const { error: removeError } = await supabase.storage.from('winery-images').remove(paths);
+        if (removeError) console.error('Error removing winery images from storage:', removeError.message);
+      }
+    }
 
     if (error) {
       toast({

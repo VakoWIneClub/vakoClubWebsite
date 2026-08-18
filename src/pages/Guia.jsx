@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Loader2, PlusCircle, ChevronsDown, Search, X, List, Map } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -33,6 +33,7 @@ const Guia = () => {
   const cityFilter = useMemo(() => searchParams.get('city') || '', [searchParams]);
   const [nameInput, setNameInput] = useState(nameFilter);
   const [cityInput, setCityInput] = useState(cityFilter);
+  const loadMoreControllerRef = useRef(null);
   useEffect(() => {
     const fetchInitialData = async () => {
       const {
@@ -99,6 +100,10 @@ const Guia = () => {
   }, []);
   useEffect(() => {
     const controller = new AbortController();
+    // A "load more" in flight when the filters change must not be allowed to resolve later and
+    // merge its old-filter results onto the newly-filtered list — handleLoadMore below never
+    // cancelled its own request, unlike this effect.
+    loadMoreControllerRef.current?.abort();
     setPage(0);
     fetchWineries(0, nameFilter, countryFilter, cityFilter, false, controller.signal);
     return () => {
@@ -134,7 +139,9 @@ const Guia = () => {
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchWineries(nextPage, nameFilter, countryFilter, cityFilter, true);
+    const controller = new AbortController();
+    loadMoreControllerRef.current = controller;
+    fetchWineries(nextPage, nameFilter, countryFilter, cityFilter, true, controller.signal);
   };
   const handleWineryDeleted = deletedWineryId => {
     setWineries(wineries.filter(winery => winery.id !== deletedWineryId));

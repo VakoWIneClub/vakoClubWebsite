@@ -13,7 +13,9 @@ L.Icon.Default.mergeOptions({
 });
 
 const GuideMap = ({ wineries }) => {
-    const wineriesWithCoords = wineries.filter(w => w.latitude && w.longitude);
+    // != null (not truthy) so a winery legitimately sitting on the equator/prime meridian
+    // (latitude or longitude === 0) isn't silently dropped from the map.
+    const wineriesWithCoords = wineries.filter(w => w.latitude != null && w.longitude != null);
 
     if (wineriesWithCoords.length === 0) {
         return (

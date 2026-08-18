@@ -28,6 +28,7 @@ const WineryEditor = () => {
   const [winery, setWinery] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [removedExistingUrls, setRemovedExistingUrls] = useState([]);
 
   const isEditing = !!slug;
 
@@ -79,31 +80,42 @@ const WineryEditor = () => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      setImageFiles(prev => [...prev, ...files]);
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setImagePreviews(prev => [...prev, ...newPreviews]);
+      // Pairing each file with the exact object URL created for it (instead of comparing
+      // against a freshly regenerated URL.createObjectURL(file) later) — createObjectURL
+      // returns a new, unique URL on every call even for the same File, so re-deriving it in
+      // removeImage below could never match and "removed" images kept getting uploaded anyway.
+      const newEntries = files.map(file => ({ file, previewUrl: URL.createObjectURL(file) }));
+      setImageFiles(prev => [...prev, ...newEntries]);
+      setImagePreviews(prev => [...prev, ...newEntries.map(entry => entry.previewUrl)]);
     }
   };
 
   const removeImage = (index) => {
-    const newPreviews = [...imagePreviews];
-    const newFiles = [...imageFiles];
-
-    const removedPreview = newPreviews.splice(index, 1)[0];
-    setImagePreviews(newPreviews);
+    const removedPreview = imagePreviews[index];
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
 
     if (removedPreview.startsWith('blob:')) {
-      const fileIndex = imageFiles.findIndex(file => URL.createObjectURL(file) === removedPreview);
-      if (fileIndex > -1) newFiles.splice(fileIndex, 1);
-      setImageFiles(newFiles);
+      setImageFiles(prev => prev.filter(entry => entry.previewUrl !== removedPreview));
+      URL.revokeObjectURL(removedPreview);
+    } else {
+      // Track already-uploaded images removed during this edit so their storage objects can be
+      // deleted once the save actually succeeds — removing them immediately would lose the
+      // file if the admin then navigates away without saving.
+      setRemovedExistingUrls(prev => [...prev, removedPreview]);
     }
+  };
+
+  const storagePathFromUrl = (url) => {
+    const marker = '/winery-images/';
+    const idx = url.indexOf(marker);
+    return idx === -1 ? null : url.slice(idx + marker.length);
   };
 
   const handleImageUploads = async () => {
     const uploadedUrls = [];
     const existingUrls = imagePreviews.filter(p => !p.startsWith('blob:'));
 
-    for (const file of imageFiles) {
+    for (const { file } of imageFiles) {
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}_${Date.now()}_${Math.random()}.${fileExt}`;
       const filePath = `public/${fileName}`;
@@ -149,13 +161,33 @@ const WineryEditor = () => {
 
     try {
       const imageUrls = await handleImageUploads();
-      const { latitude, longitude } = await getCoordinatesForAddress(formData.address);
+
+      // Re-geocoding on every save — even ones that never touch the address — meant any
+      // transient failure or Nominatim rate-limit silently wiped a winery's existing map pin
+      // (getCoordinatesForAddress returns null,null on failure, which used to be saved as-is).
+      // Only re-geocode when the address actually changed, and fall back to the winery's
+      // current coordinates instead of nulling them out if the new lookup fails.
+      let latitude = winery?.latitude ?? null;
+      let longitude = winery?.longitude ?? null;
+      const addressChanged = !isEditing || formData.address !== winery?.address;
+      if (addressChanged) {
+        const coords = await getCoordinatesForAddress(formData.address);
+        if (coords.latitude !== null && coords.longitude !== null) {
+          ({ latitude, longitude } = coords);
+        } else if (!formData.address || formData.address.trim() === '') {
+          // Address was intentionally cleared — no location is the correct outcome.
+          latitude = null;
+          longitude = null;
+        }
+        // Otherwise geocoding failed/found nothing: keep the winery's existing coordinates
+        // (already toasted inside getCoordinatesForAddress).
+      }
 
       const wineryData = {
         title: formData.title,
         description: formData.description,
-        country: formData.country,
-        city: formData.city,
+        country: formData.country.trim(),
+        city: formData.city.trim(),
         address: formData.address,
         website_url: formData.website_url,
         latitude,
@@ -177,6 +209,15 @@ const WineryEditor = () => {
         result = data;
         toast({ title: "Bodega creada", description: "La nueva bodega ha sido añadida a la guía." });
       }
+
+      if (removedExistingUrls.length > 0) {
+        const paths = removedExistingUrls.map(storagePathFromUrl).filter(Boolean);
+        if (paths.length > 0) {
+          const { error: removeError } = await supabase.storage.from('winery-images').remove(paths);
+          if (removeError) console.error('Error removing orphaned winery images:', removeError.message);
+        }
+      }
+
       navigate(`/guia/${result.slug}`);
     } catch (error) {
       toast({ variant: "destructive", title: "Error al guardar", description: error.message });
