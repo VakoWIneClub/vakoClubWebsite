@@ -20,8 +20,8 @@ const WineryMap = ({ lat, lon, title }) => {
     const position = [lat, lon];
 
     return (
-        <motion.div 
-            className="h-96 rounded-2xl overflow-hidden shadow-lg shadow-black/20"
+        <motion.div
+            className="h-96 border border-copa-gold overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -33,7 +33,7 @@ const WineryMap = ({ lat, lon, title }) => {
                 />
                 <Marker position={position}>
                     <Popup>
-                        <strong className="font-playfair text-lg text-stone-800">{title}</strong>
+                        <strong className="font-cormorant text-lg text-copa-ink">{title}</strong>
                     </Popup>
                 </Marker>
             </MapContainer>

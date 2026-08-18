@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -18,7 +17,7 @@ const GuideMap = ({ wineries }) => {
 
     if (wineriesWithCoords.length === 0) {
         return (
-            <div className="h-[500px] flex items-center justify-center bg-stone-900/50 rounded-2xl text-amber-100/70">
+            <div className="h-[500px] flex items-center justify-center border border-copa-gold bg-copa-creamDeep text-copa-ink/60" style={{ fontFamily: "'EB Garamond', serif" }}>
                 No hay bodegas con ubicación para mostrar en el mapa.
             </div>
         );
@@ -27,8 +26,8 @@ const GuideMap = ({ wineries }) => {
     const bounds = L.latLngBounds(wineriesWithCoords.map(w => [w.latitude, w.longitude]));
 
     return (
-        <motion.div 
-            className="h-[500px] rounded-2xl overflow-hidden shadow-lg shadow-black/20"
+        <motion.div
+            className="h-[500px] border border-copa-gold overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -42,11 +41,9 @@ const GuideMap = ({ wineries }) => {
                     <Marker key={winery.id} position={[winery.latitude, winery.longitude]}>
                         <Popup>
                             <div className="text-center">
-                                <strong className="font-playfair text-lg text-stone-800">{winery.title}</strong>
-                                <p className="text-sm text-stone-600">{winery.city}, {winery.country}</p>
-                                <Button asChild size="sm" className="mt-2">
-                                    <Link to={`/guia/${winery.slug}`}>Ver Bodega</Link>
-                                </Button>
+                                <strong className="font-cormorant text-lg text-copa-ink">{winery.title}</strong>
+                                <p className="text-sm text-copa-ink/70">{winery.city}, {winery.country}</p>
+                                <Link to={`/guia/${winery.slug}`} className="copa-btn-nav mt-2 inline-flex">Ver Bodega</Link>
                             </div>
                         </Popup>
                     </Marker>

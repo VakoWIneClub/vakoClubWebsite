@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Compass, Loader2, PlusCircle, ChevronsDown, Search, X, List, Map } from 'lucide-react';
+import { Loader2, PlusCircle, ChevronsDown, Search, X, List, Map } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useSearchParams } from 'react-router-dom';
 import WineryList from '@/components/guia/WineryList';
 import GuideMap from '@/components/guia/GuideMap';
+import Reveal from '@/components/copa/Reveal';
+
 const WINERIES_PER_PAGE = 9;
+
+const copaInput = 'h-10 w-full rounded-none border border-copa-gold bg-copa-cream px-3 py-2 text-sm text-copa-ink placeholder:text-copa-ink/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-copa-burgundy';
+const copaLabel = 'block font-jost text-[10px] tracking-[0.14em] uppercase text-copa-ink/70 mb-1.5';
+
 const Guia = () => {
   const {
     user
@@ -137,106 +141,109 @@ const Guia = () => {
     setAllWineriesForMap(allWineriesForMap.filter(winery => winery.id !== deletedWineryId));
   };
   const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
-  return <>
+  return (
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>Guía de Bodegas - Vako Club</title>
         <meta name="description" content="Explora nuestra guía exclusiva de bodegas. Descubre lugares únicos, vinos excepcionales y experiencias inolvidables con la curaduría de Vako Club." />
       </Helmet>
 
-      <div className="min-h-screen wine-pattern pt-24 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8
-        }} className="text-center mb-12">
-            <Compass className="h-16 w-16 mx-auto wine-text-gradient mb-4" />
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-              Guía de Bodegas
-            </h1>
-            <p className="mt-4 text-xl text-amber-100/80 max-w-3xl mx-auto">Encuentra tu bodega favorita en nuestra guía. Puedes filtrar en la lista o buscar en el mapa.</p>
-          </motion.div>
-          
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8,
-          delay: 0.2
-        }} className="wine-card rounded-2xl p-6 mb-12">
-            <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
-              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label htmlFor="name-filter" className="block text-sm font-medium text-amber-200 mb-1">Nombre</label>
-                  <Input id="name-filter" placeholder="Ej: Catena Zapata" value={nameInput} onChange={e => setNameInput(e.target.value)} />
-                </div>
-                <div>
-                  <label htmlFor="country-filter" className="block text-sm font-medium text-amber-200 mb-1">País</label>
-                  <Select onValueChange={handleCountryChange} value={countryFilter || 'all'}>
-                    <SelectTrigger id="country-filter">
-                      <SelectValue placeholder="Seleccionar país" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los países</SelectItem>
-                      {countries.map(country => <SelectItem key={country} value={country}>{country}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="city-filter" className="block text-sm font-medium text-amber-200 mb-1">Ciudad</label>
-                  <Input id="city-filter" placeholder="Ej: Mendoza" value={cityInput} onChange={e => setCityInput(e.target.value)} />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button type="submit" className="w-full">
-                  <Search className="mr-2 h-4 w-4" /> Buscar
-                </Button>
-                {(nameFilter || countryFilter || cityFilter) && <Button type="button" variant="ghost" onClick={clearFilters} className="w-full">
-                    <X className="mr-2 h-4 w-4" /> Limpiar
-                  </Button>}
-              </div>
-              {isAdmin && <div className="text-center md:text-right">
-                  <Button asChild size="lg" className="w-full">
-                    <Link to="/guia/crear">
-                      <PlusCircle className="mr-2 h-5 w-5" />
-                      Añadir Bodega
-                    </Link>
-                  </Button>
-                </div>}
-            </form>
-          </motion.div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
+        <Reveal className="text-center mb-12">
+          <div className="copa-eyebrow">Vako Club</div>
+          <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
+            Guía de Bodegas
+          </h1>
+          <p className="mt-5 text-copa-ink/75 max-w-3xl mx-auto" style={{ fontSize: 18, lineHeight: 1.6 }}>
+            Encontrá tu bodega favorita en nuestra guía. Podés filtrar en la lista o buscar en el mapa.
+          </p>
+        </Reveal>
 
-          <Tabs defaultValue="list" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:w-96 mx-auto mb-8">
-              <TabsTrigger value="list"><List className="mr-2 h-4 w-4" />Lista</TabsTrigger>
-              <TabsTrigger value="map"><Map className="mr-2 h-4 w-4" />Mapa</TabsTrigger>
-            </TabsList>
-            <TabsContent value="list">
-              {loading ? <div className="flex justify-center items-center h-64">
-                    <Loader2 className="h-12 w-12 text-amber-300 animate-spin" />
-                </div> : <>
-                  <WineryList wineries={wineries} isAdmin={isAdmin} onWineryDeleted={handleWineryDeleted} />
-                  {wineries.length > 0 && hasMore && <div className="mt-12 text-center">
-                      <Button onClick={handleLoadMore} disabled={loadingMore} size="lg">
-                        {loadingMore ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ChevronsDown className="mr-2 h-5 w-5" />}
-                        Cargar más bodegas
-                      </Button>
-                    </div>}
-                </>}
-            </TabsContent>
-            <TabsContent value="map">
-              <GuideMap wineries={allWineriesForMap} />
-            </TabsContent>
-          </Tabs>
-        </div>
+        <Reveal delay={0.05} className="border border-copa-gold bg-copa-creamDeep p-6 mb-12">
+          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
+            <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="name-filter" className={copaLabel}>Nombre</label>
+                <Input id="name-filter" placeholder="Ej: Catena Zapata" value={nameInput} onChange={e => setNameInput(e.target.value)} className={copaInput} />
+              </div>
+              <div>
+                <label htmlFor="country-filter" className={copaLabel}>País</label>
+                <Select onValueChange={handleCountryChange} value={countryFilter || 'all'}>
+                  <SelectTrigger id="country-filter" className={copaInput}>
+                    <SelectValue placeholder="Seleccionar país" />
+                  </SelectTrigger>
+                  <SelectContent className="border-copa-gold bg-copa-cream text-copa-ink rounded-none">
+                    <SelectItem value="all" className="focus:bg-copa-gold/20 focus:text-copa-ink">Todos los países</SelectItem>
+                    {countries.map(country => <SelectItem key={country} value={country} className="focus:bg-copa-gold/20 focus:text-copa-ink">{country}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="city-filter" className={copaLabel}>Ciudad</label>
+                <Input id="city-filter" placeholder="Ej: Mendoza" value={cityInput} onChange={e => setCityInput(e.target.value)} className={copaInput} />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button type="submit" className="copa-btn-nav flex-1 inline-flex items-center justify-center">
+                <Search className="mr-2 h-4 w-4" /> Buscar
+              </button>
+              {(nameFilter || countryFilter || cityFilter) && (
+                <button type="button" onClick={clearFilters} className="copa-btn-secondary flex-1 inline-flex items-center justify-center">
+                  <X className="mr-2 h-4 w-4" /> Limpiar
+                </button>
+              )}
+            </div>
+            {isAdmin && (
+              <div className="text-center md:text-right">
+                <Link to="/guia/crear" className="copa-btn-nav inline-flex items-center justify-center w-full">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Añadir Bodega
+                </Link>
+              </div>
+            )}
+          </form>
+        </Reveal>
+
+        <Tabs defaultValue="list" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:w-96 mx-auto mb-8 h-11 rounded-none border border-copa-gold bg-copa-cream p-1">
+            <TabsTrigger
+              value="list"
+              className="rounded-none font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 data-[state=active]:bg-copa-burgundy data-[state=active]:text-copa-cream data-[state=active]:shadow-none"
+            >
+              <List className="mr-2 h-4 w-4" />Lista
+            </TabsTrigger>
+            <TabsTrigger
+              value="map"
+              className="rounded-none font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 data-[state=active]:bg-copa-burgundy data-[state=active]:text-copa-cream data-[state=active]:shadow-none"
+            >
+              <Map className="mr-2 h-4 w-4" />Mapa
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="list">
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <Loader2 className="h-10 w-10 text-copa-burgundy animate-spin" />
+              </div>
+            ) : (
+              <>
+                <WineryList wineries={wineries} isAdmin={isAdmin} onWineryDeleted={handleWineryDeleted} />
+                {wineries.length > 0 && hasMore && (
+                  <div className="mt-12 text-center">
+                    <button type="button" onClick={handleLoadMore} disabled={loadingMore} className="copa-btn-primary inline-flex items-center">
+                      {loadingMore ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ChevronsDown className="mr-2 h-4 w-4" />}
+                      Cargar más bodegas
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </TabsContent>
+          <TabsContent value="map">
+            <GuideMap wineries={allWineriesForMap} />
+          </TabsContent>
+        </Tabs>
       </div>
-    </>;
+    </div>
+  );
 };
 export default Guia;

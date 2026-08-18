@@ -1,5 +1,105 @@
 /* Custom styles for React Quill to match the wine theme */
 
+/* Copa (crema/borgoña/oro) variant — scoped to .copa-quill so it doesn't affect the unscoped
+   dark-theme rules below, still used by Noticias/Eventos editors until they're migrated. */
+.copa-quill .ql-toolbar {
+  background-color: #EFE6D6 !important; /* copa-creamDeep */
+  border: 1px solid #B08D57 !important; /* copa-gold */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom: none !important;
+}
+.copa-quill .ql-container {
+  border: 1px solid #B08D57 !important;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #F7F1E6; /* copa-cream */
+  color: #2B2320; /* copa-ink */
+  min-height: 300px;
+  font-size: 1rem;
+  font-family: 'EB Garamond', serif;
+}
+.copa-quill .ql-editor {
+  color: #2B2320;
+  padding: 1rem;
+}
+.copa-quill .ql-editor.ql-blank::before {
+  color: rgba(43, 35, 32, 0.45) !important;
+  font-style: normal;
+  left: 1rem;
+}
+.copa-quill .ql-snow .ql-stroke {
+  stroke: #6B1F2A; /* copa-burgundy */
+}
+.copa-quill .ql-snow .ql-fill {
+  fill: #6B1F2A;
+}
+.copa-quill .ql-snow .ql-picker-label {
+  color: #6B1F2A;
+}
+.copa-quill .ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  stroke: #6B1F2A;
+}
+.copa-quill .ql-snow.ql-toolbar button:hover,
+.copa-quill .ql-snow .ql-toolbar button:hover,
+.copa-quill .ql-snow.ql-toolbar button:focus,
+.copa-quill .ql-snow .ql-toolbar button:focus,
+.copa-quill .ql-snow.ql-toolbar .ql-picker-label:hover,
+.copa-quill .ql-snow .ql-toolbar .ql-picker-label:hover {
+  background-color: rgba(107, 31, 42, 0.1);
+  color: #6B1F2A;
+}
+.copa-quill .ql-snow.ql-toolbar button.ql-active,
+.copa-quill .ql-snow .ql-toolbar button.ql-active,
+.copa-quill .ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.copa-quill .ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.copa-quill .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.copa-quill .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  background-color: rgba(107, 31, 42, 0.15);
+  color: #6B1F2A;
+}
+.copa-quill .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.copa-quill .ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.copa-quill .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.copa-quill .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke {
+  stroke: #6B1F2A;
+}
+.copa-quill .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.copa-quill .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+  color: #6B1F2A;
+}
+.copa-quill .ql-snow .ql-picker-options {
+  background-color: #F7F1E6;
+  border: 1px solid #B08D57 !important;
+  border-radius: 0;
+}
+.copa-quill .ql-snow .ql-picker-item {
+  color: #2B2320;
+}
+.copa-quill .ql-snow .ql-picker-item:hover {
+  background-color: rgba(107, 31, 42, 0.1);
+}
+.copa-quill .ql-editor h1, .copa-quill .ql-editor h2, .copa-quill .ql-editor h3, .copa-quill .ql-editor h4 {
+  font-family: 'Cormorant Garamond', serif;
+  color: #2B2320;
+}
+.copa-quill .ql-editor a {
+  color: #6B1F2A;
+  text-decoration: underline;
+}
+.copa-quill .ql-editor blockquote {
+  border-left: 4px solid #B08D57;
+  padding-left: 1rem;
+  color: rgba(43, 35, 32, 0.7);
+  font-style: italic;
+}
+.copa-quill .ql-editor img {
+  max-width: 100%;
+  display: block;
+  margin: 1rem auto;
+  box-shadow: 0 4px 6px rgba(43, 35, 32, 0.2);
+}
+
 .ql-toolbar {
   background-color: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(245, 222, 179, 0.2) !important;
