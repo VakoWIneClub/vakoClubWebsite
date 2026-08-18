@@ -6,6 +6,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import ArticleList from '@/components/noticias/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
+import { isAdminUser } from '@/lib/utils';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 const ARTICLES_PER_PAGE = 6;
@@ -91,7 +92,7 @@ const Noticias = () => {
     setArticles(articles.filter(article => article.id !== deletedArticleId));
   };
 
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = isAdminUser(user);
 
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>

@@ -9,6 +9,7 @@ import { es } from 'date-fns/locale';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import DOMPurify from 'dompurify';
 import ArticleComments from '@/components/noticias/ArticleComments';
+import { isAdminUser } from '@/lib/utils';
 
 const ArticlePage = () => {
   const { slug } = useParams();
@@ -19,7 +20,7 @@ const ArticlePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = isAdminUser(user);
 
   const fetchArticle = useCallback(async () => {
     setLoading(true);

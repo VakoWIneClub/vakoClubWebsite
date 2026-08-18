@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import DOMPurify from 'dompurify';
 import DeleteEventDialog from '@/components/eventos/DeleteEventDialog';
 import { useNavigate } from 'react-router-dom';
+import { isAdminUser } from '@/lib/utils';
 
 const EventoPage = () => {
   const { slug } = useParams();
@@ -75,7 +76,7 @@ const EventoPage = () => {
     );
   }
 
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = isAdminUser(user);
 
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>

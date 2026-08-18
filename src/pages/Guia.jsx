@@ -10,6 +10,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import WineryList from '@/components/guia/WineryList';
 import GuideMap from '@/components/guia/GuideMap';
 import Reveal from '@/components/copa/Reveal';
+import { isAdminUser } from '@/lib/utils';
 
 const WINERIES_PER_PAGE = 9;
 
@@ -140,7 +141,7 @@ const Guia = () => {
     setWineries(wineries.filter(winery => winery.id !== deletedWineryId));
     setAllWineriesForMap(allWineriesForMap.filter(winery => winery.id !== deletedWineryId));
   };
-  const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
+  const isAdmin = isAdminUser(user);
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>

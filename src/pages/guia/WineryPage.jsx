@@ -10,6 +10,7 @@ import { useFavorites } from '@/contexts/FavoritesContext';
 import DeleteWineryDialog from '@/components/guia/DeleteWineryDialog';
 import WineryMap from '@/components/guia/WineryMap';
 import DOMPurify from 'dompurify';
+import { isAdminUser } from '@/lib/utils';
 
 const WineryPage = () => {
   const { slug } = useParams();
@@ -39,7 +40,7 @@ const WineryPage = () => {
     fetchWinery();
   }, [fetchWinery]);
 
-  const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
+  const isAdmin = isAdminUser(user);
 
   const hasImages = winery?.image_urls && winery.image_urls.length > 0;
   const images = hasImages ? winery.image_urls : ['https://images.unsplash.com/photo-1598521628464-3435b348a21e?q=80&w=2070&auto=format&fit=crop'];

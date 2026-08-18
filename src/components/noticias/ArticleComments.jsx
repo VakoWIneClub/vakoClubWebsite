@@ -10,7 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Link } from 'react-router-dom';
 
 const ArticleComments = ({ articleId }) => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
@@ -112,8 +112,8 @@ const ArticleComments = ({ articleId }) => {
         <form onSubmit={handleSubmitComment} className="mb-8 mt-6">
           <div className="flex items-start gap-4">
             <Avatar>
-              <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
-              <AvatarFallback className="bg-copa-burgundy text-copa-cream">{profile?.name?.charAt(0) || 'U'}</AvatarFallback>
+              <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.name} />
+              <AvatarFallback className="bg-copa-burgundy text-copa-cream">{user.user_metadata?.name?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <Textarea
