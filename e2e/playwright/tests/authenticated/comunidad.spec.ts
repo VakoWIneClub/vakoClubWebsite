@@ -2,14 +2,35 @@ import { test, expect, skipIfNoAdminCreds, loginAsAdmin, testRunId } from '../fi
 
 /**
  * End-to-end coverage of the Comunidad forum (create/reply/delete a thread) against the real
- * backend (see tests/fixtures/admin-auth.ts). Every thread this spec creates is deleted before
- * the test ends.
+ * backend (see tests/fixtures/admin-auth.ts). There is no separate test environment yet — only
+ * production — so every thread this spec creates is tracked in `threadTitle` and deleted in
+ * `afterEach`, not just inline after the assertions. That way cleanup still runs even if a step
+ * between creation and the old inline cleanup throws.
  */
 test.describe('Comunidad — Foro de Debate', () => {
+  let threadTitle: string | null = null;
+
   test.beforeEach(async ({ page }) => {
     skipIfNoAdminCreds();
     await loginAsAdmin(page);
     await page.goto('/comunidad');
+  });
+
+  test.afterEach(async ({ page }) => {
+    if (!threadTitle) return;
+    // threadTitle is only ever set after creation is confirmed, and the test body never deletes
+    // its own thread — so it's guaranteed to still exist here. Deliberately no isVisible()-style
+    // soft check: that's a one-shot, non-retrying read that can catch the page mid-render under
+    // load and wrongly conclude there's nothing to clean up, silently leaving real data behind
+    // with no failure to signal it. expect(...).toBeVisible() retries instead, and if the card
+    // genuinely isn't there, this hook SHOULD fail loudly rather than skip.
+    await page.goto('/comunidad');
+    const threadCard = page.locator('.copa-card').filter({ hasText: threadTitle }).first();
+    await expect(threadCard).toBeVisible();
+    await threadCard.getByRole('button', { name: 'Eliminar tema' }).click();
+    await page.getByRole('button', { name: 'Sí, eliminar' }).click();
+    await expect(page.locator('.copa-card').filter({ hasText: threadTitle })).toHaveCount(0);
+    threadTitle = null;
   });
 
   test('create a thread, reply to it, then delete it', async ({ page }) => {
@@ -30,18 +51,14 @@ test.describe('Comunidad — Foro de Debate', () => {
     const threadCard = page.locator('.copa-card').filter({ hasText: title }).first();
     await expect(threadCard).toBeVisible();
     await expect(threadCard.getByText(message)).toBeVisible();
+    // Recorded immediately so afterEach can always find and delete it, even if an assertion
+    // below throws.
+    threadTitle = title;
 
-    try {
-      // Reply.
-      await threadCard.getByPlaceholder('Escribe una respuesta...').fill(replyText);
-      await threadCard.getByRole('button', { name: 'Enviar respuesta' }).click();
-      await expect(threadCard.getByText(replyText)).toBeVisible();
-    } finally {
-      // Delete — cleans up regardless of whether the reply assertion above passed.
-      await threadCard.getByRole('button', { name: 'Eliminar tema' }).click();
-      await page.getByRole('button', { name: 'Sí, eliminar' }).click();
-      await expect(page.locator('.copa-card').filter({ hasText: title })).toHaveCount(0);
-    }
+    // Reply.
+    await threadCard.getByPlaceholder('Escribe una respuesta...').fill(replyText);
+    await threadCard.getByRole('button', { name: 'Enviar respuesta' }).click();
+    await expect(threadCard.getByText(replyText)).toBeVisible();
   });
 
   test('rejects a whitespace-only thread instead of creating a blank one', async ({ page }) => {

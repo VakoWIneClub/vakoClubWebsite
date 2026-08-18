@@ -32,6 +32,13 @@ loadEnvFile(path.resolve(__dirname, '.env'));
  */
 export default defineConfig({
   testDir: './tests',
+  /* Default is 30s. Bumped up because every test here hits the real (unmocked) Supabase backend —
+   * under local resource contention, a tight timeout is more likely to cut a test off mid-flight,
+   * skipping its afterEach cleanup and leaving test data behind in production. */
+  timeout: 45 * 1000,
+  /* Default is 5s. Same reasoning as the test timeout above — web-first assertions like
+   * expect(page).toHaveURL(...) need more retry headroom against a real backend under load. */
+  expect: { timeout: 10 * 1000 },
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
