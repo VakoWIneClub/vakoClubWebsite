@@ -420,10 +420,10 @@ const PAGINAS_SRC = [
   '/images/guias/paginas/pagina-06-regiones.jpg',
 ];
 
-const btnPrimary =
-  'inline-flex items-center justify-center font-jost text-xs font-medium tracking-[0.14em] uppercase text-copa-cream bg-copa-burgundy px-8 py-[19px] transition-colors duration-300 hover:bg-copa-ink disabled:opacity-60 disabled:cursor-not-allowed';
-
-const eyebrow = 'font-jost text-[11px] tracking-[0.22em] uppercase text-copa-gold';
+// Shared with the rest of the site via the .copa-* component classes in src/index.css —
+// this page is their reference implementation, not a one-off.
+const btnPrimary = 'copa-btn-primary';
+const eyebrow = 'copa-eyebrow';
 
 const readStoredLang = () => {
   if (typeof window === 'undefined') return 'es';
@@ -774,7 +774,7 @@ const ElMundoDeLaCopaLanding = () => {
                     className={
                       lang === code
                         ? 'text-copa-burgundy cursor-default'
-                        : 'text-copa-ink/50 hover:text-copa-ink transition-colors cursor-pointer'
+                        : 'copa-link-nav'
                     }
                   >
                     {code.toUpperCase()}
@@ -861,7 +861,7 @@ const ElMundoDeLaCopaLanding = () => {
               </button>
               <a
                 href="#adentro"
-                className="font-jost text-xs tracking-[0.14em] uppercase text-copa-ink border-b border-copa-gold pb-1.5 transition-colors hover:text-copa-burgundy hover:border-copa-burgundy"
+                className="copa-btn-secondary"
               >
                 {t.hero.ctaSecondary}
               </a>

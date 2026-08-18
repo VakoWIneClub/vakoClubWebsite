@@ -96,3 +96,25 @@ body.copa-landing-active {
   background: #F7F1E6;
   background-image: none;
 }
+
+/* Vako Club design system — the crema/borgoña/oro ("copa") system, foundation for the
+   site-wide redesign. Shared primitives so each migrated page doesn't reinvent them; the
+   reference implementation is src/pages/tienda/ElMundoDeLaCopaLanding.jsx. The old wine-*
+   utilities above stay in place until every page that still uses them has been migrated. */
+@layer components {
+  .copa-eyebrow {
+    @apply font-jost text-[11px] tracking-[0.22em] uppercase text-copa-gold;
+  }
+
+  .copa-btn-primary {
+    @apply inline-flex items-center justify-center font-jost text-xs font-medium tracking-[0.14em] uppercase text-copa-cream bg-copa-burgundy px-8 py-[19px] transition-colors duration-300 hover:bg-copa-ink disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .copa-btn-secondary {
+    @apply font-jost text-xs tracking-[0.14em] uppercase text-copa-ink border-b border-copa-gold pb-1.5 transition-colors hover:text-copa-burgundy hover:border-copa-burgundy;
+  }
+
+  .copa-link-nav {
+    @apply text-copa-ink/50 hover:text-copa-ink transition-colors cursor-pointer;
+  }
+}
