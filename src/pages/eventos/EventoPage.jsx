@@ -82,7 +82,7 @@ const EventoPage = () => {
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>{`${event.title} - Vako Club`}</title>
-        <meta name="description" content={event.description.replace(/<[^>]+>/g, '').substring(0, 160)} />
+        <meta name="description" content={(event.description || '').replace(/<[^>]+>/g, '').substring(0, 160)} />
       </Helmet>
 
       <div className="pt-12 pb-20">

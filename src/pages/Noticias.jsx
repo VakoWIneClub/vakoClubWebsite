@@ -24,6 +24,11 @@ const Noticias = () => {
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const [activeTag, setActiveTag] = useState(queryParams.get('tag') || 'Todos');
   const isInitialLoad = useRef(true);
+  // Any in-flight fetch (tag switch or load-more) is aborted before starting a new one — without
+  // this, a slow "load more" request could resolve after a tag switch's fetch and merge stale
+  // results into the newly-filtered list, and a fast tag switch could let an older response
+  // overwrite a newer one.
+  const activeControllerRef = useRef(null);
 
   const fetchArticles = useCallback(async (currentPage, currentTag) => {
     if (currentPage === 0) {
@@ -31,6 +36,10 @@ const Noticias = () => {
     } else {
       setLoadingMore(true);
     }
+
+    activeControllerRef.current?.abort();
+    const controller = new AbortController();
+    activeControllerRef.current = controller;
 
     let query = supabase
       .from('articles')
@@ -43,24 +52,37 @@ const Noticias = () => {
 
     const from = currentPage * ARTICLES_PER_PAGE;
     const to = from + ARTICLES_PER_PAGE - 1;
-    query = query.range(from, to);
+    query = query.range(from, to).abortSignal(controller.signal);
 
     const { data, error, count } = await query;
 
     if (error) {
-      console.error('Error fetching articles:', error);
-    } else {
-      setArticles(prev => currentPage === 0 ? data : [...prev, ...data]);
-      const totalFetched = (currentPage === 0 ? 0 : articles.length) + data.length;
-      setHasMore(totalFetched < count);
+      if (error.name !== 'AbortError') {
+        console.error('Error fetching articles:', error);
+      }
+      if (currentPage === 0) {
+        setLoading(false);
+      } else {
+        setLoadingMore(false);
+      }
+      return;
     }
+
+    setArticles(prev => {
+      if (currentPage === 0) return data;
+      // Defensive id-based dedupe in case the same page ever gets fetched twice (e.g. a rapid
+      // double-click on "Cargar más" before the button's disabled state commits).
+      const existingIds = new Set(prev.map(a => a.id));
+      return [...prev, ...data.filter(a => !existingIds.has(a.id))];
+    });
+    setHasMore(from + data.length < count);
 
     if (currentPage === 0) {
       setLoading(false);
     } else {
       setLoadingMore(false);
     }
-  }, [articles.length]);
+  }, []);
 
   useEffect(() => {
     if (isInitialLoad.current) {
