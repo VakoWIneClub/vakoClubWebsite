@@ -1,60 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Wine, Users, Calendar, ShoppingBag, Paintbrush, Shirt, GlassWater, Copy } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter } from '@/components/ui/alert-dialog';
+import { Users, Calendar, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
-
-const WelcomePopup = ({ isOpen, onOpenChange }) => {
-  const { toast } = useToast();
-  const copyCoupon = () => {
-    navigator.clipboard.writeText('BONARDA20%');
-    toast({
-      title: '¡Cupón copiado!',
-      description: 'Usa BONARDA20% en la tienda.',
-    });
-  };
-  return (
-    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-      <AlertDialogContent
-        className="border-copa-gold rounded-none max-w-md"
-        style={{ backgroundColor: '#F7F1E6', backdropFilter: 'none' }}
-      >
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-center font-cormorant font-light text-copa-ink" style={{ fontSize: 28 }}>
-            ¡Bienvenido a la familia Vako Club!
-          </AlertDialogTitle>
-          {/* AlertDialogDescription renders a <p> — keep it to inline content only, the
-              coupon box (a <div>) can't legally nest inside a <p>. */}
-          <AlertDialogDescription
-            className="text-center text-copa-ink/75 mt-2"
-            style={{ fontSize: 16, lineHeight: 1.6, fontFamily: "'EB Garamond', serif" }}
-          >
-            Para celebrar tu llegada, te regalamos un <strong className="text-copa-burgundy">20% de descuento</strong> en
-            merchandising y arte. ¡Explora nuestra tienda y encuentra tu pieza favorita!
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <div className="border border-copa-gold bg-copa-creamDeep px-4 py-3 flex items-center justify-center gap-4">
-          <span className="font-jost text-lg text-copa-burgundy tracking-widest">BONARDA20%</span>
-          <button
-            type="button"
-            onClick={copyCoupon}
-            aria-label="Copiar cupón"
-            className="text-copa-burgundy hover:text-copa-ink transition-colors"
-          >
-            <Copy className="h-4 w-4" />
-          </button>
-        </div>
-        <AlertDialogFooter>
-          <button type="button" className="copa-btn-primary w-full" onClick={() => onOpenChange(false)}>
-            ¡Genial, gracias!
-          </button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-};
 
 const features = [
   {
@@ -65,8 +13,8 @@ const features = [
   },
   {
     icon: ShoppingBag,
-    title: 'Tienda Exclusiva',
-    description: 'Accede a una selección curada de vinos, merchandising y accesorios únicos del club.',
+    title: 'Guía Digital',
+    description: 'Descarga inmediata de nuestra guía en PDF: cata, servicio, etiquetas y maridaje explicados sin vueltas.',
     path: '/tienda',
   },
   {
@@ -75,13 +23,6 @@ const features = [
     description: 'Participa en catas virtuales y presenciales, talleres y encuentros exclusivos para miembros.',
     path: '/eventos',
   },
-];
-
-const communityArticles = [
-  { name: 'Vinos selectos', description: 'Descubre nuestra colección de vinos de alta calidad', icon: Wine },
-  { name: 'Arte y decoración', description: 'Piezas únicas para decorar tus espacios con la cultura del vino', icon: Paintbrush },
-  { name: 'Merchandising', description: 'Lleva tu pasión por el vino con nuestra línea de productos', icon: Shirt },
-  { name: 'Accesorios', description: 'Las mejores herramientas para disfrutar al máximo de tus vinos', icon: GlassWater },
 ];
 
 const stats = [
@@ -96,21 +37,6 @@ const sectionTitle = 'font-cormorant font-light leading-[1.05] mt-4 mx-auto max-
 const sectionParagraph = 'text-copa-ink/70 max-w-2xl mx-auto mt-5 text-center';
 
 const Home = () => {
-  const location = useLocation();
-  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
-
-  useEffect(() => {
-    const hash = location.hash;
-    if (hash.includes('type=signup')) {
-      const welcomeShown = sessionStorage.getItem('welcomePopupShown');
-      if (!welcomeShown) {
-        setShowWelcomePopup(true);
-        sessionStorage.setItem('welcomePopupShown', 'true');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    }
-  }, [location]);
-
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
@@ -120,8 +46,6 @@ const Home = () => {
           content="Bienvenido a Vako Club, un espacio para amantes del vino. Explora nuestra tienda, eventos y únete a una comunidad apasionada."
         />
       </Helmet>
-
-      <WelcomePopup isOpen={showWelcomePopup} onOpenChange={setShowWelcomePopup} />
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-36 pb-20 sm:pb-28 text-center">
@@ -194,38 +118,40 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Community articles */}
+      {/* Guía destacada — el lead principal hacia la tienda */}
       <section className="py-20 sm:py-28 bg-copa-creamDeep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal className={eyebrow}>Tienda</Reveal>
-          <Reveal delay={0.05}>
-            <h2 className={sectionTitle} style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
-              Artículos para la comunidad
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className={sectionParagraph} style={{ fontSize: 18, lineHeight: 1.6 }}>
-              Descubre nuestra selección de productos pensados para la comunidad.
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-            {communityArticles.map((article, i) => {
-              const Icon = article.icon;
-              return (
-                <Reveal key={article.name} delay={Math.min(i * 0.05, 0.2)}>
-                  <Link to="/tienda" className="copa-card flex flex-col items-center text-center p-8 h-full">
-                    <Icon className="h-9 w-9 text-copa-gold" />
-                    <h3 className="font-cormorant mt-4" style={{ fontSize: 22 }}>
-                      {article.name}
-                    </h3>
-                    <p className="text-copa-ink/70 mt-2" style={{ fontSize: 15, lineHeight: 1.55 }}>
-                      {article.description}
-                    </p>
-                  </Link>
-                </Reveal>
-              );
-            })}
+          <div className="flex flex-wrap items-center gap-12 lg:gap-20">
+            <Reveal className="flex-[0_1_360px] min-w-[260px] flex justify-center">
+              <img
+                src="/images/guias/el-mundo-de-la-copa-tapa.jpg"
+                alt="Tapa de la guía El mundo de la copa, de Vako Club"
+                className="w-full max-w-[300px] h-auto"
+                style={{ boxShadow: '14px 14px 0 rgba(43,35,32,.14)' }}
+              />
+            </Reveal>
+            <div className="flex-[1_1_380px] min-w-[280px]">
+              <Reveal className="copa-eyebrow">Guía digital · 83 páginas</Reveal>
+              <Reveal delay={0.05}>
+                <h2 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
+                  El Mundo de la Copa
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="text-copa-ink/75 mt-5" style={{ fontSize: 18, lineHeight: 1.65 }}>
+                  Todo lo que necesitás para dejar de elegir vino a ciegas: cata, servicio, etiquetas y maridaje,
+                  sin esnobismo. Disponible en español, inglés y portugués.
+                </p>
+              </Reveal>
+              <Reveal delay={0.15} className="flex flex-wrap items-center gap-6 mt-8">
+                <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-primary">
+                  Conseguir la guía — USD 29.99
+                </Link>
+                <Link to="/tienda" className="copa-btn-secondary">
+                  Ver todas las guías
+                </Link>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
@@ -255,12 +181,9 @@ const Home = () => {
               ¿Listo para descorchar tu pasión?
             </h2>
           </Reveal>
-          <Reveal delay={0.1} className="mt-8 space-y-2">
+          <Reveal delay={0.1} className="mt-8">
             <p className="text-copa-cream/85" style={{ fontSize: 18, lineHeight: 1.6 }}>
               Únete a Vako Club hoy y comienza tu viaje enológico. ¡Es gratis!
-            </p>
-            <p className="text-copa-cream/85" style={{ fontSize: 18, lineHeight: 1.6 }}>
-              Te regalamos un 20% de descuento en merchandising y arte.
             </p>
           </Reveal>
           <Reveal delay={0.15} className="mt-10">
