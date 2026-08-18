@@ -1,7 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Mail, Instagram, Youtube } from 'lucide-react';
 import { TikTokIcon } from '@/components/ui/TikTokIcon';
+import Reveal from '@/components/copa/Reveal';
 
 const contactInfo = [
   {
@@ -9,7 +9,6 @@ const contactInfo = [
     title: 'Email',
     info: 'info@vakoclub.com',
     description: 'Respuesta en 24 horas',
-    color: 'from-blue-500 to-indigo-600',
     href: 'mailto:info@vakoclub.com'
   },
   {
@@ -17,7 +16,6 @@ const contactInfo = [
     title: 'Instagram',
     info: '@vakoclub',
     description: 'Contenido exclusivo y catas',
-    color: 'from-pink-500 to-rose-500',
     href: 'https://www.instagram.com/vakoclub'
   },
   {
@@ -25,7 +23,6 @@ const contactInfo = [
     title: 'TikTok',
     info: '@vako.club',
     description: 'Videos cortos y divertidos',
-    color: 'from-gray-700 to-black',
     href: 'https://www.tiktok.com/@vako.club'
   },
   {
@@ -33,51 +30,38 @@ const contactInfo = [
     title: 'YouTube',
     info: 'VakoWineClub',
     description: 'Tutoriales y entrevistas',
-    color: 'from-red-500 to-red-600',
     href: 'https://www.youtube.com/@VakoWineClub'
   }
 ];
 
 const ContactInfo = () => {
   return (
-    <section className="py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {contactInfo.map((info, index) => {
-            const Icon = info.icon;
-            return (
-              <motion.a
-                key={index}
-                href={info.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="wine-card rounded-2xl p-6 text-center wine-hover block"
-              >
-                <div className={`inline-flex p-4 rounded-full bg-gradient-to-r ${info.color} mb-4`}>
-                  <Icon className="h-6 w-6 text-white" />
-                </div>
-                
-                <h3 className="font-playfair text-lg font-semibold text-amber-200 mb-2">
-                  {info.title}
-                </h3>
-                
-                <p className="text-amber-100 font-medium mb-1">
-                  {info.info}
-                </p>
-                
-                <p className="text-amber-100/70 text-sm">
-                  {info.description}
-                </p>
-              </motion.a>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      {contactInfo.map((info, index) => {
+        const Icon = info.icon;
+        return (
+          <Reveal key={info.title} delay={Math.min(index * 0.06, 0.24)}>
+            <a
+              href={info.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="copa-card p-6 text-center block h-full"
+            >
+              <Icon className="h-6 w-6 text-copa-burgundy mx-auto mb-4" />
+              <h3 className="font-cormorant" style={{ fontSize: 20 }}>
+                {info.title}
+              </h3>
+              <p className="text-copa-ink font-medium mt-1">
+                {info.info}
+              </p>
+              <p className="text-copa-ink/60 text-sm mt-1">
+                {info.description}
+              </p>
+            </a>
+          </Reveal>
+        );
+      })}
+    </div>
   );
 };
 
