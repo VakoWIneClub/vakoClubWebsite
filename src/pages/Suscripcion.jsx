@@ -1,18 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { Gem, Star, CheckCircle, UserPlus, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
+import Reveal from '@/components/copa/Reveal';
+
+const copaInput = 'rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy';
+const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70';
+
+const perks = [
+  {
+    icon: Gem,
+    title: 'Acceso a la Guía Exclusiva',
+    description: 'Explora nuestra selección curada de bodegas y vinos.',
+  },
+  {
+    icon: Star,
+    title: 'Guarda tus Favoritos',
+    description: 'Crea listas personalizadas de tus vinos y bodegas preferidas.',
+  },
+  {
+    icon: CheckCircle,
+    title: 'Participa en la Comunidad',
+    description: 'Conecta con otros amantes del vino en nuestros foros.',
+  },
+];
 
 const ErrorMessage = ({ message }) => {
   if (!message) return null;
-  return <p className="text-red-400 text-sm mt-1">{message}</p>;
+  return <p className="text-red-600 text-sm mt-1">{message}</p>;
 };
 
 const Suscripcion = () => {
@@ -77,7 +96,7 @@ const Suscripcion = () => {
       setLoading(false);
       return;
     }
-    
+
     const { error } = await signUp(formData.email, formData.password, {
       data: {
         name: formData.name,
@@ -98,102 +117,87 @@ const Suscripcion = () => {
   if (user) return null;
 
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>Suscripción - Vako Club</title>
         <meta name="description" content="Únete a Vako Club y accede a un mundo de beneficios exclusivos para amantes del vino." />
       </Helmet>
-      <div className="min-h-screen wine-pattern py-20 px-4">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="text-center mb-12">
-            <h1 className="font-playfair text-5xl font-bold wine-text-gradient mb-4">Únete a la Comunidad Vako</h1>
-            <p className="text-xl text-amber-100/80">Regístrate gratis y descorcha un mundo de beneficios.</p>
-          </div>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
+        <Reveal className="text-center mb-12">
+          <div className="copa-eyebrow">Vako Club</div>
+          <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
+            Únete a la Comunidad Vako
+          </h1>
+          <p className="mt-5 text-copa-ink/75" style={{ fontSize: 18 }}>Regístrate gratis y descorcha un mundo de beneficios.</p>
+        </Reveal>
 
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="wine-glass-effect rounded-2xl p-8 md:p-12 shadow-2xl">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <Reveal>
+            <div className="border border-copa-gold p-8 md:p-12">
               <div className="text-center mb-8">
-                <UserPlus className="h-12 w-12 mx-auto wine-text-gradient mb-4" />
-                <h2 className="font-playfair text-3xl font-bold wine-text-gradient">Crea tu Cuenta Gratis</h2>
+                <UserPlus className="h-9 w-9 text-copa-burgundy mx-auto mb-4" />
+                <h2 className="font-cormorant font-light" style={{ fontSize: 'clamp(26px,3.6vw,32px)' }}>Crea tu Cuenta Gratis</h2>
               </div>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-amber-200 font-medium">Nombre</Label>
+                <div className="space-y-1.5">
+                  <label htmlFor="name" className={copaLabel}>Nombre</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                    <Input id="name" placeholder="Tu nombre" className="pl-10" value={formData.name} onChange={handleChange} disabled={loading} />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-copa-ink/40" />
+                    <Input id="name" placeholder="Tu nombre" className={`pl-10 ${copaInput}`} value={formData.name} onChange={handleChange} disabled={loading} />
                   </div>
                   <ErrorMessage message={errors.name} />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-amber-200 font-medium">Correo Electrónico</Label>
+                <div className="space-y-1.5">
+                  <label htmlFor="email" className={copaLabel}>Correo Electrónico</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                    <Input id="email" type="email" placeholder="tu@email.com" className="pl-10" value={formData.email} onChange={handleChange} disabled={loading} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-copa-ink/40" />
+                    <Input id="email" type="email" placeholder="tu@email.com" className={`pl-10 ${copaInput}`} value={formData.email} onChange={handleChange} disabled={loading} />
                   </div>
                   <ErrorMessage message={errors.email} />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-amber-200 font-medium">Contraseña</Label>
+                <div className="space-y-1.5">
+                  <label htmlFor="password" className={copaLabel}>Contraseña</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50" />
-                    <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" className="pl-10 pr-10" value={formData.password} onChange={handleChange} disabled={loading} />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-100/50 cursor-pointer">
-                      {showPassword ? <EyeOff /> : <Eye />}
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-copa-ink/40" />
+                    <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" className={`pl-10 pr-10 ${copaInput}`} value={formData.password} onChange={handleChange} disabled={loading} />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-copa-ink/40 hover:text-copa-burgundy transition-colors cursor-pointer">
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   <ErrorMessage message={errors.password} />
                 </div>
-                <Button type="submit" className="w-full text-lg py-6" variant="default" disabled={loading}>
+                <button type="submit" disabled={loading} className="copa-btn-primary w-full">
                   {loading ? 'Creando cuenta...' : 'Registrarse Gratis'}
-                </Button>
+                </button>
               </form>
-              <p className="mt-6 text-center text-sm text-amber-100/60">
+              <p className="mt-6 text-center text-sm text-copa-ink/60">
                 ¿Ya tienes cuenta?{' '}
-                <Link to="/login" className="font-medium text-amber-200 hover:text-amber-300">
+                <Link to="/login" className="font-medium text-copa-burgundy hover:text-copa-ink transition-colors">
                   Inicia sesión
                 </Link>
               </p>
             </div>
+          </Reveal>
 
-            <div className="space-y-8">
-              <div className="flex items-start gap-4">
-                <div className="bg-amber-400/10 p-3 rounded-full">
-                  <Gem className="h-6 w-6 text-amber-300" />
+          <Reveal delay={0.05} className="space-y-8">
+            {perks.map((perk) => {
+              const Icon = perk.icon;
+              return (
+                <div key={perk.title} className="flex items-start gap-4">
+                  <div className="border border-copa-gold p-3 shrink-0">
+                    <Icon className="h-5 w-5 text-copa-burgundy" />
+                  </div>
+                  <div>
+                    <h3 className="font-cormorant" style={{ fontSize: 20 }}>{perk.title}</h3>
+                    <p className="text-copa-ink/70 mt-1">{perk.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-amber-200">Acceso a la Guía Exclusiva</h3>
-                  <p className="text-amber-100/70">Explora nuestra selección curada de bodegas y vinos.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="bg-amber-400/10 p-3 rounded-full">
-                  <Star className="h-6 w-6 text-amber-300" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-amber-200">Guarda tus Favoritos</h3>
-                  <p className="text-amber-100/70">Crea listas personalizadas de tus vinos y bodegas preferidas.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="bg-amber-400/10 p-3 rounded-full">
-                  <CheckCircle className="h-6 w-6 text-amber-300" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-amber-200">Participa en la Comunidad</h3>
-                  <p className="text-amber-100/70">Conecta con otros amantes del vino en nuestros foros.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+              );
+            })}
+          </Reveal>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
