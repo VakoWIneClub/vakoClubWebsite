@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { Mail, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -62,36 +61,32 @@ const NotifyGuideDialog = ({ open, onOpenChange, guideName }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-stone-900 wine-glass-effect text-amber-100">
+      <DialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
         <DialogHeader>
-          <DialogTitle className="font-playfair text-2xl wine-text-gradient">
+          <DialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
             Todavía no está a la venta
           </DialogTitle>
-          <DialogDescription className="text-amber-100/70">
+          <DialogDescription className="text-copa-ink/70" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16 }}>
             Estamos preparando el lanzamiento de "{guideName}". Deja tu email y serás de las
             primeras personas en enterarte en cuanto esté disponible para comprar.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-copa-gold" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="tu@email.com"
-              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-amber-500/30 rounded-lg text-amber-100 placeholder-amber-100/50 focus:outline-none focus:border-amber-400 transition-colors duration-300"
+              className="w-full pl-10 pr-4 py-3 bg-copa-creamDeep border border-copa-gold text-copa-ink placeholder-copa-ink/40 focus:outline-none focus:border-copa-burgundy transition-colors duration-300"
             />
           </div>
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 text-lg wine-gradient text-stone-900 font-semibold hover:opacity-90 transition-all duration-300 wine-shadow disabled:opacity-70"
-          >
-            {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-            {loading ? 'Enviando...' : 'Avísame cuando esté disponible'}
-          </Button>
+          <button type="submit" disabled={loading} className="copa-btn-primary w-full">
+            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            {loading ? 'Enviando…' : 'Avísame cuando esté disponible'}
+          </button>
         </form>
       </DialogContent>
     </Dialog>

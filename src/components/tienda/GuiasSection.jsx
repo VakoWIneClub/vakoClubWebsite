@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { BookOpen, Wine, Sparkles, Check, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { BookOpen, Wine, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import Reveal from '@/components/copa/Reveal';
 import NotifyGuideDialog from '@/components/tienda/NotifyGuideDialog';
 
 // Guías con su propia landing de venta dedicada — el título y la imagen llevan ahí
@@ -62,28 +61,18 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
   const procesando = comprando === guia.id;
   const landingPath = LANDING_PATH[guia.id];
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -10 }}
-      className="wine-card rounded-2xl overflow-hidden wine-hover relative flex flex-col"
-    >
-      <div className="absolute top-4 left-4 z-10">
-        <span className="px-3 py-1 bg-amber-500 text-amber-900 rounded-full text-xs font-bold">
-          {guia.etiqueta}
-        </span>
-      </div>
-      {!disponible && (
-        <div className="absolute top-4 right-4 z-10">
-          <span className="px-3 py-1 bg-stone-800/80 border border-amber-500/30 text-amber-200 rounded-full text-xs font-bold">
-            Próximamente
+    <Reveal delay={Math.min(index * 0.08, 0.24)} className="copa-card flex flex-col h-full">
+      <div className="relative h-56 bg-copa-creamDeep flex items-center justify-center overflow-hidden">
+        <div className="absolute top-4 inset-x-4 flex flex-wrap items-start justify-between gap-2">
+          <span className="font-jost text-[10px] tracking-[0.14em] uppercase bg-copa-burgundy text-copa-cream px-3 py-1">
+            {guia.etiqueta}
           </span>
+          {!disponible && (
+            <span className="font-jost text-[10px] tracking-[0.14em] uppercase border border-copa-gold bg-copa-cream/90 text-copa-ink px-3 py-1">
+              Próximamente
+            </span>
+          )}
         </div>
-      )}
-
-      <div className="relative h-56 bg-gradient-to-br from-amber-900/30 to-red-900/30 flex items-center justify-center overflow-hidden">
         {guia.image ? (
           landingPath ? (
             <Link to={landingPath} aria-label={guia.nombre} className="block w-full h-full">
@@ -92,60 +81,58 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
           ) : (
             <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
           )
+        ) : disponible ? (
+          <BookOpen className="h-12 w-12 text-copa-gold" />
         ) : (
-          <div className="p-6 wine-gradient rounded-full wine-shadow">
-            {disponible ? (
-              <BookOpen className="h-12 w-12 text-stone-900" />
-            ) : (
-              <Wine className="h-12 w-12 text-stone-900" />
-            )}
-          </div>
+          <Wine className="h-12 w-12 text-copa-gold" />
         )}
       </div>
 
-      <div className="p-6 space-y-4 flex-grow flex flex-col justify-between">
+      <div className="p-6 flex-grow flex flex-col justify-between gap-5">
         <div>
-          <h3 className="font-playfair text-xl font-semibold text-amber-200">
+          <h3 className="font-cormorant" style={{ fontSize: 24 }}>
             {landingPath ? (
-              <Link to={landingPath} className="hover:text-amber-100 transition-colors">{guia.nombre}</Link>
+              <Link to={landingPath} className="hover:text-copa-burgundy transition-colors">
+                {guia.nombre}
+              </Link>
             ) : (
               guia.nombre
             )}
           </h3>
-          <p className="text-amber-300/80 text-sm">{guia.subtitulo}</p>
+          <p className="font-jost text-[11px] tracking-[0.1em] uppercase text-copa-gold mt-1">{guia.subtitulo}</p>
+          <p className="text-copa-ink/70 text-sm mt-3" style={{ lineHeight: 1.6 }}>
+            {guia.descripcion}
+          </p>
         </div>
 
-        <p className="text-amber-100/70 text-sm leading-relaxed">
-          {guia.descripcion}
-        </p>
-
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-end justify-between gap-3">
           <div>
             {guia.precio ? (
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold wine-text-gradient">${guia.precio}</span>
-                {guia.precioRegular && (
-                  <span className="text-amber-100/50 line-through text-sm">${guia.precioRegular}</span>
-                )}
+              <div className="flex items-baseline gap-2">
+                <span className="font-cormorant text-copa-burgundy" style={{ fontSize: 28 }}>
+                  ${guia.precio}
+                </span>
+                {guia.precioRegular && <span className="text-copa-ink/40 line-through text-sm">${guia.precioRegular}</span>}
               </div>
             ) : (
-              <span className="text-amber-100/60 text-sm italic">{guia.precioNota}</span>
+              <span className="text-copa-ink/60 text-sm italic">{guia.precioNota}</span>
             )}
             {guia.precioRegular && (
-              <p className="text-xs text-amber-100/50">Precio Fundador de lanzamiento</p>
+              <p className="font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50 mt-1">Precio Fundador</p>
             )}
           </div>
-          <Button
+          <button
+            type="button"
             onClick={() => (disponible ? onComprar(guia.id) : onAvisame(guia.nombre))}
             disabled={procesando}
-            className="wine-gradient text-stone-900 font-semibold hover:opacity-90 disabled:opacity-70"
+            className="copa-btn-nav inline-flex items-center"
           >
-            {procesando && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {procesando ? 'Redirigiendo...' : disponible ? 'Quiero esta guía' : 'Avísame'}
-          </Button>
+            {procesando && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
+            {procesando ? 'Redirigiendo…' : disponible ? 'Quiero esta guía' : 'Avísame'}
+          </button>
         </div>
       </div>
-    </motion.div>
+    </Reveal>
   );
 };
 
@@ -182,35 +169,31 @@ const GuiasSection = () => {
   };
 
   return (
-    <div className="py-16">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-6 space-y-4"
-      >
-        <div className="inline-flex items-center gap-4">
-          <Sparkles className="h-10 w-10 text-amber-400" />
-          <h2 className="font-playfair text-4xl font-bold text-amber-200">
-            Guías en PDF
-          </h2>
-        </div>
-        <p className="text-amber-100/70 max-w-2xl mx-auto">
-          Aprende de vino a tu ritmo, sin tecnicismos. Descarga inmediata, para leer en el móvil o
-          imprimir.
+    <div className="py-20 sm:py-28">
+      <Reveal className="copa-eyebrow text-center">Guías en PDF</Reveal>
+      <Reveal delay={0.05}>
+        <h2
+          className="font-cormorant font-light leading-[1.05] mt-4 mx-auto max-w-2xl text-center"
+          style={{ fontSize: 'clamp(28px,4vw,44px)' }}
+        >
+          Aprendé de vino a tu ritmo
+        </h2>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <p className="text-copa-ink/70 max-w-2xl mx-auto mt-5 text-center" style={{ fontSize: 18, lineHeight: 1.6 }}>
+          Sin tecnicismos. Descarga inmediata, para leer en el móvil o imprimir.
         </p>
-        <div className="flex flex-wrap justify-center gap-4 text-amber-100/70 text-sm pt-2">
-          <span className="flex items-center gap-1.5">
-            <Check className="h-4 w-4 text-emerald-400" /> Descarga inmediata en PDF
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Check className="h-4 w-4 text-emerald-400" /> Escrito en la voz cercana de Vako Club
-          </span>
-        </div>
-      </motion.div>
+      </Reveal>
+      <Reveal
+        delay={0.15}
+        className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-6 font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60"
+      >
+        <span>Descarga inmediata en PDF</span>
+        <span className="hidden sm:inline text-copa-gold">·</span>
+        <span>Escrito en la voz cercana de Vako Club</span>
+      </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
         {guias.map((guia, index) => (
           <GuiaCard
             key={guia.id}
