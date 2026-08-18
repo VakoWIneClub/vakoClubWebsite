@@ -12,6 +12,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 import DOMPurify from 'dompurify';
+import { isAdminUser } from '@/lib/utils';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 
@@ -33,7 +34,7 @@ const ArticleEditor = () => {
   const quillRef = useRef(null);
 
   const isEditing = !!slug;
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = isAdminUser(user);
 
   const tag1Value = watch('tag1');
 

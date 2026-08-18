@@ -4,6 +4,7 @@ import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { motion } from 'framer-motion';
 import { ShieldAlert, Wine, Star, Users, BookOpen } from 'lucide-react';
+import { isAdminUser } from '@/lib/utils';
 
 const ProtectedRoute = ({
   children,
@@ -83,7 +84,7 @@ const ProtectedRoute = ({
     );
   }
 
-  const isAdmin = user.role === 'admin' || user.role === 'superadmin';
+  const isAdmin = isAdminUser(user);
 
   if (adminOnly && !isAdmin) {
     return (

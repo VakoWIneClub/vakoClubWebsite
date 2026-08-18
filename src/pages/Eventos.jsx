@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import DeleteEventDialog from '@/components/eventos/DeleteEventDialog';
 import Reveal from '@/components/copa/Reveal';
+import { isAdminUser } from '@/lib/utils';
 
 const copaInput = 'h-10 w-full rounded-none border border-copa-gold bg-copa-cream px-3 py-2 text-sm text-copa-ink placeholder:text-copa-ink/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-copa-burgundy';
 const copaLabel = 'block font-jost text-[10px] tracking-[0.14em] uppercase text-copa-ink/70 mb-1.5';
@@ -83,7 +84,7 @@ const Eventos = () => {
   const [selectedCountry, setSelectedCountry] = useState('Todos');
   const [selectedCity, setSelectedCity] = useState('Todos');
   const [showPastEvents, setShowPastEvents] = useState(false);
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = isAdminUser(user);
 
   const fetchFilters = useCallback(async () => {
     let query = supabase.from('events').select('country, city').not('country', 'is', null);

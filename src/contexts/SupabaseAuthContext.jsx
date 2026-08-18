@@ -38,6 +38,13 @@ export const AuthProvider = ({ children }) => {
 
     if (error) {
       console.error('Error fetching user profile:', error.message);
+      // Without role/points/level, every isAdmin check fails closed (safe), but that also means
+      // an actual admin's controls silently vanish with zero explanation — tell them why.
+      toast({
+        title: 'No se pudo cargar tu perfil completo',
+        description: 'Algunos datos (rol, puntos, nivel) no se cargaron. Recargá la página si algo no aparece como debería.',
+        variant: 'destructive',
+      });
       return { ...user };
     }
     
