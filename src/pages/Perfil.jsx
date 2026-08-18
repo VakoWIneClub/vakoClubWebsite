@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -96,9 +96,15 @@ const Perfil = () => {
   });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  // Hydrate the form from `user` once per visit (mount), not on every change to the user
+  // object. `user` changes whenever refreshUser() runs — including the one this same page fires
+  // after an avatar upload — so re-syncing on every change discarded whatever the admin had
+  // typed into other fields in the meantime.
+  const hydratedUserIdRef = useRef(null);
 
   useEffect(() => {
-    if (user) {
+    if (user && hydratedUserIdRef.current !== user.id) {
+      hydratedUserIdRef.current = user.id;
       setFormData({
         name: user.user_metadata?.name || '',
         email: user.email || '',
@@ -145,7 +151,7 @@ const Perfil = () => {
       const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
       const publicUrl = data.publicUrl;
 
-      setFormData({ ...formData, avatar_url: publicUrl });
+      setFormData(prev => ({ ...prev, avatar_url: publicUrl }));
 
       const { error: updateUserError } = await supabase.auth.updateUser({
         data: { avatar_url: publicUrl }
@@ -218,8 +224,14 @@ const Perfil = () => {
     return null;
   }
 
-  const currentLevelInfo = levelInfo[formData.level] || levelInfo['Novato'];
-  const basePoints = formData.level === 'Novato' ? 0 : (formData.level === 'Aficionado' ? levelInfo['Novato'].nextLevelPoints : levelInfo['Aficionado'].nextLevelPoints);
+  // basePoints must derive from the same normalized level as currentLevelInfo (both falling
+  // back to 'Novato' together) — they used to be computed independently, so an unrecognized
+  // `formData.level` value (stray DB edit, future level tier) fell through basePoints' own
+  // ternary to the Experto-tier base (300) while currentLevelInfo fell back to Novato's
+  // nextLevelPoints (150), producing a negative range and a progress bar that moved backwards.
+  const normalizedLevel = levelInfo[formData.level] ? formData.level : 'Novato';
+  const currentLevelInfo = levelInfo[normalizedLevel];
+  const basePoints = normalizedLevel === 'Novato' ? 0 : (normalizedLevel === 'Aficionado' ? levelInfo['Novato'].nextLevelPoints : levelInfo['Aficionado'].nextLevelPoints);
   const progressPercentage = currentLevelInfo.nextLevelPoints === Infinity ? 100 : Math.min(((formData.points - basePoints) / (currentLevelInfo.nextLevelPoints - basePoints)) * 100, 100);
 
   return (
