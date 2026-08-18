@@ -5,9 +5,7 @@ import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Upload, Save, ArrowLeft, Tag } from 'lucide-react';
 import ReactQuill from 'react-quill';
@@ -15,6 +13,9 @@ import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
+
+const copaInput = 'rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy';
+const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70 flex items-center';
 
 const ArticleEditor = () => {
   const { slug } = useParams();
@@ -177,78 +178,78 @@ const ArticleEditor = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-10rem)]">
-        <Loader2 className="h-16 w-16 text-amber-300 animate-spin" />
+      <div className="flex justify-center items-center min-h-[calc(100vh-10rem)] bg-copa-cream">
+        <Loader2 className="h-14 w-14 text-copa-burgundy animate-spin" />
       </div>
     );
   }
 
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>{isEditing ? 'Editando Artículo' : 'Crear Nuevo Artículo'} - Vako Club</title>
       </Helmet>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <div className="flex justify-between items-center">
-            <Button type="button" variant="ghost" onClick={() => navigate('/noticias')} className="text-amber-200">
+          <div className="flex justify-between items-center flex-wrap gap-4">
+            <button type="button" onClick={() => navigate('/noticias')} className="copa-link-nav font-jost text-[11px] tracking-[0.14em] uppercase inline-flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver a Noticias
-            </Button>
-            <h1 className="font-playfair text-3xl md:text-4xl font-bold wine-text-gradient">
+            </button>
+            <h1 className="font-cormorant font-light text-center" style={{ fontSize: 'clamp(26px,3.6vw,36px)' }}>
               {isEditing ? 'Editar Artículo' : 'Crear Nuevo Artículo'}
             </h1>
-            <Button type="submit" disabled={isSubmitting} size="lg">
+            <button type="submit" disabled={isSubmitting} className="copa-btn-nav inline-flex items-center">
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
               {isEditing ? 'Guardar Cambios' : 'Publicar'}
-            </Button>
+            </button>
           </div>
 
-          <div className="wine-card p-8 rounded-2xl space-y-6">
+          <div className="border border-copa-gold p-8 space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-amber-200 text-lg">Título del Artículo</Label>
+              <label htmlFor="title" className={copaLabel}>Título del Artículo</label>
               <Input
                 id="title"
                 {...register('title', { required: 'El título es obligatorio.' })}
-                className="wine-input text-xl"
+                className={`${copaInput} text-xl`}
                 placeholder="Un titular atractivo y conciso"
               />
-              {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>}
+              {errors.title && <p className="text-red-600 text-sm mt-1">{errors.title.message}</p>}
             </div>
 
             {isAdmin && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="tag1" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4" />Etiqueta 1</Label>
+                  <label htmlFor="tag1" className={copaLabel}><Tag className="mr-2 h-4 w-4" />Etiqueta 1</label>
                   <Controller
                     name="tag1"
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger>
+                        <SelectTrigger id="tag1" className={copaInput}>
                           <SelectValue placeholder="Selecciona una etiqueta" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={null}>Sin etiqueta</SelectItem>
-                          {TAGS.map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
+                        <SelectContent className="border-copa-gold bg-copa-cream text-copa-ink rounded-none">
+                          <SelectItem value={null} className="focus:bg-copa-gold/20 focus:text-copa-ink">Sin etiqueta</SelectItem>
+                          {TAGS.map(tag => <SelectItem key={tag} value={tag} className="focus:bg-copa-gold/20 focus:text-copa-ink">{tag}</SelectItem>)}
                         </SelectContent>
                       </Select>
                     )}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tag2" className="text-amber-200 text-lg flex items-center"><Tag className="mr-2 h-4 w-4" />Etiqueta 2</Label>
+                  <label htmlFor="tag2" className={copaLabel}><Tag className="mr-2 h-4 w-4" />Etiqueta 2</label>
                   <Controller
                     name="tag2"
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value} disabled={!tag1Value}>
-                        <SelectTrigger>
+                        <SelectTrigger id="tag2" className={copaInput}>
                           <SelectValue placeholder={!tag1Value ? 'Elige primero la etiqueta 1' : 'Selecciona una etiqueta'} />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={null}>Sin etiqueta</SelectItem>
-                          {TAGS.filter(tag => tag !== tag1Value).map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
+                        <SelectContent className="border-copa-gold bg-copa-cream text-copa-ink rounded-none">
+                          <SelectItem value={null} className="focus:bg-copa-gold/20 focus:text-copa-ink">Sin etiqueta</SelectItem>
+                          {TAGS.filter(tag => tag !== tag1Value).map(tag => <SelectItem key={tag} value={tag} className="focus:bg-copa-gold/20 focus:text-copa-ink">{tag}</SelectItem>)}
                         </SelectContent>
                       </Select>
                     )}
@@ -258,42 +259,41 @@ const ArticleEditor = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-amber-200 text-lg">Imagen Principal</Label>
+              <label htmlFor="image" className={copaLabel}>Imagen Principal</label>
               <div className="flex items-center gap-4">
-                {imagePreview && <img src={imagePreview} alt="Vista previa" className="h-24 w-36 rounded-lg object-cover" />}
-                <Button asChild variant="outline" className="flex-1">
-                  <label className="cursor-pointer">
-                    <Upload className="mr-2 h-4 w-4" />
-                    {imageFile ? 'Cambiar imagen' : 'Seleccionar imagen'}
-                    <input id="image" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-                  </label>
-                </Button>
+                {imagePreview && <img src={imagePreview} alt="Vista previa" className="h-24 w-36 object-cover" />}
+                <label className="copa-btn-secondary cursor-pointer inline-flex items-center">
+                  <Upload className="mr-2 h-4 w-4" />
+                  {imageFile ? 'Cambiar imagen' : 'Seleccionar imagen'}
+                  <input id="image" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+                </label>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-amber-200 text-lg">Contenido</Label>
-              <Controller
-                name="content"
-                control={control}
-                rules={{ required: 'El contenido no puede estar vacío.' }}
-                render={({ field }) => (
-                  <ReactQuill
-                    ref={quillRef}
-                    theme="snow"
-                    value={field.value}
-                    onChange={field.onChange}
-                    modules={modules}
-                    className="bg-white/5 text-amber-100 rounded-md"
-                  />
-                )}
-              />
-              {errors.content && <p className="text-red-400 text-sm mt-1">{errors.content.message}</p>}
+              <label className={copaLabel}>Contenido</label>
+              <div className="copa-quill">
+                <Controller
+                  name="content"
+                  control={control}
+                  rules={{ required: 'El contenido no puede estar vacío.' }}
+                  render={({ field }) => (
+                    <ReactQuill
+                      ref={quillRef}
+                      theme="snow"
+                      value={field.value}
+                      onChange={field.onChange}
+                      modules={modules}
+                    />
+                  )}
+                />
+              </div>
+              {errors.content && <p className="text-red-600 text-sm mt-1">{errors.content.message}</p>}
             </div>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

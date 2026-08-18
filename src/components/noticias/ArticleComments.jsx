@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, MessageSquare, Send, Trash2 } from 'lucide-react';
@@ -103,75 +102,78 @@ const ArticleComments = ({ articleId }) => {
   };
 
   return (
-    <div className="wine-card rounded-2xl p-8">
-      <h2 className="font-playfair text-3xl font-bold wine-text-gradient mb-6 flex items-center">
-        <MessageSquare className="mr-3 h-7 w-7" />
+    <div className="border border-copa-gold p-8">
+      <h2 className="font-cormorant font-light flex items-center" style={{ fontSize: 28 }}>
+        <MessageSquare className="mr-3 h-6 w-6 text-copa-gold" />
         Comentarios ({comments.length})
       </h2>
 
       {user ? (
-        <form onSubmit={handleSubmitComment} className="mb-8">
-          <div className="flex items-start space-x-4">
+        <form onSubmit={handleSubmitComment} className="mb-8 mt-6">
+          <div className="flex items-start gap-4">
             <Avatar>
               <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
-              <AvatarFallback>{profile?.name?.charAt(0) || 'U'}</AvatarFallback>
+              <AvatarFallback className="bg-copa-burgundy text-copa-cream">{profile?.name?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <Textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Escribe tu comentario aquí..."
-                className="wine-input mb-2"
+                className="rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy mb-3"
                 rows={3}
               />
-              <Button type="submit" disabled={submitting || !newComment.trim()}>
+              <button type="submit" disabled={submitting || !newComment.trim()} className="copa-btn-nav inline-flex items-center">
                 {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                 Enviar Comentario
-              </Button>
+              </button>
             </div>
           </div>
         </form>
       ) : (
-        <div className="text-center wine-glass-effect rounded-lg p-6 mb-8">
-          <p className="text-amber-100/80 mb-4">¿Quieres unirte a la conversación? Inicia sesión para dejar un comentario.</p>
-          <Button asChild>
-            <Link to="/login">Iniciar Sesión</Link>
-          </Button>
+        <div className="text-center border border-copa-gold bg-copa-creamDeep p-6 mt-6 mb-8">
+          <p className="text-copa-ink/75 mb-4">¿Quieres unirte a la conversación? Inicia sesión para dejar un comentario.</p>
+          <Link to="/login" className="copa-btn-primary inline-flex">Iniciar Sesión</Link>
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-6 mt-6">
         {loading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 text-amber-300 animate-spin" />
+            <Loader2 className="h-7 w-7 text-copa-burgundy animate-spin" />
           </div>
         ) : comments.length > 0 ? (
           comments.map(comment => (
-            <div key={comment.id} className="flex items-start space-x-4">
+            <div key={comment.id} className="flex items-start gap-4">
               <Avatar>
                 <AvatarImage src={comment.profiles?.avatar_url} alt={comment.profiles?.name} />
-                <AvatarFallback>{comment.profiles?.name?.charAt(0) || 'U'}</AvatarFallback>
+                <AvatarFallback className="bg-copa-burgundy text-copa-cream">{comment.profiles?.name?.charAt(0) || 'U'}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-amber-200">{comment.profiles?.name || 'Anónimo'}</p>
-                    <p className="text-xs text-amber-100/60">
+                    <p className="font-semibold text-copa-ink">{comment.profiles?.name || 'Anónimo'}</p>
+                    <p className="font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50 mt-0.5">
                       {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true, locale: es })}
                     </p>
                   </div>
                   {user && user.id === comment.user_id && (
-                    <Button variant="ghost" size="icon" onClick={() => handleDeleteComment(comment.id)} className="h-8 w-8">
-                      <Trash2 className="h-4 w-4 text-red-400" />
-                    </Button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteComment(comment.id)}
+                      aria-label="Eliminar comentario"
+                      className="h-8 w-8 flex items-center justify-center text-copa-ink/40 hover:text-copa-burgundy transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   )}
                 </div>
-                <p className="mt-2 text-amber-100/90 whitespace-pre-wrap">{comment.content}</p>
+                <p className="mt-2 text-copa-ink/80 whitespace-pre-wrap" style={{ lineHeight: 1.6 }}>{comment.content}</p>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-center text-amber-100/70 py-8">Aún no hay comentarios. ¡Sé el primero en opinar!</p>
+          <p className="text-center text-copa-ink/60 py-8">Aún no hay comentarios. ¡Sé el primero en opinar!</p>
         )}
       </div>
     </div>
