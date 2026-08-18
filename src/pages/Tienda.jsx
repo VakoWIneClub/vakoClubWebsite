@@ -5,7 +5,7 @@ import CompraResultBanner from "@/components/tienda/CompraResultBanner";
 
 const Tienda = () => {
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <link
           rel="icon"
@@ -25,7 +25,7 @@ const Tienda = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GuiasSection />
       </div>
-    </>
+    </div>
   );
 };
 export default Tienda;
