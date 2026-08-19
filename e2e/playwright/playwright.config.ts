@@ -4,10 +4,11 @@ import path from 'node:path';
 
 /**
  * Minimal, dependency-free .env loader (no `dotenv` package in this project's devDependencies).
- * Used for E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD, which authenticated specs read to log in as an
- * admin against the real Supabase backend (there is no separate test/staging project — see
- * tests/fixtures/admin-auth.ts). The file itself is gitignored (matches the root .gitignore's
- * `.env` pattern); CI supplies the same two vars as repository secrets instead.
+ * Used for E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD (login for the authenticated specs) and
+ * VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (points the app at the staging Supabase project
+ * instead of production — see tests/fixtures/admin-auth.ts). The file itself is gitignored
+ * (matches the root .gitignore's `.env` pattern); CI supplies the same vars as repository
+ * secrets instead.
  */
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -26,6 +27,36 @@ function loadEnvFile(filePath) {
 }
 
 loadEnvFile(path.resolve(__dirname, '.env'));
+
+/**
+ * Vite only exposes VITE_-prefixed vars via import.meta.env when they come from a real .env
+ * file it loads itself — an inherited process.env value (which is all the webServer's spawned
+ * `npm run dev` gets from the lines above) is NOT picked up. So we forward the ones we just
+ * loaded into .env.test.local at the project root (matches the root .gitignore's `.env.*.local`
+ * pattern) and run the dev server in `test` mode below, which makes Vite load that file
+ * specifically — a normal `npm run dev` run never sees it.
+ *
+ * This whole module re-runs once per worker process under fullyParallel, so this write would
+ * otherwise happen repeatedly in parallel. Vite's file watcher restarts the dev server on every
+ * touch to this file regardless of whether the content actually changed, so redundant writes
+ * from multiple workers landing close together kept the server restarting and it never
+ * stabilized long enough to serve a page. Comparing against the existing content first makes
+ * the write a no-op after the first worker does it.
+ */
+const viteEnvLines = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY']
+  .filter((key) => process.env[key])
+  .map((key) => `${key}=${process.env[key]}`);
+const viteEnvContent = viteEnvLines.length > 0 ? viteEnvLines.join('\n') + '\n' : null;
+const viteEnvPath = path.resolve(__dirname, '../../.env.test.local');
+const existingViteEnvContent = fs.existsSync(viteEnvPath) ? fs.readFileSync(viteEnvPath, 'utf-8') : null;
+if (viteEnvContent !== existingViteEnvContent) {
+  if (viteEnvContent) {
+    fs.writeFileSync(viteEnvPath, viteEnvContent);
+  } else if (existingViteEnvContent !== null) {
+    // No staging vars configured — remove any stale file so the app falls back to production.
+    fs.unlinkSync(viteEnvPath);
+  }
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -102,9 +133,11 @@ export default defineConfig({
     // },
   ],
 
-  /* Run the app's Vite dev server before starting the tests */
+  /* Run the app's Vite dev server before starting the tests, in `test` mode so it picks up
+   * .env.test.local (staging Supabase credentials) written above — a plain `npm run dev` never
+   * loads that file. */
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run dev -- --mode test',
     cwd: '../..',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
