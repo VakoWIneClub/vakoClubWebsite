@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -22,7 +22,14 @@ const ArticlePage = () => {
 
   const isAdmin = isAdminUser(user);
 
+  // Guards against out-of-order responses: e.g. this page mounts right after creating an article,
+  // the admin immediately edits it and navigates back here, and the ORIGINAL mount's fetch — still
+  // in flight — resolves after the fresh one, overwriting current data with a stale snapshot. Only
+  // the response belonging to the most-recently-issued request is applied.
+  const latestRequestRef = useRef(0);
+
   const fetchArticle = useCallback(async () => {
+    const requestId = ++latestRequestRef.current;
     setLoading(true);
     setError(false);
 
@@ -32,6 +39,7 @@ const ArticlePage = () => {
       .eq('slug', slug)
       .single();
 
+    if (requestId !== latestRequestRef.current) return;
     if (articleError || !articleData) {
       console.error('Error fetching article:', articleError);
       setError(true);
@@ -48,6 +56,7 @@ const ArticlePage = () => {
         .eq('id', articleData.author_id)
         .single();
 
+      if (requestId !== latestRequestRef.current) return;
       if (authorError) {
         console.error('Error fetching author:', authorError);
       } else {

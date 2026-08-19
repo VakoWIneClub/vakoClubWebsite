@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -19,8 +19,15 @@ const EventoPage = () => {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Guards against out-of-order responses: e.g. this page mounts right after creating an event,
+  // the admin immediately edits it and navigates back here, and the ORIGINAL mount's fetch — still
+  // in flight — resolves after the fresh one, overwriting current data with a stale snapshot. Only
+  // the response belonging to the most-recently-issued request is applied.
+  const latestRequestRef = useRef(0);
+
   useEffect(() => {
     const fetchEvent = async () => {
+      const requestId = ++latestRequestRef.current;
       setLoading(true);
       const { data, error } = await supabase
         .from('events')
@@ -28,6 +35,7 @@ const EventoPage = () => {
         .eq('slug', slug)
         .single();
 
+      if (requestId !== latestRequestRef.current) return;
       if (error) {
         console.error('Error fetching event:', error);
       } else {
