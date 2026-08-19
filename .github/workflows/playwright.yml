@@ -18,14 +18,17 @@ jobs:
     defaults:
       run:
         working-directory: e2e/playwright
-    # Authenticated specs (tests/authenticated/) log in as a real admin against the real
-    # Supabase backend — there is no separate test/staging project (see
-    # e2e/playwright/tests/fixtures/admin-auth.ts). Without these two repo secrets set
-    # (Settings > Secrets and variables > Actions), those specs call test.skip() and this
-    # workflow only exercises the anonymous smoke suite.
+    # Authenticated specs (tests/authenticated/) log in as an admin and run real CRUD against a
+    # dedicated staging Supabase project (VITE_SUPABASE_URL/ANON_KEY below), not production — see
+    # e2e/playwright/tests/fixtures/admin-auth.ts and supabase/migrations/ (schema replicated from
+    # prod). Without these repo secrets set (Settings > Secrets and variables > Actions), the
+    # authenticated specs call test.skip() and this workflow only exercises the anonymous smoke
+    # suite against whatever VITE_SUPABASE_URL resolves to (production, if unset).
     env:
       E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
       E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+      VITE_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.STAGING_SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
