@@ -6,3 +6,7 @@
 .env.*.local
 supabase/.temp/
 vite.config.js.timestamp-*.mjs
+.agents/
+.claude/skills/supabase
+.claude/skills/supabase-postgres-best-practices
+skills-lock.json
