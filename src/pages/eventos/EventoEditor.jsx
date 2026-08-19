@@ -35,6 +35,11 @@ const EventoEditor = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [currentEvent, setCurrentEvent] = useState(null);
   const quillRef = useRef(null);
+  // Guards against React StrictMode's dev-mode double-invoke of the load effect below: without
+  // this, a second (stale) fetch resolving after the admin has already started editing the form
+  // calls reset() again with the ORIGINAL data, silently discarding their in-progress edit right
+  // before submit — same class of bug fixed in Perfil.jsx's hydratedUserIdRef.
+  const hydratedSlugRef = useRef(null);
 
   const isEditing = !!slug;
 
@@ -59,10 +64,18 @@ const EventoEditor = () => {
       .eq('slug', slug)
       .single();
 
+    if (hydratedSlugRef.current === slug) {
+      // Already hydrated the form for this slug — this is a stale duplicate resolution, and
+      // applying it now would stomp on whatever the admin has already typed.
+      setIsLoading(false);
+      return;
+    }
+
     if (error || !data) {
       toast({ variant: "destructive", title: "Error", description: "No se pudo cargar el evento para editar." });
       navigate('/eventos');
     } else {
+      hydratedSlugRef.current = slug;
       setCurrentEvent(data);
       const defaultValues = {
         title: data.title,

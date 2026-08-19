@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
@@ -20,7 +20,14 @@ const WineryPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Guards against out-of-order responses: e.g. this page mounts right after creating a winery,
+  // the admin immediately edits it and navigates back here, and the ORIGINAL mount's fetch — still
+  // in flight — resolves after the fresh one, overwriting current data with a stale snapshot. Only
+  // the response belonging to the most-recently-issued request is applied.
+  const latestRequestRef = useRef(0);
+
   const fetchWinery = useCallback(async () => {
+    const requestId = ++latestRequestRef.current;
     setLoading(true);
     const { data, error } = await supabase
       .from('wineries')
@@ -28,6 +35,7 @@ const WineryPage = () => {
       .eq('slug', slug)
       .single();
 
+    if (requestId !== latestRequestRef.current) return;
     if (error) {
       console.error('Error fetching winery:', error);
     } else {

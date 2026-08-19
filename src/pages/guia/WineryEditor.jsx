@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Helmet } from 'react-helmet';
@@ -29,6 +29,11 @@ const WineryEditor = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [removedExistingUrls, setRemovedExistingUrls] = useState([]);
+  // Guards against React StrictMode's dev-mode double-invoke of the load effect below: without
+  // this, a second (stale) fetch resolving after the admin has already started editing the form
+  // calls setValue() again with the ORIGINAL data, silently discarding their in-progress edit
+  // right before submit — same class of bug fixed in Perfil.jsx's hydratedUserIdRef.
+  const hydratedSlugRef = useRef(null);
 
   const isEditing = !!slug;
 
@@ -58,10 +63,18 @@ const WineryEditor = () => {
 
       const { data, error } = await supabase.from('wineries').select('*').eq('slug', slug).single();
 
+      if (hydratedSlugRef.current === slug) {
+        // Already hydrated the form for this slug — this is a stale duplicate resolution, and
+        // applying it now would stomp on whatever the admin has already typed.
+        setIsLoading(false);
+        return;
+      }
+
       if (error || !data) {
         toast({ variant: "destructive", title: "Error", description: "No se pudo cargar la bodega para editar." });
         navigate('/guia');
       } else {
+        hydratedSlugRef.current = slug;
         setWinery(data);
         setValue('title', data.title);
         setValue('description', data.description);
