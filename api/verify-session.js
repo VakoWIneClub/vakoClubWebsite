@@ -29,6 +29,12 @@ export default async function handler(req, res) {
     return res.status(200).json({
       paid: true,
       guideName: guia?.nombre || null,
+      // Value/currency van al frontend para el evento de compra de GA4/Meta Pixel — se leen del
+      // catálogo (fuente de verdad del precio), no del session_id, para no confiar en nada editable
+      // del lado del cliente.
+      value: guia ? guia.amountCents / 100 : null,
+      currency: guia?.currency || null,
+      guideId: guideId || null,
       // El link ya lleva el session_id verificado: /api/download-guide lo vuelve a comprobar
       // contra Stripe antes de entregar el archivo, nunca sirve el PDF como link público estático.
       downloadUrl: guia?.filePath ? `/api/download-guide?session_id=${encodeURIComponent(sessionId)}` : null,

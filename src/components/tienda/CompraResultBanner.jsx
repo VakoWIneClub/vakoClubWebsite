@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, XCircle, Loader2, Download } from 'lucide-react';
@@ -12,6 +12,10 @@ const CompraResultBanner = () => {
   // below only runs when sessionId is present.
   const [status, setStatus] = useState(compra === 'exito' ? (sessionId ? 'verificando' : 'error') : null);
   const [resultado, setResultado] = useState(null);
+  // Evita disparar el evento de compra dos veces si el efecto se reejecuta (StrictMode en dev,
+  // o el usuario recarga la misma URL de éxito) — el transaction_id igual dedupea en GA4/Meta,
+  // pero así no dependemos solo de eso.
+  const eventoDisparado = useRef(false);
 
   useEffect(() => {
     let cancelado = false;
@@ -22,6 +26,24 @@ const CompraResultBanner = () => {
           if (cancelado) return;
           setStatus(data.paid ? 'pagado' : 'no-pagado');
           setResultado(data);
+
+          if (data.paid && !eventoDisparado.current) {
+            eventoDisparado.current = true;
+            const valorMoneda = data.currency?.toUpperCase() || 'USD';
+
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'purchase', {
+                transaction_id: sessionId,
+                value: data.value,
+                currency: valorMoneda,
+                items: [{ item_id: data.guideId, item_name: data.guideName, price: data.value, quantity: 1 }],
+              });
+            }
+
+            if (typeof window.fbq === 'function') {
+              window.fbq('track', 'Purchase', { value: data.value, currency: valorMoneda }, { eventID: sessionId });
+            }
+          }
         })
         .catch(() => {
           if (!cancelado) setStatus('error');

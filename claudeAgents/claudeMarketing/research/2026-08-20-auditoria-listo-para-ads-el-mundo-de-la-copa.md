@@ -1,0 +1,77 @@
+# Investigación: Auditoría "lista para pautar ads" — Guía General "El Mundo de la Copa"
+Fecha: 2026-08-20 | Agente: vako-research
+
+## Resumen ejecutivo (3-5 bullets)
+
+- **Precio ($29.99) está bien posicionado**, no es el cuello de botella. Se ubica entre los ebooks/guías baratos de nicho (rango €6,80–$12 encontrado en investigaciones previas de la serie regional, ebooks de Gumroad/Etsy desde $3) y el libro de referencia del sector (*Wine Folly: Magnum Edition*, $35–40 en tienda física/Amazon). Para un PDF de 83 páginas con diseño propio, landing dedicada y sin competencia directa de un "producto equivalente" al mismo precio, $29.99 es defendible sin necesidad de bajarlo. Lo que sí falta para convertir mejor en tráfico frío no es el precio, es prueba social y una garantía explícita (ver hallazgo 3 y riesgos).
+- **La página de venta ya es fuerte** — hay una landing dedicada real en `/tienda/el-mundo-de-la-copa` (`src/pages/tienda/ElMundoDeLaCopaLanding.jsx`), no solo la tarjeta genérica de `/tienda`. Esto no coincide con lo que dice `00-BRAND-CONTEXT.md` ("ya no habrá páginas de venta independientes por guía") — la nota quedó desactualizada, hay que corregirla. Tiene hero, índice, vistazo interior, "quiénes somos", oferta clara, imán de entrada por email y FAQ, en ES/EN/PT, con gate de idioma/edad propio. Es el destino correcto para el link de ads, no `/tienda`.
+- **Hueco crítico de tracking: no hay píxel de conversión de ningún tipo.** Confirmado en el código: existe GA4 (`G-9CL1Z3H6GM`, corregido recientemente para SPA), pero no hay Meta Pixel, no hay TikTok Pixel, y ni siquiera un evento `purchase`/`conversion` en GA4 en la página de éxito de compra (`CompraResultBanner.jsx`, `verify-session.js`). Esto significa que aunque los ads empiecen a correr, no hay forma de que Meta/TikTok optimicen hacia compra, ni de medir ROAS real en GA4, ni de construir públicos de retargeting/lookalike. Es el bloqueo más serio para "vender rápido con ads" — más que el precio o el canal.
+- **El bloqueo ya conocido de Stripe live en Vercel sigue siendo el obstáculo #1** — sin eso, ningún ad puede llevar a una compra real hoy en producción. Confirmado, no nuevo.
+- **Para empezar rápido con presupuesto bajo/mediano, Meta/Instagram Ads es el canal recomendado primero**, no Google Search ni TikTok Ads todavía — ver hallazgo 2 para la justificación completa.
+
+## Hallazgos detallados
+
+### 1. Benchmark de precio/oferta
+
+**Anclas de precio reales encontradas (con fuente):**
+- Ebooks de vino genéricos en Gumroad: desde $3 ("Sip and Savor: The Everyday Guide to Wine"). [Gumroad, vía búsqueda web, agosto 2026]
+- Investigación previa del propio equipo (`research/2026-08-13-guia-vino-espanol-angulo-demanda.md` y las de Argentina/Francia) ya había encontrado: ebooks baratos de nicho regional en el rango €6,80–€12, y cursos/certificaciones mucho más caros: Grand Cru Academy (curso de 60h sobre vino francés) 99€+IVA; Spanish Wine Scholar $725–$1.395; French Wine Scholar/WSET $795–$2.500+.
+- *Wine Folly: Magnum Edition: The Master Guide* (el libro físico de referencia del sector, no un PDF) se vende en el rango $35–$40 en Amazon, Barnes & Noble y la propia tienda de Wine Folly. [penguinrandomhouse.com, amazon.com, shop.winefolly.com, vía búsqueda web, agosto 2026]
+
+**Conclusión:** $29.99 cae justo debajo del ancla de precio más fuerte y reconocible del sector (Wine Folly, $35–40), y muy por encima de los ebooks genéricos sin marca ($3–12) — lo cual tiene sentido porque "El Mundo de la Copa" no compite con un PDF cualquiera, compite en la categoría de "guía de referencia curada", más cerca de Wine Folly que de un ebook de Gumroad. No hay evidencia que sugiera bajar el precio para convertir en frío. `[PENDIENTE: no existe todavía ningún dato de conversión real propio (0 ventas confirmadas) para validar esta hipótesis con datos propios; esto es benchmark de mercado, no un test A/B]`.
+
+**Lo que sí falta, según evidencia de conversión en tráfico frío (no específico de vino):**
+- Un caso de estudio de producto digital documentó que una garantía de devolución de 30 días visible aumentó las ventas un 21% (con un 12% de tasa de reembolso). [quicksprout.com / conversionfanatics.com, vía búsqueda web, agosto 2026]
+- La página de venta de "El Mundo de la Copa" hoy **no menciona ninguna garantía de devolución** en su FAQ ni en la sección de oferta (confirmado leyendo `ElMundoDeLaCopaLanding.jsx` completo) — a diferencia de la oferta ya diseñada para la Guía del Vino Español, que sí incluye garantía de 14 días. Es una inconsistencia fácil de corregir y de bajo costo.
+- La página tampoco tiene ningún testimonio, reseña o prueba social (lógico: `[PENDIENTE: no hay compradores reales confirmados todavía]`, según `01-ESTADO-ACTUAL.md` el flujo solo se probó de punta a punta en modo test/local). Para tráfico frío (gente que no conoce Vako Club), la ausencia de prueba social es más determinante para la conversión que 5-10 dólares de diferencia en el precio.
+
+### 2. Canales de tráfico pagado — cuál priorizar primero
+
+Con presupuesto bajo/mediano de un negocio que recién empieza a pautar, audiencia principiante en vino, hispanohablante, activa en Instagram:
+
+- **Meta Ads (Instagram/Facebook) — recomendado para empezar.** Es una compra por impulso/descubrimiento (nadie busca activamente "guía de vino en PDF" con intención de compra alta todavía en este mercado), lo cual favorece a Meta sobre Google Search: "para negocios de producto, marcas de estilo de vida, o categorías donde la gente no busca hasta después de haber sido inspirada, Meta Ads suele ser más efectivo". Además Meta ya es el canal donde Vako Club tiene audiencia (@vakoclub, campaña de Instagram de 3 meses en curso) y CPCs de referencia mucho más bajos que Google Search ($0.62–$0.70 vs. $5.26 de CPC promedio). [aureliusmedia.co, vía búsqueda web, agosto 2026 — cifras de blogs de la industria, no de Meta/Google directamente, tratar como orientativas]
+- **Google Search Ads — segunda prioridad, no la primera.** Captura intención de búsqueda activa (mayor tasa de conversión por click, pero CPC más caro), útil más adelante cuando haya presupuesto para complementar, no para arrancar solo. La recomendación general para presupuestos bajos (`<$3.000/mes`) es concentrarse en una sola plataforma primero en vez de repartir el presupuesto, porque los datos no alcanzan para que ninguno de los dos algoritmos optimice bien. [misma fuente]
+- **TikTok Ads — no priorizar todavía.** Buen alcance barato (CPM $3–7 en Latinoamérica) pero exige presupuesto mínimo más alto para probar en serio: fuentes de la industria mencionan mínimos de campaña alrededor de $500 con $50/día, y recomiendan presupuestar $700–$1.000 para el primer mes de test real. [stackmatix.com, vía búsqueda web, agosto 2026 — cifras de blogs de la industria, tratar como orientativas, no oficiales de TikTok] Para "empezar rápido" con presupuesto ajustado, es más caro entrar en serio que en Meta.
+- **Pinterest —** `[PENDIENTE: no se investigó en esta pasada, no hay evidencia recogida]`. Podría ser interesante a mediano plazo (contenido de "tabla de maridaje" y visual educativo funciona bien ahí), pero no es la prioridad #1 para esta semana.
+
+**Recomendación concreta:** arrancar con Meta Ads (Instagram primero), dirigiendo el tráfico directo a `/tienda/el-mundo-de-la-copa`, apoyado en la campaña de Instagram orgánica ya en marcha (Semana 1, lanzada 2026-08-17) para tener contenido de marca ya visible antes de que llegue tráfico pagado frío.
+
+### 3. Estado SEO/orgánico como apoyo (pulso rápido, no auditoría completa)
+
+Revisado directamente en el código (`src/pages/tienda/ElMundoDeLaCopaLanding.jsx`, `src/pages/Tienda.jsx`, `index.html`, `public/`):
+
+- ✅ **Metadatos básicos presentes:** título y meta description propios y específicos en ES/EN/PT en la landing dedicada, y en `/tienda` genérica. Bien escritos, con la propuesta de valor clara.
+- ⚠️ **No hay ninguna etiqueta Open Graph (`og:title`, `og:image`, `og:description`) ni Twitter Card en ninguna página de venta.** Solo existe en `src/pages/SobreNosotros.jsx` (una página no comercial). Esto afecta la vista previa cuando alguien comparte el link de la landing (WhatsApp, Instagram bio, Facebook) — hoy mostraría una vista previa genérica o vacía en vez de la tapa de la guía.
+- ⚠️ **No hay datos estructurados (schema.org `Product`/`Offer`)** en la landing de venta — no es bloqueante para lanzar ads esta semana, pero deja sobre la mesa la posibilidad de rich snippets en Google (precio, disponibilidad) más adelante.
+- ⚠️ **No existe `robots.txt` ni `sitemap.xml`** en `public/` (verificado, no se encontró ninguno). No bloquea que Google indexe páginas individuales, pero es una falta de higiene SEO básica que vale la pena resolver, sobre todo porque cualquier tráfico pagado que rebote y busque la marca en Google se beneficia de un sitio bien indexado.
+- ⚠️ **Atributo `lang` inconsistente:** `index.html` declara `<html lang="en">` a nivel global, y solo la landing de "El Mundo de la Copa" lo corrige dinámicamente por idioma (`Helmet htmlAttributes={{ lang }}`). El resto del sitio (incluida `/tienda` genérica) sigue sirviendo contenido en español con `lang="en"` — señal SEO/accesibilidad menor pero real y fácil de arreglar.
+- ✅ La landing de venta en sí (contenido, estructura, propuesta de valor, FAQ) está bien construida y no es un cuello de botella para que el tráfico pagado convierta — el copy es claro y sin fricción evidente.
+
+**Conclusión para el punto 3:** el SEO no es lo que bloquea vender rápido con ads (los ads no dependen de indexación), pero sí hay 3-4 arreglos baratos (OG tags, robots.txt/sitemap, `lang`) que ayudan a que el tráfico que llegue por fuera de los ads (compartidos, búsqueda de marca) no se desperdicie.
+
+### 4. Riesgos/huecos que bloquean vender rápido esta semana
+
+1. **[CONOCIDO, sigue bloqueante] Claves live de Stripe no están en Vercel.** Sin esto, ningún click de un ad puede terminar en un cobro real en producción. Es el bloqueo #1, ya documentado en `01-ESTADO-ACTUAL.md`.
+2. **[NUEVO, crítico] Cero tracking de conversión para ads.** No hay Meta Pixel ni TikTok Pixel instalados en ninguna parte del código, y ni siquiera GA4 dispara un evento de compra/conversión en la página de éxito. Lanzar Meta Ads sin Meta Pixel significa que la plataforma no puede optimizar hacia "quién compra" — solo hacia clicks o vistas de landing, lo cual es mucho menos eficiente y más caro por venta. Esto se puede resolver en horas (Meta Pixel base + evento `Purchase` en `CompraResultBanner.jsx`/`verify-session.js`), pero hay que hacerlo *antes* de encender el presupuesto, no después.
+3. **[NUEVO, medio] Documentación de marca desactualizada.** `00-BRAND-CONTEXT.md` dice que ya no existen landings dedicadas por guía, pero sí existe una (`/tienda/el-mundo-de-la-copa`) y es, de hecho, el mejor activo de conversión que tiene el negocio hoy. Vale la pena que Julian confirme si esto es un cambio de rumbo intencional (¿la serie regional también tendrá landing propia cuando se lance?) para no seguir diseñando oferta/landing/creatividades asumiendo lo contrario.
+4. **[NUEVO, menor] Sin garantía de devolución en la oferta de "El Mundo de la Copa".** Fácil de agregar (copy, no requiere desarrollo, salvo decidir el mecanismo de reembolso con Stripe) y hay evidencia de que mejora conversión en frío (ver hallazgo 1).
+5. **[NUEVO, menor] Cero prueba social todavía** — no hay compradores reales confirmados. No es corregible antes de lanzar (no se puede fabricar), pero sí es una razón más para no esperar: cuantas más compras reales existan cuanto antes, antes se puede agregar el primer testimonio a la landing.
+6. **[PENDIENTE de este research] Sin dato de audiencia guardada de la campaña de Instagram (Semana 1)** — ya señalado en `01-ESTADO-ACTUAL.md` como pendiente de Julian, relevante también aquí porque esa campaña orgánica es la base de audiencia/creatividad más obvia para armar el primer público de Meta Ads (custom audience de gente que ya interactuó con el contenido).
+
+## Implicaciones para el equipo
+- **Para vako-ofertas:** evaluar agregar una garantía de devolución explícita (14-30 días) a la oferta de "El Mundo de la Copa", igual que ya tienen las guías regionales — es el ajuste de oferta de mayor impacto/menor esfuerzo detectado. El precio $29.99 no necesita bajar.
+- **Para vako-creatividades:** el destino de cualquier CTA de ads debe ser `/tienda/el-mundo-de-la-copa` (la landing dedicada), no `/tienda` genérica — es la página con mejor estructura de conversión. Al no haber todavía prueba social real, evitar prometer testimonios/reseñas en el copy de las piezas hasta que existan compradores reales.
+- **Para vako-email:** sin cambios directos; sigue pendiente conectar un ESP (ya documentado). Si se agrega el imán de entrada por email de la landing (`email.title` / "Enviar la primera parte") a una automatización real, es una fuente de leads tibios adicional a la ya existente para nutrir antes de la compra.
+- **Para vako-landing:** corregir la nota desactualizada de `00-BRAND-CONTEXT.md` sobre "no hay landings dedicadas" (o pedirle a Julian que confirme el cambio de rumbo). Agregar etiquetas Open Graph (`og:title`, `og:description`, `og:image` con la tapa de la guía) a `ElMundoDeLaCopaLanding.jsx` y a `Tienda.jsx` — impacto directo en cómo se ve el link cuando se comparte o cuando Meta arma la vista previa del anuncio a partir de la URL de destino.
+
+## Fuentes
+- [Gumroad — resultados de búsqueda de ebooks de vino, incl. "Sip and Savor: The Everyday Guide to Wine" desde $3](https://sevensky.gumroad.com/l/gumroad-guide-pdf-for-beginners) (agosto 2026)
+- [Wine Folly: Magnum Edition — Penguin Random House](https://www.penguinrandomhouse.com/books/564466/wine-folly-magnum-edition-by-madeline-puckette-and-justin-hammack/)
+- [Wine Folly: Magnum Edition — tienda oficial Wine Folly](https://shop.winefolly.com/products/the-master-guide)
+- [Wine Folly: Magnum Edition — Amazon](https://www.amazon.com/Wine-Folly-Magnum-Master-Guide/dp/0525533893)
+- [Meta Ads vs Google Ads 2026 — comparación de CPC/CPM y recomendación de presupuesto](https://www.aureliusmedia.co/blog/meta-ads-vs-google-ads-budget) (blog de agencia, cifras orientativas, agosto 2026)
+- [TikTok Ads Cost 2026 — CPM/CPC y presupuestos mínimos](https://www.stackmatix.com/blog/tiktok-ads-cost-2026-pricing-breakdown) (blog de agencia, cifras orientativas, agosto 2026)
+- [Does a Money-Back Guarantee Increase Shopify Conversion? — caso del +21% en ventas con garantía visible de 30 días](https://revenueflows.ai/blog/does-money-back-guarantee-increase-shopify-conversion-rate) (agosto 2026)
+- [Does a money back guarantee matter? — Conversion Fanatics](https://conversionfanatics.com/does-a-money-back-guarantee-matter/) (agosto 2026)
+- Código del propio sitio (fuente primaria, no web): `src/pages/tienda/ElMundoDeLaCopaLanding.jsx`, `src/pages/Tienda.jsx`, `src/App.jsx`, `src/components/tienda/GuiasSection.jsx`, `src/components/tienda/CompraResultBanner.jsx`, `index.html`, ausencia de `public/robots.txt` y `public/sitemap.xml` verificada directamente.
+- Investigaciones internas previas del equipo (referencia de precio de la serie regional): `research/2026-08-13-guia-vino-espanol-angulo-demanda.md`, `research/2026-08-14-guia-vino-argentino-angulo-demanda.md`, `research/2026-08-14-guia-vino-frances-angulo-demanda.md`
