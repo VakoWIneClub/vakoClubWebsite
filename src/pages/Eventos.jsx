@@ -179,7 +179,7 @@ const Eventos = () => {
         <Reveal className="text-center mb-12">
           <div className="copa-eyebrow">Vako Club</div>
           <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
-            {showPastEvents ? 'Eventos Pasados' : 'Eventos Exclusivos'}
+            {showPastEvents ? 'Eventos Pasados' : 'Eventos'}
           </h1>
           <p className="mt-5 text-copa-ink/75 max-w-3xl mx-auto" style={{ fontSize: 18, lineHeight: 1.6 }}>
             Infórmate sobre catas, talleres y encuentros. Vive la cultura del vino de una forma única.

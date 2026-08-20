@@ -94,7 +94,7 @@ const WineryPage = () => {
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>{`${winery.title} - Guía de Bodegas Vako Club`}</title>
-        <meta name="description" content={(winery.description || '').substring(0, 160)} />
+        <meta name="description" content={(winery.description || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)} />
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
