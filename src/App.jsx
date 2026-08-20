@@ -25,6 +25,7 @@ import PoliticaPrivacidad from '@/pages/PoliticaPrivacidad';
 import EmailVerification from '@/pages/EmailVerification';
 import AuthCallback from '@/pages/AuthCallback';
 import ScrollToTop from '@/components/ScrollToTop';
+import AnalyticsTracker from '@/components/AnalyticsTracker';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ArticlePage from '@/pages/noticias/ArticlePage';
 import ArticleEditor from '@/pages/noticias/ArticleEditor';
@@ -45,6 +46,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsTracker />
       {/* "El mundo de la copa" has its own language + 18+ gate baked into the landing itself
           (src/pages/tienda/ElMundoDeLaCopaLanding.jsx), so it opts out of the generic
           site-wide age gate to avoid showing two age checks back to back. */}
