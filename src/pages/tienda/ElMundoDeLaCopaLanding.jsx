@@ -12,6 +12,10 @@ import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
 const EMAILJS_SERVICE_ID = 'service_2z4rljb';
 const EMAILJS_TEMPLATE_ID = 'template_d3yel4f';
+// Plantilla dedicada (no la de arriba, que también usan el formulario de contacto y la lista de
+// espera de guías regionales) — evita que esas otras dos reciban por error el auto-reply del
+// extracto gratis. "To Email" configurado en el panel de EmailJS como {{email}}.
+const EMAILJS_TEMPLATE_ID_EXTRACTO = 'template_l6a109b';
 const EMAILJS_PUBLIC_KEY = 'G7BJcfLPx0PBVWBOT';
 
 const GUIDE_ID = 'guia-general';
@@ -159,7 +163,7 @@ const COPY = {
       submitBusy: 'Enviando…',
       defaultMsg: 'Un correo por semana sobre vino. Te podés dar de baja cuando quieras.',
       invalidMsg: 'Escribí un email válido para mandarte la primera parte.',
-      successMsg: 'Listo, ya lo tenemos. Te lo mandamos por email en las próximas 24 horas.',
+      successMsg: 'Listo: ya te lo mandamos. Revisá tu email (y la carpeta de spam, por las dudas).',
       errorMsg: 'Hubo un problema al enviarlo. Probá de nuevo en un rato.',
     },
     faq: {
@@ -291,7 +295,7 @@ const COPY = {
       submitBusy: 'Sending…',
       defaultMsg: 'One email a week about wine. Unsubscribe whenever you want.',
       invalidMsg: 'Enter a valid email so we can send you the first part.',
-      successMsg: "Got it — we'll email it to you within the next 24 hours.",
+      successMsg: "Done — check your inbox (and spam folder, just in case).",
       errorMsg: 'Something went wrong sending it. Try again in a bit.',
     },
     faq: {
@@ -423,7 +427,7 @@ const COPY = {
       submitBusy: 'Enviando…',
       defaultMsg: 'Um email por semana sobre vinho. Você pode cancelar quando quiser.',
       invalidMsg: 'Digite um email válido para receber a primeira parte.',
-      successMsg: 'Pronto, já recebemos. Te enviamos por email nas próximas 24 horas.',
+      successMsg: 'Pronto: já enviamos. Confira seu email (e a caixa de spam, por via das dúvidas).',
       errorMsg: 'Houve um problema ao enviar. Tente de novo daqui a pouco.',
     },
     faq: {
@@ -651,6 +655,9 @@ const ElMundoDeLaCopaLanding = () => {
       return;
     }
     setEnviandoEmail(true);
+
+    // Aviso interno a Vako — best-effort: si falla, el lead igual recibe su extracto abajo, solo
+    // se pierde la notificación a Julian, no se le muestra ningún error por esto.
     emailjs
       .send(
         EMAILJS_SERVICE_ID,
@@ -663,6 +670,11 @@ const ElMundoDeLaCopaLanding = () => {
         },
         EMAILJS_PUBLIC_KEY
       )
+      .catch(() => {});
+
+    // Auto-respuesta real con el extracto — esta es la que determina lo que ve el lead.
+    emailjs
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_EXTRACTO, { email }, EMAILJS_PUBLIC_KEY)
       .then(() => {
         setEmailMsg(t.email.successMsg);
         setEmail('');
