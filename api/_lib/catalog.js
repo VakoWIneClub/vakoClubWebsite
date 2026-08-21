@@ -9,10 +9,7 @@
 export const GUIAS_CATALOG = {
   'guia-general': {
     nombre: 'El Mundo de la Copa',
-    // TEMPORAL (2026-08-21): $1 en vez de $29.99 para que Julian pueda hacer una compra real en
-    // producción y verificar el Meta Pixel con el Pixel Helper, sin gastar $29.99 ni esperar
-    // días a que vuelva un reembolso grande. Volver a 2999 apenas termine la prueba.
-    amountCents: 100,
+    amountCents: 2999,
     currency: 'usd',
     disponible: true,
     // Español es el archivo por defecto (`filePath`, usado si el idioma pedido no tiene edición
