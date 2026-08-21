@@ -17,7 +17,7 @@ Fecha: 2026-08-20 | Agente: vako-email
 
 | # | Bloqueo/dependencia | Qué falta | Quién lo resuelve |
 |---|---|---|---|
-| 1 | **PDF de extracto no existe todavía.** La auto-respuesta promete descargar la Parte I ("Fundamentos", 4 capítulos) como PDF suelto. Hoy ese archivo no está exportado ni tiene URL pública. | Exportar esas páginas de `producto-guia-general-CONTENIDO-COMPLETO.md` (o del diseño real del PDF maestro) como archivo independiente y subirlo a una ruta pública (ej. `public/guias/el-mundo-de-la-copa-parte-1-gratis.pdf`) — no necesita protección como el PDF pago, es contenido gratuito. | Julian / diseño (ya señalado como pendiente por `vako-ofertas`) |
+| 1 | ✅ **Resuelto 2026-08-21.** PDF de extracto exportado y subido: `public/guias/el-mundo-de-la-copa-parte-1-fundamentos.pdf`, público en `https://vakoclub.com/guias/el-mundo-de-la-copa-parte-1-fundamentos.pdf` una vez desplegado. Maquetado con el diseño de marca real (Cormorant Garamond/EB Garamond/Jost, burdeos/dorado) a partir del texto íntegro de `producto-guia-general-CONTENIDO-COMPLETO.md` (Capítulos 1–4), con portada y cierre con CTA a la guía completa. No necesita protección como el PDF pago porque es contenido gratuito. | — | — |
 | 2 | **Plantilla de Auto-Reply de EmailJS no está configurada.** El formulario ya envía `email` como parámetro (`enviarEmail()` en `ElMundoDeLaCopaLanding.jsx`), pero solo dispara la plantilla que notifica el inbox interno de Vako. EmailJS tiene una función nativa de "Auto-Reply" por plantilla (panel de EmailJS, sin tocar código) que puede mandar un email aparte a quien completó el formulario, mapeando el campo `email` ya enviado como destinatario. | Configurar el Auto-Reply en el panel de EmailJS con el asunto/cuerpo de este documento, usando `{{email}}` como destinatario. Alternativa si el panel no alcanza: un segundo `emailjs.send()` en el código con una plantilla dedicada — esto sí requeriría una línea de código, fuera del alcance de `vako-email`. | Julian (config de panel) o un dev si se necesita la alternativa de código |
 | 3 | **No hay campo de nombre en el formulario** — solo pide email (`copa-email-input`, `type="email"`, sin input de nombre). Por eso ningún email de esta pieza usa `{{nombre}}`: todos abren con un saludo genérico ("Hola,"). Si en algún momento se agrega un campo de nombre al formulario, se puede personalizar; no es bloqueante, solo una nota para no prometer una personalización que no existe hoy. | — | — |
 | 4 | **El ESP de email marketing sigue sin conectarse** (recordatorio ya conocido, ver `00-BRAND-CONTEXT.md`). Esto bloquea específicamente los **Emails 1 a 4** (Días 1, 3, 6, 9): EmailJS solo puede disparar un envío instantáneo al momento del submit (la auto-respuesta), no programar envíos automáticos varios días después según la fecha en que cada persona dejó su email. La auto-respuesta (Día 0) sí se puede activar sin ESP, en cuanto existan los puntos 1 y 2 de esta tabla. La secuencia completa (1-4) queda lista para cargar en cuanto se conecte un ESP (Brevo, MailerLite, Mailchimp, ConvertKit u otro con plan gratuito). | Conectar un ESP | Julian |
@@ -42,7 +42,7 @@ Fecha: 2026-08-20 | Agente: vako-email
 **Especificación técnica (para quien configure el panel de EmailJS):**
 - Se configura como **Auto-Reply** de la plantilla que ya usa `enviarEmail()` en `ElMundoDeLaCopaLanding.jsx` (o una plantilla nueva dedicada, si se prefiere no tocar la que notifica a Julian).
 - Destinatario del Auto-Reply: mapear al parámetro `email` que el formulario ya envía (`{{email}}`) — no requiere cambios en el código del formulario, ese dato ya viaja hoy.
-- El link de descarga del cuerpo del email apunta a `[PENDIENTE: URL pública del PDF de extracto — ver dependencia #1 de la tabla de arriba]`.
+- El link de descarga del cuerpo del email apunta a `https://vakoclub.com/guias/el-mundo-de-la-copa-parte-1-fundamentos.pdf` — PDF real exportado y subido el 2026-08-21 (`public/guias/el-mundo-de-la-copa-parte-1-fundamentos.pdf`), con el diseño de marca (Cormorant Garamond/EB Garamond/Jost, paleta burdeos/dorada) y el texto real de los 4 capítulos de la Parte I, cerrando con un CTA a la guía completa.
 - Remitente sugerido: `info@vakoclub.com` (mismo remitente que ya usa el sitio para contacto).
 
 **Asunto (variantes para probar):**
@@ -60,7 +60,7 @@ Gracias por dejarnos tu email en *El Mundo de la Copa*.
 
 Como prometimos, acá tenés la **Parte I completa de la guía — "Fundamentos"** — gratis, sin letra chica:
 
-**[Descargar la Parte I gratis]** → `[PENDIENTE: URL pública del PDF de extracto]`
+**[Descargar la Parte I gratis]** → `https://vakoclub.com/guias/el-mundo-de-la-copa-parte-1-fundamentos.pdf`
 
 En estas páginas vas a aprender a identificar los cinco componentes que explican casi cualquier vino: dulzor, acidez, taninos, alcohol y cuerpo. Un adelanto real, tomado directo de la guía:
 
