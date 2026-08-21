@@ -508,6 +508,8 @@ const ElMundoDeLaCopaLanding = () => {
   const [trazoOro, setTrazoOro] = useState(true);
   const reducedRef = useRef(false);
   const autoDownloadRef = useRef(false);
+  // Evita disparar el evento de compra dos veces (recarga de la misma URL de éxito, StrictMode).
+  const eventoCompraDisparado = useRef(false);
 
   const problemaRef = useRef(null);
   const ofertaRef = useRef(null);
@@ -565,9 +567,38 @@ const ElMundoDeLaCopaLanding = () => {
         if (cancelado) return;
         setCompraResultado(data);
         setCompraStatus(data.paid ? 'pagado' : 'no-pagado');
+
+        // Esta landing tiene su propio manejo de éxito de compra (no reusa CompraResultBanner,
+        // que sólo vive en /tienda genérica) — el evento de conversión tiene que dispararse acá
+        // también, o los ads que apuntan a esta página nunca verían una sola compra. Va ANTES de
+        // la descarga automática (con un pequeño margen abajo) para que el beacon de tracking no
+        // compita con la carga provisional que dispara `location.href`, aunque esa URL termine en
+        // descarga y no en una navegación real.
+        if (data.paid && !eventoCompraDisparado.current) {
+          eventoCompraDisparado.current = true;
+          const valorMoneda = data.currency?.toUpperCase() || 'USD';
+
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'purchase', {
+              transaction_id: sessionId,
+              value: data.value,
+              currency: valorMoneda,
+              items: [{ item_id: data.guideId, item_name: data.guideName, price: data.value, quantity: 1 }],
+            });
+          }
+
+          if (typeof window.fbq === 'function') {
+            window.fbq('track', 'Purchase', { value: data.value, currency: valorMoneda }, { eventID: sessionId });
+          }
+        }
+
         if (data.paid && data.downloadUrl && !autoDownloadRef.current) {
           autoDownloadRef.current = true;
-          window.location.href = data.downloadUrl;
+          // Pequeño respiro para que los beacons de arriba salgan de verdad antes de que el
+          // navegador inicie la carga (aunque termine en descarga, no en navegación real).
+          setTimeout(() => {
+            window.location.href = data.downloadUrl;
+          }, 300);
         }
       })
       .catch(() => {
