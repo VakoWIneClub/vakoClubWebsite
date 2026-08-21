@@ -20,7 +20,7 @@ Estas piezas están **listas para pautar**, pero hay dos bloqueos técnicos real
 
 - **Landing de destino (todas las piezas):** `https://vakoclub.com/tienda/el-mundo-de-la-copa` — nunca `/tienda` genérica.
 - **Precio:** $29.99 USD (sin cambios en Stripe, no se toca `api/_lib/catalog.js`).
-- **Garantía:** devolución de 14 días, sin pedir justificación — escribir a info@vakoclub.com dentro de los 14 días posteriores a la compra.
+- **Garantía:** devolución de 7 días, sin pedir justificación — escribir a info@vakoclub.com dentro de los 7 días posteriores a la compra.
 - **Bono "Fundador/a":** quien compre entra a la Membresía Gratuita de Vako Club (ya implementada en `/suscripcion`, coste cero) + aviso prioritario cuando salgan las guías de España, Argentina y Francia.
 - **Escasez real (adaptación de la Opción B de `vako-ofertas`):** el bono "Fundador/a" se ofrece a los **primeros 50 compradores de esta campaña de ads** (no a los primeros 50 compradores de siempre — ese matiz importa para no prometer de más). Elegimos atar el tope al bono "Fundador/a" (ya construido, cero trabajo extra) y no al bono de fichas imprimibles reempaquetadas que menciona la oferta original, porque ese segundo bono todavía no está exportado como PDF suelto — no prometemos en el anuncio algo que hoy no se puede entregar. **Nota operativa, no de copy:** como el sitio no tiene contador automático de compras por campaña, Julian tiene que llevar la cuenta manual desde el dashboard de Stripe y avisar al equipo cuando se llegue a 50 para retirar la mención del bono de los anuncios activos. Si no se va a cortar de verdad al llegar a 50, no usar esta mención.
 - **Nunca usar:** contadores regresivos falsos, "quedan X copias" sin tope verificable, testimonios o cifras de compradores/seguidores inventadas (no hay ninguno documentado todavía).
@@ -46,13 +46,13 @@ Estas piezas están **listas para pautar**, pero hay dos bloqueos técnicos real
 >
 > "El Mundo de la Copa" son 83 páginas para entender qué estás tomando. Sin esnobismo, sin tecnicismos vacíos. Mirá 6 páginas reales antes de decidir.
 >
-> Garantía de devolución de 14 días · Descarga inmediata.
+> Garantía de devolución de 7 días · Descarga inmediata.
 
 **Headline (título, ~40 caracteres):**
 > Dejá de elegir vino a ciegas
 
 **Description (opcional, debajo del headline):**
-> 83 páginas · $29.99 · Garantía 14 días
+> 83 páginas · $29.99 · Garantía 7 días
 
 **Dirección visual:**
 Abre con un plano cercano de una mano dudando frente a una carta de vinos en un restaurante (o una góndola de supermercado), cámara algo temblorosa/handheld para transmitir el momento real de duda. Corte seco a la portada de "El Mundo de la Copa" apareciendo en pantalla (usar el archivo real `el-mundo-de-la-copa-tapa.jpg`), luego 2-3 planos rápidos hojeando las páginas de muestra reales ya existentes en el sitio (`pagina-01-apertura.jpg` a `pagina-06-regiones.jpg` — no generar páginas nuevas, usar las reales). Paleta vino/burdeos + dorado, tipografía tipo Playfair/Cormorant superpuesta para el copy en pantalla ("Sin esnobismo. Sin tecnicismos vacíos."). Cierre con el precio y el botón de compra simulado en pantalla.
@@ -77,7 +77,7 @@ Abre con un plano cercano de una mano dudando frente a una carta de vinos en un 
 >
 > Se compra en 2 minutos, se manda por email al instante — perfecto para el último momento. $29.99, pago único, sin vencimiento.
 >
-> Garantía de devolución de 14 días, por si no es lo que buscabas.
+> Garantía de devolución de 7 días, por si no es lo que buscabas.
 
 **Headline:**
 > El regalo que sí van a usar
@@ -108,7 +108,7 @@ Toma cálida, editorial, de una copa de vino junto a la tapa de la guía impresa
 >
 > Cata, servicio, uvas, regiones y maridaje — en el orden en que realmente hace falta aprenderlos, no en el de un programa académico.
 >
-> Descarga inmediata · Garantía de devolución de 14 días.
+> Descarga inmediata · Garantía de devolución de 7 días.
 
 **Headline:**
 > Aprendé a tu propio ritmo
@@ -137,7 +137,7 @@ Escena cálida y tranquila: alguien leyendo la guía en una tablet o celular, de
 **Primary text:**
 > Nada de "guía misteriosa" — esto es exactamente lo que vas a recibir: 83 páginas divididas en 7 partes, desde los fundamentos hasta el maridaje, pasando por cómo catar y las regiones del mundo.
 >
-> Podés ver 6 páginas reales antes de decidir. Si no te sirve, tenés 14 días de garantía de devolución.
+> Podés ver 6 páginas reales antes de decidir. Si no te sirve, tenés 7 días de garantía de devolución.
 
 **Headline:**
 > 83 páginas. Mirá qué hay adentro.

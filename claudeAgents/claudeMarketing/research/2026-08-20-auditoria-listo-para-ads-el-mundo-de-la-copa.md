@@ -22,7 +22,7 @@ Fecha: 2026-08-20 | Agente: vako-research
 
 **Lo que sí falta, según evidencia de conversión en tráfico frío (no específico de vino):**
 - Un caso de estudio de producto digital documentó que una garantía de devolución de 30 días visible aumentó las ventas un 21% (con un 12% de tasa de reembolso). [quicksprout.com / conversionfanatics.com, vía búsqueda web, agosto 2026]
-- La página de venta de "El Mundo de la Copa" hoy **no menciona ninguna garantía de devolución** en su FAQ ni en la sección de oferta (confirmado leyendo `ElMundoDeLaCopaLanding.jsx` completo) — a diferencia de la oferta ya diseñada para la Guía del Vino Español, que sí incluye garantía de 14 días. Es una inconsistencia fácil de corregir y de bajo costo.
+- La página de venta de "El Mundo de la Copa" hoy **no menciona ninguna garantía de devolución** en su FAQ ni en la sección de oferta (confirmado leyendo `ElMundoDeLaCopaLanding.jsx` completo) — a diferencia de la oferta ya diseñada para la Guía del Vino Español, que sí incluye garantía de 7 días. Es una inconsistencia fácil de corregir y de bajo costo.
 - La página tampoco tiene ningún testimonio, reseña o prueba social (lógico: `[PENDIENTE: no hay compradores reales confirmados todavía]`, según `01-ESTADO-ACTUAL.md` el flujo solo se probó de punta a punta en modo test/local). Para tráfico frío (gente que no conoce Vako Club), la ausencia de prueba social es más determinante para la conversión que 5-10 dólares de diferencia en el precio.
 
 ### 2. Canales de tráfico pagado — cuál priorizar primero

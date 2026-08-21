@@ -4,7 +4,7 @@ Fecha: 2026-08-20 | Agente: vako-email
 ## Resumen ejecutivo
 
 - **Para quién:** alguien que llegó por un anuncio pagado a `/tienda/el-mundo-de-la-copa`, no compró en la primera visita, y dejó su email en el formulario "¿Todavía lo estás pensando? Dejanos tu email y te mandamos la primera parte completa, gratis" (sección `#email` de la landing, `ElMundoDeLaCopaLanding.jsx`). Es tráfico frío — no conoce Vako Club, así que ningún email de esta pieza asume familiaridad previa con la marca.
-- **Oferta usada, exactamente como la definió `vako-ofertas`** (`ofertas/2026-08-20-oferta-ads-el-mundo-de-la-copa.md`): *El Mundo de la Copa*, $29.99 (sin tocar Stripe), garantía de devolución de 14 días sin preguntas, bono de estatus "Fundador/a" (Membresía Gratuita + aviso prioritario de la serie regional), bono de fichas imprimibles (Ficha de Cata + Glosario del Catador) limitado a los primeros 50 compradores de esta campaña (Opción B de escasez real, no un precio con fecha de vencimiento).
+- **Oferta usada, exactamente como la definió `vako-ofertas`** (`ofertas/2026-08-20-oferta-ads-el-mundo-de-la-copa.md`): *El Mundo de la Copa*, $29.99 (sin tocar Stripe), garantía de devolución de 7 días sin preguntas, bono de estatus "Fundador/a" (Membresía Gratuita + aviso prioritario de la serie regional), bono de fichas imprimibles (Ficha de Cata + Glosario del Catador) limitado a los primeros 50 compradores de esta campaña (Opción B de escasez real, no un precio con fecha de vencimiento).
 - **Dos piezas entregadas en este documento:**
   1. **Auto-respuesta de EmailJS (Día 0, envío instantáneo)** — resuelve el gap operativo que encontró `vako-ofertas`: hoy el formulario de "primera parte gratis" solo le avisa a Julian por email, no le entrega nada a quien dejó su dirección. Diseño de asunto + cuerpo abajo.
   2. **Secuencia de 4 emails cortos (Días 1, 3, 6 y 9)** que siguen a esa auto-respuesta, cada uno reforzando un único elemento de la oferta: garantía → bono Fundador → tope de 50 unidades → resumen y última llamada.
@@ -28,7 +28,7 @@ Fecha: 2026-08-20 | Agente: vako-email
 | Email | Asunto (variante principal) | Envío | Objetivo |
 |---|---|---|---|
 | 0 — Auto-respuesta EmailJS | Tu primera parte de El Mundo de la Copa ya está lista | Inmediato (disparado por EmailJS al enviar el formulario) | Entregar el extracto real prometido y sembrar la secuencia de conversión |
-| 1 | Por si te está frenando el "¿y si no me sirve?" | Día 1 | Bajar el riesgo percibido: garantía de devolución de 14 días |
+| 1 | Por si te está frenando el "¿y si no me sirve?" | Día 1 | Bajar el riesgo percibido: garantía de devolución de 7 días |
 | 2 | Lo que se lleva quien compra ahora (no es solo el PDF) | Día 3 | Subir el valor percibido: bono de estatus Fundador/a + prioridad regional |
 | 3 | Los primeros 50, nada más | Día 6 | Urgencia real: tope de 50 unidades del bono de fichas imprimibles |
 | 4 | Antes de que dejemos de escribirte sobre esto | Día 9 | Resumen de toda la oferta + última llamada, cierre suave de la serie |
@@ -85,11 +85,11 @@ El equipo de Vako Club
 
 ## Email 1 — Garantía (bajar el riesgo)
 
-**Objetivo:** recordar que ya recibió valor real, y presentar la garantía de 14 días como respuesta directa a la duda más común de comprarle a una marca desconocida. Un único CTA de compra, sin presionar de más — es apenas el segundo contacto.
+**Objetivo:** recordar que ya recibió valor real, y presentar la garantía de 7 días como respuesta directa a la duda más común de comprarle a una marca desconocida. Un único CTA de compra, sin presionar de más — es apenas el segundo contacto.
 
 **Asunto (variantes para probar):**
 1. Por si te está frenando el "¿y si no me sirve?"
-2. Sin letra chica: 14 días para probarla
+2. Sin letra chica: 7 días para probarla
 3. La pregunta que más nos hacen antes de comprar
 
 **Preheader:** Si no te sirve, te devolvemos el dinero. Simple.
@@ -100,11 +100,11 @@ Hola,
 
 Ayer te mandamos la Parte I de *El Mundo de la Copa* (si no te llegó, revisá spam o escribinos a info@vakoclub.com y te la reenviamos).
 
-Hoy queremos contarte algo que no suele decirse en una guía de $29.99, pero que para nosotros es importante: tenés **14 días de garantía completa**. Si la comprás y sentís que no era lo que esperabas, nos escribís a info@vakoclub.com dentro de esos 14 días y te devolvemos el dinero, sin pedirte que justifiques nada.
+Hoy queremos contarte algo que no suele decirse en una guía de $29.99, pero que para nosotros es importante: tenés **7 días de garantía completa**. Si la comprás y sentís que no era lo que esperabas, nos escribís a info@vakoclub.com dentro de esos 7 días y te devolvemos el dinero, sin pedirte que justifiques nada.
 
 No lo decimos porque esperemos devoluciones — lo decimos porque decidir comprarle a una marca que recién estás conociendo no debería sentirse como un salto al vacío. Ya leíste el primer capítulo; el resto de la guía sigue el mismo nivel, la misma claridad y el mismo objetivo: que entiendas qué estás tomando, no que memorices un manual.
 
-**[Conseguí la guía completa — $29.99 · Garantía de 14 días]** → `https://vakoclub.com/tienda/el-mundo-de-la-copa#oferta`
+**[Conseguí la guía completa — $29.99 · Garantía de 7 días]** → `https://vakoclub.com/tienda/el-mundo-de-la-copa#oferta`
 
 Un abrazo,
 El equipo de Vako Club
@@ -197,7 +197,7 @@ El equipo de Vako Club
 2. Todo lo que incluye tu $29.99, en un solo email
 3. Última vez que te hablamos de esta guía (por ahora)
 
-**Preheader:** Garantía de 14 días, estatus de Fundador/a, y el bono mientras dure el cupo.
+**Preheader:** Garantía de 7 días, estatus de Fundador/a, y el bono mientras dure el cupo.
 
 **Cuerpo:**
 
@@ -208,7 +208,7 @@ Este es el último email de esta serie sobre *El Mundo de la Copa* — no te vam
 Antes de cerrar el tema, todo junto:
 
 - **La guía completa:** 83 páginas — fundamentos, cata, uvas, todas las regiones del mundo y maridaje, sin esnobismo. $29.99.
-- **Garantía de devolución de 14 días**, sin preguntas.
+- **Garantía de devolución de 7 días**, sin preguntas.
 - **Estatus de Fundador/a:** Membresía Gratuita + prioridad en la próxima serie de guías regionales.
 - **Mientras dure el cupo de esta campaña:** las fichas imprimibles (Ficha de Cata + Glosario) como bono aparte. `[PENDIENTE: confirmar disponibilidad real del cupo antes de enviar este email]`
 

@@ -21,7 +21,7 @@ Fecha: 2026-08-20 | Agente: vako-landing
 
 ---
 
-## 2. Garantía de 14 días, bono "Fundador" y escasez de 50 unidades — dónde y cómo insertarlos
+## 2. Garantía de 7 días, bono "Fundador" y escasez de 50 unidades — dónde y cómo insertarlos
 
 Todos estos cambios son sobre el diccionario `COPY` (objeto `es`/`en`/`pt`) y el JSX de la sección **"8 · La oferta"** (`id="oferta"`, línea ~1013 del archivo actual). No requieren tocar Stripe ni el flujo de pago.
 
@@ -33,13 +33,13 @@ Cambiar `hero.microcopy` de:
 a:
 
 **ES:**
-> "Descarga inmediata · Pago seguro · Devolución garantizada 14 días"
+> "Descarga inmediata · Pago seguro · Devolución garantizada 7 días"
 
 **EN:**
-> "Instant download · Secure payment · 14-day money-back guarantee"
+> "Instant download · Secure payment · 7-day money-back guarantee"
 
 **PT:**
-> "Download imediato · Pagamento seguro · Garantia de devolução em 14 dias"
+> "Download imediato · Pagamento seguro · Garantia de devolução em 7 dias"
 
 *(Se quita "PDF para leer en cualquier dispositivo" porque ya se sobreentiende y así el espacio se usa para el elemento de confianza que realmente falta. Si se prefiere no perder esa frase, usar cuatro elementos en vez de tres — el patrón de "·" ya soporta cualquier cantidad.)*
 
@@ -50,13 +50,13 @@ Insertar un bloque nuevo, visualmente distinto (no solo una línea más de la li
 **Copy sugerido (nuevo campo `t.oferta.garantia`):**
 
 **ES:**
-> **Garantía de devolución — 14 días.** Si no te sirve, escribinos a info@vakoclub.com dentro de los 14 días y te devolvemos el 100%, sin pedirte explicaciones.
+> **Garantía de devolución — 7 días.** Si no te sirve, escribinos a info@vakoclub.com dentro de los 7 días y te devolvemos el 100%, sin pedirte explicaciones.
 
 **EN:**
-> **14-day money-back guarantee.** If it's not for you, email us at info@vakoclub.com within 14 days and we'll refund you in full, no questions asked.
+> **7-day money-back guarantee.** If it's not for you, email us at info@vakoclub.com within 7 days and we'll refund you in full, no questions asked.
 
 **PT:**
-> **Garantia de devolução — 14 dias.** Se não for para você, escreva para info@vakoclub.com dentro de 14 dias e devolvemos 100%, sem perguntas.
+> **Garantia de devolução — 7 dias.** Se não for para você, escreva para info@vakoclub.com dentro de 7 dias e devolvemos 100%, sem perguntas.
 
 ### 2.3 Bono "Fundador/a" — sumar a la lista `oferta.incluye`
 
@@ -109,9 +109,9 @@ No hace falta agregar botones nuevos (ya hay 4, ver puntuación arriba). Sí con
 
 **Después (solo en la sección de oferta y en el cierre, no en el header ni el hero para no hacerlo largo dos veces):**
 
-**ES:** "Conseguir la guía — USD 29.99 · Devolución garantizada 14 días"
-**EN:** "Get the guide — USD 29.99 · 14-day money-back guarantee"
-**PT:** "Consiga o guia — USD 29.99 · Garantia de devolução em 14 dias"
+**ES:** "Conseguir la guía — USD 29.99 · Devolución garantizada 7 días"
+**EN:** "Get the guide — USD 29.99 · 7-day money-back guarantee"
+**PT:** "Consiga o guia — USD 29.99 · Garantia de devolução em 7 dias"
 
 ### 2.7 FAQ — dos objeciones que faltan
 
@@ -119,11 +119,11 @@ Agregar a `t.faq.items` (después de la última pregunta actual, "¿Se actualiza
 
 **Nueva pregunta 1 — reembolso:**
 
-**ES:** { q: "¿Puedo pedir reembolso?", a: "Sí. Tenés 14 días desde la compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin pedirte explicaciones." }
+**ES:** { q: "¿Puedo pedir reembolso?", a: "Sí. Tenés 7 días desde la compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin pedirte explicaciones." }
 
-**EN:** { q: "Can I get a refund?", a: "Yes. You have 14 days from your purchase to email us at info@vakoclub.com and we'll refund you in full, no questions asked." }
+**EN:** { q: "Can I get a refund?", a: "Yes. You have 7 days from your purchase to email us at info@vakoclub.com and we'll refund you in full, no questions asked." }
 
-**PT:** { q: "Posso pedir reembolso?", a: "Sim. Você tem 14 dias a partir da compra para escrever para info@vakoclub.com e devolvemos 100%, sem perguntas." }
+**PT:** { q: "Posso pedir reembolso?", a: "Sim. Você tem 7 dias a partir da compra para escrever para info@vakoclub.com e devolvemos 100%, sem perguntas." }
 
 **Nueva pregunta 2 — "¿por qué pagar si hay info gratis?":**
 
@@ -144,17 +144,17 @@ No hay testimonios ni cifras hoy — `[PENDIENTE: primeras reseñas reales, a co
 **ES:**
 - "Pago 100% seguro, procesado por Stripe"
 - "Mirá 6 páginas reales antes de decidir — no es una maqueta"
-- "Devolución completa dentro de 14 días, sin preguntas"
+- "Devolución completa dentro de 7 días, sin preguntas"
 
 **EN:**
 - "100% secure payment, processed by Stripe"
 - "See 6 real pages before you decide — not a mockup"
-- "Full refund within 14 days, no questions asked"
+- "Full refund within 7 days, no questions asked"
 
 **PT:**
 - "Pagamento 100% seguro, processado pela Stripe"
 - "Veja 6 páginas reais antes de decidir — não é uma maquete"
-- "Devolução completa em até 14 dias, sem perguntas"
+- "Devolução completa em até 7 dias, sem perguntas"
 
 **Por qué esto funciona como sustituto honesto:** las 6 páginas de muestra ya existen (`/adentro`) y hoy están enmarcadas solo como "un vistazo" — reencuadrarlas explícitamente como *reducción de riesgo* ("no es una maqueta, es el PDF real") les da el mismo trabajo que haría un testimonio: bajar el miedo a comprar algo que no es lo que promete. Es la recomendación que ya dejó `vako-ofertas` en su oferta de hoy, aquí convertida en copy insertable.
 

@@ -54,7 +54,7 @@ Los tres primeros son ejecutables esta semana con lo que ya existe, sin escribir
 
 ## Garantía (reducción de riesgo)
 
-- **Garantía de devolución de 14 días**, sin pedir justificación — escribir a info@vakoclub.com dentro de los 14 días posteriores a la compra. Stripe ya soporta reembolsos manuales desde su panel sin ningún cambio de código; el único trabajo pendiente es **agregar esta garantía al copy de la landing y del anuncio**, algo que hoy no existe en `ElMundoDeLaCopaLanding.jsx`. Para tráfico frío esto es más importante que para tráfico orgánico: es la pieza que más falta hoy en la landing actual — coincide con el hallazgo #1 de `vako-research` del mismo día, que cita un caso de estudio de producto digital donde una garantía de devolución de 30 días visible subió las ventas 21% (con 12% de tasa de reembolso); no es un dato propio de Vako, es referencia de mercado, pero respalda priorizar esto antes que tocar el precio.
+- **Garantía de devolución de 7 días**, sin pedir justificación — escribir a info@vakoclub.com dentro de los 7 días posteriores a la compra. Stripe ya soporta reembolsos manuales desde su panel sin ningún cambio de código; el único trabajo pendiente es **agregar esta garantía al copy de la landing y del anuncio**, algo que hoy no existe en `ElMundoDeLaCopaLanding.jsx`. Para tráfico frío esto es más importante que para tráfico orgánico: es la pieza que más falta hoy en la landing actual — coincide con el hallazgo #1 de `vako-research` del mismo día, que cita un caso de estudio de producto digital donde una garantía de devolución de 30 días visible subió las ventas 21% (con 12% de tasa de reembolso); no es un dato propio de Vako, es referencia de mercado, pero respalda priorizar esto antes que tocar el precio.
 - **Muestra gratuita ya existe y es más fuerte que en las ofertas regionales:** la landing ya muestra 6 páginas interiores reales (`/adentro`) — esto ya cumple el rol de "poder hojearlo antes de pagar" que en las guías regionales todavía está pendiente (su contenido ni existe). Solo falta nombrarlo como parte de la reducción de riesgo en el copy de venta ("mirá 6 páginas reales antes de decidir"), no construir nada nuevo.
 
 ## Prueba social
@@ -81,16 +81,16 @@ Dos mecánicas reales disponibles para lanzar la campaña de ads ya, sin depende
 A diferencia de las ofertas regionales (pensadas para audiencia ya tibia de Instagram), estos textos están pensados para funcionar **sin ningún contexto previo de marca** — como tiene que funcionar un anuncio a tráfico frío.
 
 **Principal (headline de anuncio / landing):**
-> "Dejá de elegir vino a ciegas. 83 páginas para entender qué estás tomando — sin escuela de sommelier, sin snobismo. Garantía de devolución de 14 días."
+> "Dejá de elegir vino a ciegas. 83 páginas para entender qué estás tomando — sin escuela de sommelier, sin snobismo. Garantía de devolución de 7 días."
 
 **Variante pregunta (hook de anuncio en video/reel):**
 > "¿Alguna vez pediste 'el segundo más barato' de la carta solo para no arriesgarte? Esta guía te saca de ahí en una sola lectura."
 
 **Variante corta (caption / feed estático):**
-> "El PDF que te enseña a elegir vino sin pasar vergüenza. $29.99 · Garantía de 14 días · Mirá 6 páginas reales antes de comprar."
+> "El PDF que te enseña a elegir vino sin pasar vergüenza. $29.99 · Garantía de 7 días · Mirá 6 páginas reales antes de comprar."
 
 **CTA (botón / cierre):**
-> "Conseguí la guía — $29.99 · Devolución garantizada 14 días"
+> "Conseguí la guía — $29.99 · Devolución garantizada 7 días"
 
 ## Cómo se cobra
 
@@ -108,7 +108,7 @@ A diferencia de las ofertas regionales (pensadas para audiencia ya tibia de Inst
 ## Qué se activa esta semana sin bloqueos técnicos vs. qué requiere trabajo adicional
 
 **Activable esta semana, sin tocar código de pago:**
-- Agregar la garantía de 14 días al copy de la landing y de los anuncios.
+- Agregar la garantía de 7 días al copy de la landing y de los anuncios.
 - Nombrar explícitamente las 6 páginas de muestra ya existentes como reducción de riesgo ("mirá 6 páginas reales antes de decidir").
 - Agregar el bono de estatus "Fundador/a" + prioridad en la serie regional al copy (cero dependencia técnica, la Membresía Gratuita ya funciona).
 - Escribir los anuncios/copy con los one-liners de esta oferta.
@@ -126,7 +126,7 @@ A diferencia de las ofertas regionales (pensadas para audiencia ya tibia de Inst
 ## Qué necesita vako-landing / vako-email / vako-creatividades para ejecutarla
 
 **Para `vako-landing`:**
-- Sobre `src/pages/tienda/ElMundoDeLaCopaLanding.jsx` (ya existe, no hay que crearla desde cero): agregar la garantía de 14 días visible junto al precio (sección "8 · La oferta"), agregar el bono de estatus "Fundador/a" a la lista `incluye`, y si se usa la Opción A de escasez, agregar el precio ancla tachado junto a `PRICE_LABEL`.
+- Sobre `src/pages/tienda/ElMundoDeLaCopaLanding.jsx` (ya existe, no hay que crearla desde cero): agregar la garantía de 7 días visible junto al precio (sección "8 · La oferta"), agregar el bono de estatus "Fundador/a" a la lista `incluye`, y si se usa la Opción A de escasez, agregar el precio ancla tachado junto a `PRICE_LABEL`.
 - Revisar y, si hace falta, reforzar la sección "9 · Para quien no está listo" (captura de email) una vez que exista el PDF de muestra real y la auto-respuesta de EmailJS — hoy promete algo que no se entrega automáticamente.
 - Confirmar si conviene una versión de landing más corta/directa específica para tráfico de ads (sin el gate de idioma/edad como primer paso, que agrega fricción a alguien que llega con intención de compra desde un anuncio) — decisión de `vako-landing`, señalada aquí como algo a evaluar.
 
@@ -136,7 +136,7 @@ A diferencia de las ofertas regionales (pensadas para audiencia ya tibia de Inst
 - Mismo recordatorio técnico ya conocido: no hay ESP de email marketing conectado, solo EmailJS transaccional — redactar listo para cargar en cuanto se conecte uno.
 
 **Para `vako-creatividades`:**
-- Piezas de anuncio (no de contenido orgánico) usando los one-liners de esta oferta, mostrando explícitamente: la garantía de 14 días, 1-2 páginas reales de muestra, y el precio con o sin ancla según lo que Julian decida.
+- Piezas de anuncio (no de contenido orgánico) usando los one-liners de esta oferta, mostrando explícitamente: la garantía de 7 días, 1-2 páginas reales de muestra, y el precio con o sin ancla según lo que Julian decida.
 - Formato pensado para tráfico frío: el hook tiene que funcionar sin que la persona sepa qué es Vako Club — evitar dar por sentado reconocimiento de marca que sí puede asumirse en contenido orgánico de Instagram.
 
 ## Fuentes consultadas
