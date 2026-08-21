@@ -39,7 +39,9 @@ Estas piezas están **listas para pautar**, pero hay dos bloqueos técnicos real
 - **Formato:** Reel/video corto, 9:16, ~20-25s. Versión estática de respaldo: imagen de la tapa + 1 línea de copy superpuesta.
 
 **Gancho / hook (primeros 1-2 seg):**
-> "¿Pedís siempre 'el segundo más barato' de la carta?"
+> "El vino tiene un idioma. Se aprende en una tarde."
+
+*(Actualizado 2026-08-21: el gancho original, "¿Pedís siempre 'el segundo más barato' de la carta?", le pareció a Julian poco atractivo como pregunta retórica — se reemplazó por esta frase, que es copy real de la introducción del propio libro ("El vino tiene un idioma. Se aprende en una tarde y te dura toda la vida", ver `producto-guia-general-CONTENIDO-COMPLETO.md`), más asertiva y ya usada en la pieza estática del canvas de Design.)*
 
 **Primary text (copy de anuncio):**
 > Te pasan la carta y no tenés ni idea de qué pedir, así que agarrás el segundo más barato para no arriesgarte. No es falta de gusto — es que nadie te enseñó a leer una etiqueta.
