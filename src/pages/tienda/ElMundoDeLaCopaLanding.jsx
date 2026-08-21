@@ -63,7 +63,7 @@ const COPY = {
       paragraph:
         'Ochenta y tres páginas para dejar de elegir a ciegas. Cómo se cata, cómo se sirve, qué dice una etiqueta y con qué va cada botella. Sin esnobismo y sin tecnicismos vacíos.',
       ctaSecondary: 'Ver páginas de adentro',
-      microcopy: 'Descarga inmediata · PDF para leer en cualquier dispositivo · Pago seguro',
+      microcopy: 'Descarga inmediata · Pago seguro · Devolución garantizada 14 días',
       coverAlt: 'Tapa de la guía El mundo de la copa, de Vako Club',
       coverSrc: '/images/guias/el-mundo-de-la-copa-tapa.jpg',
       coverWidth: 451,
@@ -112,10 +112,23 @@ const COPY = {
       label: 'Experiencia',
       bio: 'Sin escuela y sin atajos: leyendo, probando, preguntando y volviendo a probar. Nos llevó diez años llegar hasta acá, y buena parte de ese camino fue dar vueltas de más por no tener a nadie que me dijera por dónde empezar.',
     },
+    confianza: {
+      items: [
+        'Pago 100% seguro, procesado por Stripe',
+        'Mirá 6 páginas reales antes de decidir — no es una maqueta',
+        'Devolución completa dentro de 14 días, sin preguntas',
+      ],
+    },
     oferta: {
       eyebrow: 'La guía completa',
       paymentNote: 'Pago único · Sin vencimiento',
+      garantia: {
+        titulo: 'Garantía de devolución — 14 días.',
+        texto: 'Si no te sirve, escribinos a info@vakoclub.com dentro de los 14 días y te devolvemos el 100%, sin pedirte explicaciones.',
+      },
+      ctaConGarantia: 'Conseguir la guía — USD 29.99 · Devolución garantizada 14 días',
       secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en tu email',
+      escasez: 'El estatus de Fundador/a está disponible para los primeros 50 compradores de esta campaña.',
       langNotice: null,
       incluye: [
         'Las 83 páginas en PDF de alta calidad',
@@ -123,6 +136,7 @@ const COPY = {
         'Diagramas y fichas de cata para imprimir',
         'Acceso inmediato, sin vencimiento',
         'Actualizaciones futuras sin costo',
+        'Estatus de Fundador/a de Vako Club: invitación a la Membresía Gratuita + aviso prioritario cuando salga la serie regional (España, Argentina, Francia)',
       ],
     },
     compra: {
@@ -138,14 +152,14 @@ const COPY = {
     },
     email: {
       title: '¿Todavía lo estás pensando?',
-      paragraph: 'Dejanos tu email y te mandamos la primera parte completa, gratis. Si te sirve, ya sabés dónde está el resto.',
+      paragraph: 'Dejanos tu email y te mandamos gratis la Parte I completa (Fundamentos) en PDF. Si te sirve, ya sabés dónde está el resto.',
       inputLabel: 'Tu email',
       placeholder: 'Tu email',
       submitIdle: 'Enviar la primera parte',
       submitBusy: 'Enviando…',
       defaultMsg: 'Un correo por semana sobre vino. Te podés dar de baja cuando quieras.',
       invalidMsg: 'Escribí un email válido para mandarte la primera parte.',
-      successMsg: 'Listo: te llega la primera parte en unos minutos.',
+      successMsg: 'Listo, ya lo tenemos. Te lo mandamos por email en las próximas 24 horas.',
       errorMsg: 'Hubo un problema al enviarlo. Probá de nuevo en un rato.',
     },
     faq: {
@@ -157,6 +171,8 @@ const COPY = {
         { q: '¿Cómo la recibo?', a: 'Por email, apenas se acredita el pago.' },
         { q: '¿Puedo regalarla?', a: 'Sí. Comprás igual que siempre y nos escribís a quién mandarle el enlace.' },
         { q: '¿Se actualiza?', a: 'Sí, y las actualizaciones te llegan sin costo.' },
+        { q: '¿Puedo pedir reembolso?', a: 'Sí. Tenés 14 días desde la compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin pedirte explicaciones.' },
+        { q: '¿Por qué pagar si hay información gratis en internet?', a: 'Porque está toda repartida en videos, blogs y opiniones contradictorias. Esta guía la ordena una sola vez, de la primera copa a la góndola, en 83 páginas pensadas para leerse — no para googlear cada duda por separado.' },
       ],
     },
     cierre: { title: 'La próxima botella que abras puede tener sentido.' },
@@ -179,7 +195,7 @@ const COPY = {
       paragraph:
         'Eighty-three pages to stop choosing wine blind. How to taste it, how to serve it, what a label actually says, and what to pair with each bottle. No snobbery, no empty jargon.',
       ctaSecondary: 'See the inside pages',
-      microcopy: 'Instant download · PDF readable on any device · Secure payment',
+      microcopy: 'Instant download · Secure payment · 14-day money-back guarantee',
       coverAlt: 'Cover of The World of the Glass guide, by Vako Club',
       coverSrc: '/images/guias/el-mundo-de-la-copa-tapa-en.jpg',
       coverWidth: 642,
@@ -228,10 +244,23 @@ const COPY = {
       label: 'Experience',
       bio: "No formal school, no shortcuts: reading, tasting, asking, and tasting again. It took ten years to get here, and a good part of that road was extra loops from not having anyone to tell me where to start.",
     },
+    confianza: {
+      items: [
+        '100% secure payment, processed by Stripe',
+        'See 6 real pages before you decide — not a mockup',
+        'Full refund within 14 days, no questions asked',
+      ],
+    },
     oferta: {
       eyebrow: 'The complete guide',
       paymentNote: 'One-time payment · No expiration',
+      garantia: {
+        titulo: '14-day money-back guarantee.',
+        texto: "If it's not for you, email us at info@vakoclub.com within 14 days and we'll refund you in full, no questions asked.",
+      },
+      ctaConGarantia: 'Get the guide — USD 29.99 · 14-day money-back guarantee',
       secureNote: 'Secure payment with Stripe · You get the download link instantly by email',
+      escasez: 'Founding Member status is available to the first 50 buyers of this campaign.',
       langNotice: null,
       incluye: [
         'All 83 pages in high-quality PDF',
@@ -239,6 +268,7 @@ const COPY = {
         'Printable diagrams and tasting sheets',
         'Instant access, no expiration',
         'Future updates at no extra cost',
+        'Vako Club Founding Member status: invitation to the Free Membership + priority notice when the regional series (Spain, Argentina, France) launches',
       ],
     },
     compra: {
@@ -254,14 +284,14 @@ const COPY = {
     },
     email: {
       title: 'Still thinking it over?',
-      paragraph: "Leave us your email and we'll send you the complete first part, free. If it's useful, you already know where to find the rest.",
+      paragraph: "Leave us your email and we'll send you Part I (Fundamentals) in full, free, as a PDF. If it's useful, you already know where to find the rest.",
       inputLabel: 'Your email',
       placeholder: 'Your email',
       submitIdle: 'Send me the first part',
       submitBusy: 'Sending…',
       defaultMsg: 'One email a week about wine. Unsubscribe whenever you want.',
       invalidMsg: 'Enter a valid email so we can send you the first part.',
-      successMsg: 'Done: the first part will land in your inbox in a few minutes.',
+      successMsg: "Got it — we'll email it to you within the next 24 hours.",
       errorMsg: 'Something went wrong sending it. Try again in a bit.',
     },
     faq: {
@@ -273,6 +303,8 @@ const COPY = {
         { q: 'How do I receive it?', a: 'By email, as soon as the payment is confirmed.' },
         { q: 'Can I gift it?', a: 'Yes. Buy it the same way as always and let us know who to send the link to.' },
         { q: 'Does it get updated?', a: 'Yes, and updates reach you at no extra cost.' },
+        { q: 'Can I get a refund?', a: "Yes. You have 14 days from your purchase to email us at info@vakoclub.com and we'll refund you in full, no questions asked." },
+        { q: "Why pay if there's free information online?", a: "Because it's scattered across videos, blogs, and contradicting opinions. This guide puts it in one place, from your first glass to the wine aisle, in 83 pages meant to be read — not googled one question at a time." },
       ],
     },
     cierre: { title: 'The next bottle you open might actually make sense.' },
@@ -295,7 +327,7 @@ const COPY = {
       paragraph:
         'Oitenta e três páginas para parar de escolher vinho no escuro. Como degustar, como servir, o que um rótulo realmente diz e com que harmonizar cada garrafa. Sem esnobismo e sem jargão vazio.',
       ctaSecondary: 'Ver páginas internas',
-      microcopy: 'Download imediato · PDF para ler em qualquer dispositivo · Pagamento seguro',
+      microcopy: 'Download imediato · Pagamento seguro · Garantia de devolução em 14 dias',
       coverAlt: 'Capa do guia O Mundo da Taça, da Vako Club',
       coverSrc: '/images/guias/el-mundo-de-la-copa-tapa-pt.png',
       coverWidth: 1632,
@@ -344,10 +376,23 @@ const COPY = {
       label: 'Experiência',
       bio: 'Sem escola e sem atalhos: lendo, provando, perguntando e provando de novo. Levou dez anos para chegar até aqui, e boa parte desse caminho foi dar voltas a mais por não ter ninguém que me dissesse por onde começar.',
     },
+    confianza: {
+      items: [
+        'Pagamento 100% seguro, processado pela Stripe',
+        'Veja 6 páginas reais antes de decidir — não é uma maquete',
+        'Devolução completa em até 14 dias, sem perguntas',
+      ],
+    },
     oferta: {
       eyebrow: 'O guia completo',
       paymentNote: 'Pagamento único · Sem vencimento',
+      garantia: {
+        titulo: 'Garantia de devolução — 14 dias.',
+        texto: 'Se não for para você, escreva para info@vakoclub.com dentro de 14 dias e devolvemos 100%, sem perguntas.',
+      },
+      ctaConGarantia: 'Consiga o guia — USD 29.99 · Garantia de devolução em 14 dias',
       secureNote: 'Pagamento seguro com Stripe · Você recebe o link de download na hora, por email',
+      escasez: 'O status de Fundador(a) está disponível para os primeiros 50 compradores desta campanha.',
       langNotice: null,
       incluye: [
         'As 83 páginas em PDF de alta qualidade',
@@ -355,6 +400,7 @@ const COPY = {
         'Diagramas e fichas de degustação para imprimir',
         'Acesso imediato, sem vencimento',
         'Atualizações futuras sem custo',
+        'Status de Fundador(a) da Vako Club: convite para a Membresia Gratuita + aviso prioritário quando sair a série regional (Espanha, Argentina, França)',
       ],
     },
     compra: {
@@ -370,14 +416,14 @@ const COPY = {
     },
     email: {
       title: 'Ainda está pensando?',
-      paragraph: 'Deixe seu email e mandamos a primeira parte completa, de graça. Se gostar, você já sabe onde está o resto.',
+      paragraph: 'Deixe seu email e mandamos de graça a Parte I completa (Fundamentos) em PDF. Se gostar, você já sabe onde está o resto.',
       inputLabel: 'Seu email',
       placeholder: 'Seu email',
       submitIdle: 'Enviar a primeira parte',
       submitBusy: 'Enviando…',
       defaultMsg: 'Um email por semana sobre vinho. Você pode cancelar quando quiser.',
       invalidMsg: 'Digite um email válido para receber a primeira parte.',
-      successMsg: 'Pronto: a primeira parte chega em alguns minutos.',
+      successMsg: 'Pronto, já recebemos. Te enviamos por email nas próximas 24 horas.',
       errorMsg: 'Houve um problema ao enviar. Tente de novo daqui a pouco.',
     },
     faq: {
@@ -389,6 +435,8 @@ const COPY = {
         { q: 'Como recebo?', a: 'Por email, assim que o pagamento é confirmado.' },
         { q: 'Posso presentear?', a: 'Sim. Compre normalmente e nos escreva para quem enviar o link.' },
         { q: 'É atualizado?', a: 'Sim, e as atualizações chegam sem custo.' },
+        { q: 'Posso pedir reembolso?', a: 'Sim. Você tem 14 dias a partir da compra para escrever para info@vakoclub.com e devolvemos 100%, sem perguntas.' },
+        { q: 'Por que pagar se há informação gratuita na internet?', a: 'Porque está toda espalhada em vídeos, blogs e opiniões contraditórias. Este guia organiza tudo de uma vez, da primeira taça até a prateleira do mercado, em 83 páginas pensadas para ler — não para pesquisar cada dúvida em separado.' },
       ],
     },
     cierre: { title: 'A próxima garrafa que você abrir pode fazer sentido.' },
@@ -1010,6 +1058,23 @@ const ElMundoDeLaCopaLanding = () => {
         </div>
       </section>
 
+      {/* 7 · Franja de confianza — sustituye a la prueba social inexistente sin inventar nada:
+          reencuadra elementos verificables (pago seguro, muestra real, garantía) como reducción
+          de riesgo justo antes de que el visitante decida. */}
+      <section aria-label={t.confianza.items.join(' · ')} className="bg-copa-creamDeep border-y border-copa-gold">
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-10 sm:py-12 flex flex-wrap gap-x-10 gap-y-5 justify-center text-center">
+          {t.confianza.items.map((item) => (
+            <span
+              key={item}
+              className="flex-[1_1_240px] max-w-[320px] font-jost text-[12px] tracking-[0.08em] uppercase text-copa-ink/70"
+              style={{ lineHeight: 1.6 }}
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </section>
+
       {/* 8 · La oferta */}
       <section id="oferta" ref={ofertaRef} className="max-w-[1160px] mx-auto px-6 sm:px-8 pb-20 sm:pb-32 lg:pb-40">
         <div className="bg-copa-creamDeep border-y border-copa-gold py-14 sm:py-20 lg:py-24 px-6 sm:px-8 flex flex-wrap gap-10 sm:gap-16 lg:gap-20 items-center justify-center">
@@ -1026,14 +1091,27 @@ const ElMundoDeLaCopaLanding = () => {
             <Reveal delay={0.1} className="font-jost text-[11px] tracking-[0.16em] uppercase text-copa-ink/60 mt-[18px]">
               {t.oferta.paymentNote}
             </Reveal>
+            <Reveal delay={0.12} className="mt-8 py-4 px-5 border border-copa-gold bg-copa-cream text-left">
+              <div className="font-cormorant text-copa-burgundy" style={{ fontSize: 17, lineHeight: 1.3 }}>
+                {t.oferta.garantia.titulo}
+              </div>
+              <div className="text-copa-ink/75 mt-1.5" style={{ fontSize: 14.5, lineHeight: 1.5 }}>
+                {t.oferta.garantia.texto}
+              </div>
+            </Reveal>
             <Reveal delay={0.15}>
-              <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-10`}>
-                {comprando ? t.nav.redirecting : `${t.nav.cta} — ${PRICE_LABEL}`}
+              <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-8`}>
+                {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
               </button>
             </Reveal>
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
               {t.oferta.secureNote}
             </div>
+            {t.oferta.escasez && (
+              <div className="text-copa-ink/55 mt-3" style={{ fontSize: 13.5, lineHeight: 1.5, fontStyle: 'italic' }}>
+                {t.oferta.escasez}
+              </div>
+            )}
             {t.oferta.langNotice && (
               <div className="text-copa-burgundy mt-3" style={{ fontSize: 14, lineHeight: 1.5 }}>
                 {t.oferta.langNotice}
@@ -1147,7 +1225,7 @@ const ElMundoDeLaCopaLanding = () => {
         </Reveal>
         <Reveal delay={0.08}>
           <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-14`}>
-            {comprando ? t.nav.redirecting : `${t.nav.cta} — ${PRICE_LABEL}`}
+            {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
           </button>
         </Reveal>
       </section>
