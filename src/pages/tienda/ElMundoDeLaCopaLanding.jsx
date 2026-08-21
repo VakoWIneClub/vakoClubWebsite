@@ -10,7 +10,7 @@ import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 
 // Same EmailJS project already used by the contact form and the "notify me" waitlist
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
-const EMAILJS_SERVICE_ID = 'service_2z4rljb';
+const EMAILJS_SERVICE_ID = 'service_u1dbejb';
 const EMAILJS_TEMPLATE_ID = 'template_d3yel4f';
 // Plantilla dedicada (no la de arriba, que también usan el formulario de contacto y la lista de
 // espera de guías regionales) — evita que esas otras dos reciban por error el auto-reply del

@@ -17,7 +17,7 @@ const ContactForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const EMAILJS_SERVICE_ID = 'service_2z4rljb';
+  const EMAILJS_SERVICE_ID = 'service_u1dbejb';
   const EMAILJS_TEMPLATE_ID = 'template_d3yel4f';
   const EMAILJS_PUBLIC_KEY = 'G7BJcfLPx0PBVWBOT';
 

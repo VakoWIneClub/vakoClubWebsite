@@ -9,7 +9,7 @@ import {
 // Misma integración de EmailJS ya usada en el formulario de contacto (src/components/contacto/ContactForm.jsx).
 // Todavía no hay checkout ni ESP de email marketing conectado, así que cada guía captura el email
 // en una lista de espera en vez de enlazar a un pago que no existe.
-const EMAILJS_SERVICE_ID = 'service_2z4rljb';
+const EMAILJS_SERVICE_ID = 'service_u1dbejb';
 const EMAILJS_TEMPLATE_ID = 'template_d3yel4f';
 const EMAILJS_PUBLIC_KEY = 'G7BJcfLPx0PBVWBOT';
 
