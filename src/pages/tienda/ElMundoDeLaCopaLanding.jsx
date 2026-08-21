@@ -33,17 +33,17 @@ const GATE_COPY = {
   es: {
     ageLabel: 'Confirmo que soy mayor de 18 años.',
     continueLabel: 'Continuar',
-    hint: 'Elegí un idioma y confirmá tu edad para continuar.',
+    hint: 'Confirmá tu edad para continuar (podés cambiar el idioma si preferís otro).',
   },
   en: {
     ageLabel: 'I confirm I am 18 years of age or older.',
     continueLabel: 'Continue',
-    hint: 'Choose a language and confirm your age to continue.',
+    hint: 'Confirm your age to continue (switch language above if you prefer another).',
   },
   pt: {
     ageLabel: 'Confirmo que tenho 18 anos ou mais.',
     continueLabel: 'Continuar',
-    hint: 'Escolha um idioma e confirme sua idade para continuar.',
+    hint: 'Confirme sua idade para continuar (troque o idioma acima se preferir outro).',
   },
 };
 
@@ -494,7 +494,10 @@ const ElMundoDeLaCopaLanding = () => {
   const { toast } = useToast();
   const [lang, setLang] = useState(readStoredLang);
   const [gateOpen, setGateOpen] = useState(() => !readGatePassed() && !readHasCompraParam());
-  const [gateLang, setGateLang] = useState(null);
+  // Preseleccionado en español (idioma principal del sitio y de la campaña de ads) para que el
+  // gate le pida al visitante una sola decisión —confirmar la edad— en vez de dos. Sigue siendo
+  // posible cambiar de idioma antes de continuar; solo cambia el estado inicial del botón.
+  const [gateLang, setGateLang] = useState('es');
   const [gateAge, setGateAge] = useState(false);
   const [comprando, setComprando] = useState(false);
   const [email, setEmail] = useState('');
