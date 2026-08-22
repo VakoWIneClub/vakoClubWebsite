@@ -72,7 +72,9 @@ Abre con un plano cercano de una mano dudando frente a una carta de vinos en un 
 - **Formato:** estático cuadrado o 4:5 para feed (funciona bien como "producto claro"), con versión Reel corta como alternativa.
 
 **Gancho / hook:**
-> "¿Le vas a regalar otra botella que no sabés si le va a gustar?"
+> "Dejá de regalar botellas al azar."
+
+*(Actualizado 2026-08-21: reemplaza la pregunta retórica original, "¿Le vas a regalar otra botella que no sabés si le va a gustar?", por una versión más directa que Julian prefirió — mismo ángulo, ya usada en la pieza estática y la historia del canvas de Design.)*
 
 **Primary text:**
 > En vez de apostar con una botella más, regalale algo que sí va a usar cada vez que elija una: "El Mundo de la Copa", la guía de Vako Club para entender vino sin escuela de sommelier.
@@ -103,7 +105,9 @@ Toma cálida, editorial, de una copa de vino junto a la tapa de la guía impresa
 - **Formato:** Reel, 9:16, ~20s, tono más pausado/cálido que el Concepto 1 (menos "dolor", más "alivio").
 
 **Gancho / hook:**
-> "No hace falta un curso de meses para entender de vino."
+> "No hace falta un WSET de $2.500 para entender de vino."
+
+*(Actualizado 2026-08-21: versión más específica y filosa que Julian eligió sobre la original ("No hace falta un curso de meses..."), usando el dato real de la investigación de `vako-research` — las certificaciones tipo WSET cuestan $795-$2.500+, ver `research/2026-08-20-auditoria-listo-para-ads-el-mundo-de-la-copa.md`. Ya está en la pieza estática y la historia del canvas de Design.)*
 
 **Primary text:**
 > No hace falta una certificación cara ni un curso de meses. "El Mundo de la Copa" es una sola guía, 83 páginas, para aprender a tu propio ritmo: de la primera copa hasta poder leer una etiqueta sin dudar.
