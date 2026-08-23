@@ -33,6 +33,7 @@ module.exports = {
           burgundyDark: '#4A1119',
           gold: '#B08D57',
           ink: '#2B2320',
+          error: '#8C2F2F',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

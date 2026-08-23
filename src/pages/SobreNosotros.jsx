@@ -38,24 +38,18 @@ const SobreNosotros = () => {
         <meta property="og:description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
       </Helmet>
 
-      <section className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] border-b border-copa-gold/50">
-        <Reveal className="px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
+      <section className="border-b border-copa-gold/50">
+        <Reveal className="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-24 text-center">
           <div className="copa-eyebrow">Quiénes somos</div>
           <h1 className="font-cormorant font-light leading-[1.02] mt-6" style={{ fontSize: 'clamp(36px,6vw,66px)' }}>
             No somos una bodega. Somos los que te explican <span className="text-copa-burgundy">qué estás tomando</span>.
           </h1>
-          <p className="text-copa-ink/80 max-w-xl mt-7" style={{ fontSize: 19, lineHeight: 1.65 }}>
+          <p className="text-copa-ink/80 mt-7 mx-auto" style={{ fontSize: 19, lineHeight: 1.65 }}>
             Vako Club nació de una idea simple: que entender el vino no debería depender de haber ido a una escuela. Sin escuela y sin atajos — leyendo, probando, preguntando y volviendo a probar. Nos llevó diez años llegar hasta acá, y buena parte de ese camino fue dar vueltas de más por no tener a nadie que nos dijera por dónde empezar.
           </p>
-          <p className="font-cormorant italic text-copa-burgundy mt-8 pl-5 border-l-2 border-copa-gold" style={{ fontSize: 25 }}>
+          <p className="font-cormorant italic text-copa-burgundy mt-8" style={{ fontSize: 25 }}>
             «Cada botella tiene una historia que contar.»
           </p>
-        </Reveal>
-        <Reveal delay={0.1} className="bg-copa-creamDeep border-t lg:border-t-0 lg:border-l border-copa-gold/50 flex items-center justify-center p-10">
-          <div className="w-full max-w-xs aspect-[3/4] border border-copa-gold/60 flex flex-col items-center justify-center gap-2.5 text-center text-copa-ink/45 px-6">
-            <div className="font-jost text-[11px] tracking-[0.18em] uppercase">Foto pendiente</div>
-            <div className="text-sm max-w-[210px]" style={{ lineHeight: 1.5 }}>Retrato de Julian o mesa de cata — vertical, luz cálida</div>
-          </div>
         </Reveal>
       </section>
 
