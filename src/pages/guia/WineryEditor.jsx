@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Loader2, Save, ArrowLeft, Trash2, ImagePlus, MapPin, Globe, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactQuill from 'react-quill';
+import { compressImage } from '@/lib/imageCompression';
 
 const copaInput = 'rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy';
 const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70 flex items-center';
@@ -129,11 +130,12 @@ const WineryEditor = () => {
     const existingUrls = imagePreviews.filter(p => !p.startsWith('blob:'));
 
     for (const { file } of imageFiles) {
-      const fileExt = file.name.split('.').pop();
+      const compressed = await compressImage(file);
+      const fileExt = compressed.name.split('.').pop();
       const fileName = `${user.id}_${Date.now()}_${Math.random()}.${fileExt}`;
       const filePath = `public/${fileName}`;
 
-      const { error } = await supabase.storage.from('winery-images').upload(filePath, file);
+      const { error } = await supabase.storage.from('winery-images').upload(filePath, compressed);
       if (error) throw new Error(`Error al subir imagen: ${error.message}`);
 
       const { data } = supabase.storage.from('winery-images').getPublicUrl(filePath);

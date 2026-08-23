@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Loader2, PlusCircle, ChevronsDown } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
+import { useToast } from '@/components/ui/use-toast';
 import ArticleList from '@/components/noticias/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
@@ -13,6 +14,7 @@ const ARTICLES_PER_PAGE = 6;
 
 const Noticias = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -41,48 +43,52 @@ const Noticias = () => {
     const controller = new AbortController();
     activeControllerRef.current = controller;
 
-    let query = supabase
-      .from('articles')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false });
+    // try/finally: a transient network failure can make the query *throw* instead of resolving
+    // to {error} (unlike a normal Supabase error response) — without this, that exception used
+    // to skip past setLoading(false)/setLoadingMore(false) entirely, leaving the spinner stuck
+    // until a full page reload.
+    try {
+      let query = supabase
+        .from('articles')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false });
 
-    if (currentTag && currentTag !== 'Todos') {
-      query = query.or(`tag1.eq.${currentTag},tag2.eq.${currentTag}`);
-    }
+      if (currentTag && currentTag !== 'Todos') {
+        query = query.or(`tag1.eq.${currentTag},tag2.eq.${currentTag}`);
+      }
 
-    const from = currentPage * ARTICLES_PER_PAGE;
-    const to = from + ARTICLES_PER_PAGE - 1;
-    query = query.range(from, to).abortSignal(controller.signal);
+      const from = currentPage * ARTICLES_PER_PAGE;
+      const to = from + ARTICLES_PER_PAGE - 1;
+      query = query.range(from, to).abortSignal(controller.signal);
 
-    const { data, error, count } = await query;
+      const { data, error, count } = await query;
+      if (error) throw error;
 
-    if (error) {
+      setArticles(prev => {
+        if (currentPage === 0) return data;
+        // Defensive id-based dedupe in case the same page ever gets fetched twice (e.g. a rapid
+        // double-click on "Cargar más" before the button's disabled state commits).
+        const existingIds = new Set(prev.map(a => a.id));
+        return [...prev, ...data.filter(a => !existingIds.has(a.id))];
+      });
+      setHasMore(from + data.length < count);
+    } catch (error) {
       if (error.name !== 'AbortError') {
         console.error('Error fetching articles:', error);
+        toast({
+          variant: 'destructive',
+          title: 'No se pudieron cargar los artículos',
+          description: 'Hubo un problema de conexión. Probá de nuevo en unos segundos.',
+        });
       }
+    } finally {
       if (currentPage === 0) {
         setLoading(false);
       } else {
         setLoadingMore(false);
       }
-      return;
     }
-
-    setArticles(prev => {
-      if (currentPage === 0) return data;
-      // Defensive id-based dedupe in case the same page ever gets fetched twice (e.g. a rapid
-      // double-click on "Cargar más" before the button's disabled state commits).
-      const existingIds = new Set(prev.map(a => a.id));
-      return [...prev, ...data.filter(a => !existingIds.has(a.id))];
-    });
-    setHasMore(from + data.length < count);
-
-    if (currentPage === 0) {
-      setLoading(false);
-    } else {
-      setLoadingMore(false);
-    }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     if (isInitialLoad.current) {

@@ -11,6 +11,7 @@ import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 import DOMPurify from 'dompurify';
 import { Loader2, Upload, Save, ArrowLeft, Calendar, MapPin, Globe, Map } from 'lucide-react';
+import { compressImage } from '@/lib/imageCompression';
 
 const quillFormats = [
   'header',
@@ -113,12 +114,13 @@ const EventoEditor = () => {
       return currentImageUrl || null;
     }
 
-    const fileExt = imageFile.name.split('.').pop();
+    const compressed = await compressImage(imageFile);
+    const fileExt = compressed.name.split('.').pop();
     const fileName = `events/${user.id}_${Date.now()}.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from('article-images')
-      .upload(fileName, imageFile);
+      .upload(fileName, compressed);
 
     if (uploadError) {
       throw new Error(`Error al subir imagen: ${uploadError.message}`);
@@ -153,10 +155,11 @@ const EventoEditor = () => {
       if (file) {
         setIsSubmitting(true);
         try {
-          const fileExt = file.name.split('.').pop();
+          const compressed = await compressImage(file);
+          const fileExt = compressed.name.split('.').pop();
           const fileName = `events/${user.id}_content_${Date.now()}.${fileExt}`;
 
-          const { error: uploadError } = await supabase.storage.from('article-images').upload(fileName, file);
+          const { error: uploadError } = await supabase.storage.from('article-images').upload(fileName, compressed);
           if (uploadError) throw uploadError;
 
           const { data } = supabase.storage.from('article-images').getPublicUrl(fileName);

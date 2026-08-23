@@ -36,7 +36,7 @@ const ArticleCard = ({ article, index, isAdmin, onArticleDeleted, onTagClick }) 
         <div className="copa-card h-full flex flex-col overflow-hidden transition-transform duration-300 group-hover:-translate-y-1.5">
           {article.image_url && (
             <div className="h-56 overflow-hidden">
-              <img src={article.image_url} alt={article.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+              <img src={article.image_url} alt={article.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
             </div>
           )}
           <div className="p-6 flex-grow flex flex-col">

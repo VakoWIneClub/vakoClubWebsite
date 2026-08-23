@@ -13,6 +13,7 @@ import 'react-quill/dist/quill.snow.css';
 import '@/quill-custom.css';
 import DOMPurify from 'dompurify';
 import { isAdminUser } from '@/lib/utils';
+import { compressImage } from '@/lib/imageCompression';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 
@@ -108,11 +109,12 @@ const ArticleEditor = () => {
   const handleImageUpload = async () => {
     if (!imageFile) return article?.image_url || null;
 
-    const fileExt = imageFile.name.split('.').pop();
+    const compressed = await compressImage(imageFile);
+    const fileExt = compressed.name.split('.').pop();
     const fileName = `${user.id}_${Date.now()}.${fileExt}`;
     const filePath = `public/${fileName}`;
 
-    const { error } = await supabase.storage.from('article-images').upload(filePath, imageFile);
+    const { error } = await supabase.storage.from('article-images').upload(filePath, compressed);
     if (error) throw new Error(`Error al subir imagen principal: ${error.message}`);
 
     const { data } = supabase.storage.from('article-images').getPublicUrl(filePath);
@@ -130,11 +132,12 @@ const ArticleEditor = () => {
       if (file) {
         setIsSubmitting(true);
         try {
-          const fileExt = file.name.split('.').pop();
+          const compressed = await compressImage(file);
+          const fileExt = compressed.name.split('.').pop();
           const fileName = `${user.id}_content_${Date.now()}.${fileExt}`;
           const filePath = `public/${fileName}`;
 
-          const { error: uploadError } = await supabase.storage.from('article-images').upload(filePath, file);
+          const { error: uploadError } = await supabase.storage.from('article-images').upload(filePath, compressed);
           if (uploadError) throw uploadError;
 
           const { data } = supabase.storage.from('article-images').getPublicUrl(filePath);
