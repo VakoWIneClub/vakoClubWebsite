@@ -5,6 +5,7 @@ import { Menu, X, LogOut, User as UserIcon, Gem } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { isAdminUser } from '@/lib/utils';
 
 const NAV_ITEMS = [
   { name: 'Inicio', path: '/' },
@@ -16,6 +17,13 @@ const NAV_ITEMS = [
   { name: 'Contacto', path: '/contacto' },
 ];
 
+// Not launched yet — only shown to admins previewing it, via useNavItems below.
+const ADMIN_ONLY_NAV_ITEMS = [
+  { name: 'Academia', path: '/educacion' },
+];
+
+const useNavItems = (user) => (isAdminUser(user) ? [...NAV_ITEMS, ...ADMIN_ONLY_NAV_ITEMS] : NAV_ITEMS);
+
 const isItemActive = (pathname, itemPath) =>
   pathname.startsWith(itemPath) && (itemPath !== '/' || pathname === '/');
 
@@ -24,6 +32,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const navItems = useNavItems(user);
 
   const getInitials = (name) => {
     if (!name) return 'V';
@@ -84,7 +93,7 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center gap-7 font-jost text-[11px] tracking-[0.16em] uppercase">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -134,7 +143,7 @@ const Navbar = () => {
               className="md:hidden border-t border-copa-gold overflow-hidden"
             >
               <div className="py-6 flex flex-col gap-5 font-jost text-xs tracking-[0.14em] uppercase">
-                {NAV_ITEMS.map((item) => (
+                {navItems.map((item) => (
                   <Link
                     key={item.path}
                     to={item.path}

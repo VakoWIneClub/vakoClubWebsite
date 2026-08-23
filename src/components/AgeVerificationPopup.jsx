@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Wine } from 'lucide-react';
 
 const AgeVerificationPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,41 +27,40 @@ const AgeVerificationPopup = () => {
   return (
     <Dialog open={isOpen}>
       <DialogContent
-        className="wine-glass-effect sm:max-w-[425px] border-amber-400/30 text-amber-100"
-        hideCloseButton={true}
+        className="rounded-none border-copa-gold bg-copa-cream text-copa-ink sm:max-w-[420px] p-9"
+        hideCloseButton
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
+        <img src="/images/VakoLogo.png" alt="Vako Club" className="h-11 w-11 object-contain mx-auto" />
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-center text-2xl font-playfair wine-text-gradient">
-            <Wine className="mr-3 h-7 w-7 text-amber-300" />
-            Verificación de Edad
+          <DialogTitle className="text-center font-cormorant font-light text-copa-ink" style={{ fontSize: 32, lineHeight: 1.15 }}>
+            ¿Tenés 18 años o más?
           </DialogTitle>
-          <DialogDescription className="text-center text-amber-100/80 pt-2">
-            Debes tener la edad legal para consumir alcohol en tu país para poder ingresar a Vako Club.
+          <DialogDescription className="text-center text-copa-ink/70" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16, lineHeight: 1.6 }}>
+            Hablamos de vino, así que necesitamos preguntarlo una sola vez.
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4">
-          <div className="flex items-center space-x-3 justify-center">
-            <Checkbox 
-              id="age-confirm" 
-              checked={isChecked}
-              onCheckedChange={setIsChecked}
-            />
-            <Label htmlFor="age-confirm" className="text-base text-amber-100/90 cursor-pointer">
-              Sí, tengo la edad necesaria
-            </Label>
-          </div>
+        <div className="flex items-center gap-3 justify-center pt-2">
+          <Checkbox
+            id="age-confirm"
+            checked={isChecked}
+            onCheckedChange={setIsChecked}
+            className="border-copa-burgundy data-[state=checked]:bg-copa-burgundy data-[state=checked]:text-copa-cream"
+          />
+          <Label htmlFor="age-confirm" className="text-copa-ink/80 cursor-pointer font-normal" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16 }}>
+            Confirmo que soy mayor de 18 años.
+          </Label>
         </div>
         <DialogFooter>
-          <Button 
-            onClick={handleAccept} 
+          <button
+            type="button"
+            onClick={handleAccept}
             disabled={!isChecked}
-            className="w-full"
-            size="lg"
+            className="copa-btn-primary w-full mt-2"
           >
-            Aceptar
-          </Button>
+            Continuar
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
