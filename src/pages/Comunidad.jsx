@@ -53,30 +53,6 @@ const Comunidad = () => {
           )}
         </Reveal>
 
-        <Reveal delay={0.05} className="border border-copa-gold bg-copa-creamDeep p-8 mb-16 text-center">
-          <h2 className="font-cormorant font-light" style={{ fontSize: 30 }}>Síguenos en Redes</h2>
-          <p className="text-copa-ink/70 max-w-2xl mx-auto mt-3" style={{ fontSize: 16 }}>
-            No te pierdas nuestras últimas noticias, catas en vivo y contenido exclusivo.
-          </p>
-          <div className="flex justify-center gap-4 mt-8">
-            {socialLinks.map((social) => {
-              const Icon = social.icon;
-              return (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink border border-copa-gold px-5 py-3 transition-colors hover:border-copa-burgundy hover:text-copa-burgundy"
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{social.label}</span>
-                </a>
-              );
-            })}
-          </div>
-        </Reveal>
-
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:w-96 mx-auto mb-12 h-11 rounded-none border border-copa-gold bg-copa-cream p-1">
             <TabsTrigger
@@ -119,6 +95,30 @@ const Comunidad = () => {
               <Share2 className="mr-2 h-5 w-5" />
               Invitar a un amigo
             </button>
+          </div>
+        </Reveal>
+
+        <Reveal className="border border-copa-gold bg-copa-creamDeep p-8 mt-16 text-center">
+          <h2 className="font-cormorant font-light" style={{ fontSize: 30 }}>Síguenos en Redes</h2>
+          <p className="text-copa-ink/70 max-w-2xl mx-auto mt-3" style={{ fontSize: 16 }}>
+            No te pierdas nuestras últimas noticias, catas en vivo y contenido exclusivo.
+          </p>
+          <div className="flex justify-center gap-4 mt-8">
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink border border-copa-gold px-5 py-3 transition-colors hover:border-copa-burgundy hover:text-copa-burgundy"
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{social.label}</span>
+                </a>
+              );
+            })}
           </div>
         </Reveal>
       </div>
