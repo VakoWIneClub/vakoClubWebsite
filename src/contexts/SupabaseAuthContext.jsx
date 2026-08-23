@@ -30,13 +30,25 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = useCallback(async (user) => {
     if (!user) return null;
-    const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('role, points, level')
-      .eq('id', user.id)
-      .single();
+    // Wrapped because a transient network hiccup can make this *throw* instead of resolving to
+    // {error} — left unhandled, that exception used to escape handleSession below and skip its
+    // setUser/setLoading(false), leaving the session stuck "loading" until a full page reload.
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('role, points, level')
+        .eq('id', user.id)
+        .single();
 
-    if (error) {
+      if (error) throw error;
+
+      return {
+        ...user,
+        role: profile?.role || 'user',
+        points: profile?.points || 0,
+        level: profile?.level || 'Novato',
+      };
+    } catch (error) {
       console.error('Error fetching user profile:', error.message);
       // Without role/points/level, every isAdmin check fails closed (safe), but that also means
       // an actual admin's controls silently vanish with zero explanation — tell them why.
@@ -47,24 +59,23 @@ export const AuthProvider = ({ children }) => {
       });
       return { ...user };
     }
-    
-    return { 
-      ...user, 
-      role: profile?.role || 'user',
-      points: profile?.points || 0,
-      level: profile?.level || 'Novato',
-    };
-  }, []);
-  
+  }, [toast]);
+
   const handleSession = useCallback(async (session) => {
     setSession(session);
-    if (session?.user) {
-      const userWithProfile = await fetchUserProfile(session.user);
-      setUser(userWithProfile);
-    } else {
-      setUser(null);
+    try {
+      if (session?.user) {
+        const userWithProfile = await fetchUserProfile(session.user);
+        setUser(userWithProfile);
+      } else {
+        setUser(null);
+      }
+    } finally {
+      // finally, not just a trailing call — fetchUserProfile already falls back on its own
+      // errors, but this is the last line of defense so a session never gets stuck "loading"
+      // no matter what throws above.
+      setLoading(false);
     }
-    setLoading(false);
   }, [fetchUserProfile]);
 
   const refreshUser = useCallback(async () => {

@@ -29,19 +29,24 @@ const EventoPage = () => {
     const fetchEvent = async () => {
       const requestId = ++latestRequestRef.current;
       setLoading(true);
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .eq('slug', slug)
-        .single();
+      // try/finally: a transient network failure can make the query *throw* instead of resolving
+      // to {error} — without this, that exception used to skip past setLoading(false) entirely,
+      // leaving the spinner stuck until a full page reload.
+      try {
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .eq('slug', slug)
+          .single();
 
-      if (requestId !== latestRequestRef.current) return;
-      if (error) {
-        console.error('Error fetching event:', error);
-      } else {
+        if (requestId !== latestRequestRef.current) return;
+        if (error) throw error;
         setEvent(data);
+      } catch (error) {
+        console.error('Error fetching event:', error);
+      } finally {
+        if (requestId === latestRequestRef.current) setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchEvent();

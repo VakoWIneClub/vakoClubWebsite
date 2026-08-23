@@ -48,7 +48,7 @@ const WineryCard = ({
         <div className="copa-card h-full flex flex-col overflow-hidden transition-transform duration-300 group-hover:-translate-y-1.5">
           <div className="h-56 overflow-hidden relative">
             <AnimatePresence initial={false}>
-              <motion.img key={currentImageIndex} src={images[currentImageIndex]} alt={`${winery.title} - imagen ${currentImageIndex + 1}`} className="w-full h-full object-cover absolute inset-0" initial={{
+              <motion.img key={currentImageIndex} src={images[currentImageIndex]} alt={`${winery.title} - imagen ${currentImageIndex + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover absolute inset-0" initial={{
               opacity: 0,
               x: 50
             }} animate={{

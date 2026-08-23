@@ -33,38 +33,45 @@ const ArticlePage = () => {
     setLoading(true);
     setError(false);
 
-    const { data: articleData, error: articleError } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-
-    if (requestId !== latestRequestRef.current) return;
-    if (articleError || !articleData) {
-      console.error('Error fetching article:', articleError);
-      setError(true);
-      setLoading(false);
-      return;
-    }
-
-    setArticle(articleData);
-
-    if (articleData.author_id) {
-      const { data: authorData, error: authorError } = await supabase
-        .from('profiles')
-        .select('name, avatar_url')
-        .eq('id', articleData.author_id)
+    // try/finally: a transient network failure can make either query *throw* instead of
+    // resolving to {error} — without this, that exception used to skip past setLoading(false)
+    // entirely, leaving the spinner stuck until a full page reload.
+    try {
+      const { data: articleData, error: articleError } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('slug', slug)
         .single();
 
       if (requestId !== latestRequestRef.current) return;
-      if (authorError) {
-        console.error('Error fetching author:', authorError);
-      } else {
-        setAuthor(authorData);
+      if (articleError || !articleData) {
+        console.error('Error fetching article:', articleError);
+        setError(true);
+        return;
       }
-    }
 
-    setLoading(false);
+      setArticle(articleData);
+
+      if (articleData.author_id) {
+        const { data: authorData, error: authorError } = await supabase
+          .from('profiles')
+          .select('name, avatar_url')
+          .eq('id', articleData.author_id)
+          .single();
+
+        if (requestId !== latestRequestRef.current) return;
+        if (authorError) {
+          console.error('Error fetching author:', authorError);
+        } else {
+          setAuthor(authorData);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching article:', error);
+      setError(true);
+    } finally {
+      if (requestId === latestRequestRef.current) setLoading(false);
+    }
   }, [slug]);
 
   useEffect(() => {

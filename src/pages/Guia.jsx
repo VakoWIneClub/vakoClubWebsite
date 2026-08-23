@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Loader2, PlusCircle, ChevronsDown, Search, X, List, Map } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
+import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +22,7 @@ const Guia = () => {
   const {
     user
   } = useAuth();
+  const { toast } = useToast();
   const [wineries, setWineries] = useState([]);
   const [allWineriesForMap, setAllWineriesForMap] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,24 +39,30 @@ const Guia = () => {
   const loadMoreControllerRef = useRef(null);
   useEffect(() => {
     const fetchInitialData = async () => {
-      const {
-        data: countriesData,
-        error: countriesError
-      } = await supabase.from('wineries').select('country');
-      if (countriesError) {
-        console.error('Error fetching countries:', countriesError);
-      } else {
+      // Neither of these drives the page's main loading state, but a thrown (rather than
+      // resolved-with-error) network failure would otherwise be an unhandled rejection — wrap so
+      // one failing request doesn't silently take the other down with it.
+      try {
+        const {
+          data: countriesData,
+          error: countriesError
+        } = await supabase.from('wineries').select('country');
+        if (countriesError) throw countriesError;
         const uniqueCountries = [...new Set(countriesData.map(w => w.country).filter(Boolean))].sort();
         setCountries(uniqueCountries);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
       }
-      const {
-        data: mapData,
-        error: mapError
-      } = await supabase.from('wineries').select('id, title, slug, latitude, longitude, city, country').filter('latitude', 'not.is', null).filter('longitude', 'not.is', null);
-      if (mapError) {
-        console.error('Error fetching wineries for map:', mapError);
-      } else {
+
+      try {
+        const {
+          data: mapData,
+          error: mapError
+        } = await supabase.from('wineries').select('id, title, slug, latitude, longitude, city, country').filter('latitude', 'not.is', null).filter('longitude', 'not.is', null);
+        if (mapError) throw mapError;
         setAllWineriesForMap(mapData);
+      } catch (error) {
+        console.error('Error fetching wineries for map:', error);
       }
     };
     fetchInitialData();
@@ -65,40 +73,53 @@ const Guia = () => {
     } else {
       setLoading(true);
     }
-    let query = supabase.from('wineries').select('*', {
-      count: 'exact'
-    }).order('created_at', {
-      ascending: false
-    });
-    if (name) query = query.ilike('title', `%${name}%`);
-    if (country) query = query.eq('country', country);
-    if (city) query = query.ilike('city', `%${city}%`);
-    const from = currentPage * WINERIES_PER_PAGE;
-    const to = from + WINERIES_PER_PAGE - 1;
-    query = query.range(from, to);
-    if (abortSignal) {
-      query.abortSignal(abortSignal);
-    }
-    const {
-      data,
-      error,
-      count
-    } = await query;
-    if (error && error.name !== 'AbortError') {
-      console.error('Error fetching wineries:', error);
-    } else if (data) {
+    // try/finally: a transient network failure can make the query *throw* instead of resolving
+    // to {error} — without this, that exception used to skip past setLoading(false) entirely,
+    // leaving the spinner stuck until a full page reload.
+    try {
+      let query = supabase.from('wineries').select('*', {
+        count: 'exact'
+      }).order('created_at', {
+        ascending: false
+      });
+      if (name) query = query.ilike('title', `%${name}%`);
+      if (country) query = query.eq('country', country);
+      if (city) query = query.ilike('city', `%${city}%`);
+      const from = currentPage * WINERIES_PER_PAGE;
+      const to = from + WINERIES_PER_PAGE - 1;
+      query = query.range(from, to);
+      if (abortSignal) {
+        query.abortSignal(abortSignal);
+      }
+      const {
+        data,
+        error,
+        count
+      } = await query;
+      if (error) throw error;
+
       setWineries(prev => {
         const newWineries = isLoadMore ? [...prev, ...data] : data;
         setHasMore(newWineries.length < (count ?? 0));
         return newWineries;
       });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Error fetching wineries:', error);
+        toast({
+          variant: 'destructive',
+          title: 'No se pudieron cargar las bodegas',
+          description: 'Hubo un problema de conexión. Probá de nuevo en unos segundos.',
+        });
+      }
+    } finally {
+      if (isLoadMore) {
+        setLoadingMore(false);
+      } else {
+        setLoading(false);
+      }
     }
-    if (isLoadMore) {
-      setLoadingMore(false);
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  }, [toast]);
   useEffect(() => {
     const controller = new AbortController();
     // A "load more" in flight when the filters change must not be allowed to resolve later and

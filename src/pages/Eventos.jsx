@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Calendar, MapPin, Clock, Loader2, PlusCircle, Pencil, Globe, Map, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
+import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -44,6 +45,8 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
               alt={event.title}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               src={event.image_url || 'https://images.unsplash.com/photo-1691257790470-b5e4e80ca59f'}
+              loading="lazy"
+              decoding="async"
             />
             {isPast && (
               <span className="absolute top-4 left-4 font-jost text-[10px] tracking-[0.1em] uppercase bg-copa-ink/80 text-copa-cream px-2.5 py-1">
@@ -90,6 +93,7 @@ const EventCard = ({ event, index, isAdmin, onEventDeleted }) => {
 
 const Eventos = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [countries, setCountries] = useState([]);
@@ -100,18 +104,17 @@ const Eventos = () => {
   const isAdmin = isAdminUser(user);
 
   const fetchFilters = useCallback(async () => {
-    let query = supabase.from('events').select('country, city').not('country', 'is', null);
+    try {
+      let query = supabase.from('events').select('country, city').not('country', 'is', null);
 
-    if (!showPastEvents) {
-      const today = new Date().toISOString();
-      query = query.gte('event_date', today);
-    }
+      if (!showPastEvents) {
+        const today = new Date().toISOString();
+        query = query.gte('event_date', today);
+      }
 
-    const { data, error } = await query;
+      const { data, error } = await query;
+      if (error) throw error;
 
-    if (error) {
-      console.error("Error fetching filters", error);
-    } else {
       const uniqueCountries = [...new Set(data.map(c => c.country))].sort();
       setCountries(uniqueCountries);
 
@@ -121,36 +124,48 @@ const Eventos = () => {
       } else {
         setCities([]);
       }
+    } catch (error) {
+      console.error("Error fetching filters", error);
     }
   }, [showPastEvents, selectedCountry]);
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
-    let query = supabase
-      .from('events')
-      .select('*')
-      .order('event_date', { ascending: showPastEvents });
+    // try/finally: a transient network failure can make the query *throw* instead of resolving
+    // to {error} — without this, that exception used to skip past setLoading(false) entirely,
+    // leaving the spinner stuck until a full page reload.
+    try {
+      let query = supabase
+        .from('events')
+        .select('*')
+        .order('event_date', { ascending: showPastEvents });
 
-    if (selectedCountry !== 'Todos') {
-      query = query.eq('country', selectedCountry);
-    }
-    if (selectedCity !== 'Todos') {
-      query = query.eq('city', selectedCity);
-    }
+      if (selectedCountry !== 'Todos') {
+        query = query.eq('country', selectedCountry);
+      }
+      if (selectedCity !== 'Todos') {
+        query = query.eq('city', selectedCity);
+      }
 
-    if (!showPastEvents) {
-      const today = new Date().toISOString().split('T')[0];
-      query = query.gte('event_date', today);
-    }
+      if (!showPastEvents) {
+        const today = new Date().toISOString().split('T')[0];
+        query = query.gte('event_date', today);
+      }
 
-    const { data, error } = await query;
-    if (error) {
-      console.error('Error fetching events:', error);
-    } else {
+      const { data, error } = await query;
+      if (error) throw error;
       setEvents(data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      toast({
+        variant: 'destructive',
+        title: 'No se pudieron cargar los eventos',
+        description: 'Hubo un problema de conexión. Probá de nuevo en unos segundos.',
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [selectedCountry, selectedCity, showPastEvents]);
+  }, [selectedCountry, selectedCity, showPastEvents, toast]);
 
   useEffect(() => {
     fetchFilters();

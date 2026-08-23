@@ -29,19 +29,24 @@ const WineryPage = () => {
   const fetchWinery = useCallback(async () => {
     const requestId = ++latestRequestRef.current;
     setLoading(true);
-    const { data, error } = await supabase
-      .from('wineries')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    // try/finally: a transient network failure can make the query *throw* instead of resolving
+    // to {error} — without this, that exception used to skip past setLoading(false) entirely,
+    // leaving the spinner stuck until a full page reload.
+    try {
+      const { data, error } = await supabase
+        .from('wineries')
+        .select('*')
+        .eq('slug', slug)
+        .single();
 
-    if (requestId !== latestRequestRef.current) return;
-    if (error) {
-      console.error('Error fetching winery:', error);
-    } else {
+      if (requestId !== latestRequestRef.current) return;
+      if (error) throw error;
       setWinery(data);
+    } catch (error) {
+      console.error('Error fetching winery:', error);
+    } finally {
+      if (requestId === latestRequestRef.current) setLoading(false);
     }
-    setLoading(false);
   }, [slug]);
 
   useEffect(() => {
