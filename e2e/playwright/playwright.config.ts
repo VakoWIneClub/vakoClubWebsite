@@ -63,6 +63,9 @@ if (viteEnvContent !== existingViteEnvContent) {
  */
 export default defineConfig({
   testDir: './tests',
+  // Wipes test-results/, playwright-report/, allure-results/ and blob-report/ after each local
+  // run (skipped on CI, which needs them for the upload-artifact steps) — see the file itself.
+  globalTeardown: './global-teardown.ts',
   /* Default is 30s. Bumped up because every test here hits the real (unmocked) Supabase backend —
    * under local resource contention, a tight timeout is more likely to cut a test off mid-flight,
    * skipping its afterEach cleanup and leaving test data behind in production. */
