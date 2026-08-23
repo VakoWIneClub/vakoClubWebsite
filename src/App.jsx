@@ -32,6 +32,7 @@ import ArticleEditor from '@/pages/noticias/ArticleEditor';
 import EventoPage from '@/pages/eventos/EventoPage';
 import EventoEditor from '@/pages/eventos/EventoEditor';
 import SobreNosotros from '@/pages/SobreNosotros';
+import Educacion from '@/pages/Educacion';
 import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 import PerfilSuscripcion from '@/pages/perfil/PerfilSuscripcion';
 
@@ -89,6 +90,8 @@ function App() {
             <Route path="/email-verification" element={<EmailVerification />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+            {/* Academia is built but not launched — gated to admins until it's ready for everyone. */}
+            <Route path="/educacion" element={<ProtectedRoute adminOnly><Educacion /></ProtectedRoute>} />
           </Routes>
         </main>
 

@@ -72,13 +72,7 @@ const DeleteWineryDialog = ({ wineryId, wineryTitle, imageUrls, onDeleted, trigg
           </button>
         )}
       </AlertDialogTrigger>
-      {/* AlertDialogContent's base classes bake in .wine-glass-effect (a plain, un-layered CSS
-          rule that beats any className override on background/blur regardless of order) — style
-          forces it off, same workaround used in Home.jsx's WelcomePopup. */}
-      <AlertDialogContent
-        className="bg-copa-cream border-copa-gold rounded-none text-copa-ink"
-        style={{ backgroundColor: '#F7F1E6', backdropFilter: 'none' }}
-      >
+      <AlertDialogContent className="rounded-none">
         <AlertDialogHeader>
           <AlertDialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
             ¿Estás seguro?

@@ -1,319 +1,187 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { BookOpen, Play, Clock, Star, Award, Users, ChevronRight, Wine, Grape, Eye } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import Reveal from '@/components/copa/Reveal';
+
+const INFO_BAR = [
+  '6 cursos previstos',
+  'Cata · Maridaje · Regiones',
+  'Español, inglés, portugués',
+  'A tu ritmo',
+];
+
+const CATEGORIES = ['Todos', 'Cata', 'Maridaje', 'Regiones', 'Producción'];
+
+const COURSES = [
+  {
+    numeral: 'I',
+    tag: 'Cata · Principiante',
+    title: 'Fundamentos de la cata',
+    description: 'Ver, oler, probar. Los tres pasos que ordenan todo lo demás, con palabras que ya usás.',
+    lessons: '12 lecciones',
+    status: 'Gratis',
+    opensFirst: true,
+  },
+  {
+    numeral: 'II',
+    tag: 'Maridaje · Intermedio',
+    title: 'Mesa y maridaje',
+    description: 'Qué funciona, por qué, y cuándo da exactamente igual. Maridaje sin reglas rígidas.',
+    lessons: '18 lecciones',
+    status: 'Precio pendiente',
+  },
+  {
+    numeral: 'III',
+    tag: 'Uvas · Todos los niveles',
+    title: 'Las uvas, una por una',
+    description: 'Malbec, Cabernet, Chardonnay y compañía: qué esperar de cada una sin memorizar nada.',
+    lessons: '9 lecciones',
+    status: 'Precio pendiente',
+  },
+  {
+    numeral: 'IV',
+    tag: 'Regiones · Intermedio',
+    title: 'De Mendoza al Loira',
+    description: 'Por qué el lugar cambia el vino, y cómo se lee eso en la etiqueta.',
+    writing: true,
+  },
+  {
+    numeral: 'V',
+    tag: 'Cata · Avanzado',
+    title: 'Análisis sensorial',
+    description: 'Entrenar el paladar en serio: cómo se describe lo que sentís sin inventar nada.',
+    writing: true,
+  },
+  {
+    numeral: 'VI',
+    tag: 'Producción · Avanzado',
+    title: 'De la uva a la botella',
+    description: 'Qué pasa en la bodega, y cuánto de eso llega efectivamente a tu copa.',
+    writing: true,
+  },
+];
 
 const Educacion = () => {
-  const categories = [{
-    id: 'todos',
-    name: 'Todos los Cursos'
-  }, {
-    id: 'cata',
-    name: 'Cata de Vinos'
-  }, {
-    id: 'maridaje',
-    name: 'Maridajes'
-  }, {
-    id: 'historia',
-    name: 'Historia del Vino'
-  }, {
-    id: 'produccion',
-    name: 'Producción'
-  }];
-  const courses = [{
-    id: 1,
-    title: 'Fundamentos de la Cata de Vinos',
-    description: 'Aprende las técnicas básicas para catar vinos como un profesional.',
-    category: 'cata',
-    level: 'Principiante',
-    duration: '4 semanas',
-    rating: 4.9,
-    students: 1250,
-    image: 'Professional wine tasting setup with multiple glasses',
-    lessons: 12,
-    price: 'Gratis'
-  }, {
-    id: 2,
-    title: 'Maridajes Perfectos: Vino y Gastronomía',
-    description: 'Descubre cómo combinar vinos con diferentes tipos de comida.',
-    category: 'maridaje',
-    level: 'Intermedio',
-    duration: '6 semanas',
-    rating: 4.8,
-    students: 890,
-    image: 'Elegant wine and food pairing presentation',
-    lessons: 18,
-    price: '€49'
-  }, {
-    id: 3,
-    title: 'Historia y Tradición Vinícola',
-    description: 'Un viaje a través de la historia del vino y sus tradiciones.',
-    category: 'historia',
-    level: 'Todos los niveles',
-    duration: '3 semanas',
-    rating: 4.7,
-    students: 650,
-    image: 'Ancient wine cellar with historical barrels',
-    lessons: 9,
-    price: '€29'
-  }, {
-    id: 4,
-    title: 'Proceso de Elaboración del Vino',
-    description: 'Conoce todo el proceso desde la uva hasta la botella.',
-    category: 'produccion',
-    level: 'Avanzado',
-    duration: '8 semanas',
-    rating: 4.9,
-    students: 420,
-    image: 'Modern winery production facility',
-    lessons: 24,
-    price: '€89'
-  }, {
-    id: 5,
-    title: 'Cata Avanzada: Análisis Sensorial',
-    description: 'Desarrolla tu paladar con técnicas avanzadas de análisis sensorial.',
-    category: 'cata',
-    level: 'Avanzado',
-    duration: '5 semanas',
-    rating: 4.8,
-    students: 320,
-    image: 'Professional sommelier conducting advanced tasting',
-    lessons: 15,
-    price: '€69'
-  }, {
-    id: 6,
-    title: 'Maridajes con Quesos Artesanales',
-    description: 'Especialízate en la combinación perfecta de vinos y quesos.',
-    category: 'maridaje',
-    level: 'Intermedio',
-    duration: '4 semanas',
-    rating: 4.6,
-    students: 580,
-    image: 'Artisanal cheese and wine pairing board',
-    lessons: 12,
-    price: '€39'
-  }];
-
   return (
-    <div className="relative">
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
-        <title>Educación - Vinos Elegantes | Aprende sobre Vinos</title>
-        <meta name="description" content="Descubre nuestros cursos de vinos: cata, maridajes, historia y producción. Aprende de expertos sommeliers y conviértete en un conocedor del vino." />
+        <title>Academia - Vako Club</title>
+        <meta name="description" content="La Academia Vako está en preparación: cursos cortos de cata, maridaje, uvas, regiones y producción, del mismo criterio que la guía." />
       </Helmet>
-      
-      {/* Overlay and "Coming Soon" message */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-start pt-32 h-full bg-black/50 backdrop-blur-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, type: 'spring' }}
-          className="text-center p-8 rounded-lg"
-        >
-          <Clock className="h-20 w-20 mx-auto wine-text-gradient mb-6" />
-          <h2 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient mb-4">
-            Próximamente
-          </h2>
-          <p className="text-xl text-amber-100/80 max-w-lg mx-auto">
-            Estamos preparando contenidos educativos excepcionales para ti. ¡Vuelve pronto!
+
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16 text-center flex flex-col items-center">
+        <Reveal className="copa-eyebrow">Academia Vako · En preparación</Reveal>
+        <Reveal delay={0.05}>
+          <h1 className="font-cormorant font-light leading-[1.05] mt-6" style={{ fontSize: 'clamp(40px,7vw,76px)' }}>
+            El vino, <span className="text-copa-burgundy">en orden</span>.
+          </h1>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="text-copa-ink/80 max-w-2xl mx-auto mt-6" style={{ fontSize: 20, lineHeight: 1.6 }}>
+            Cursos cortos que siguen el mismo criterio que la guía: de la primera copa a la góndola, sin esnobismo. Se abren de a uno, cuando están listos de verdad.
           </p>
-        </motion.div>
+        </Reveal>
+        <Reveal delay={0.15} className="flex flex-wrap gap-6 items-center justify-center mt-10">
+          <a href="mailto:info@vakoclub.com?subject=Academia%20Vako%20-%20Avisenme%20cuando%20abra" className="copa-btn-primary">
+            Avisarme cuando abra
+          </a>
+          <Link to="/guia" className="copa-btn-secondary">
+            Empezar por la guía
+          </Link>
+        </Reveal>
+      </section>
+
+      <div className="border-y border-copa-gold/50 bg-copa-creamDeep">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4">
+          {INFO_BAR.map((item, i) => (
+            <div
+              key={item}
+              className={`py-6 text-center copa-eyebrow text-copa-ink/70 ${i < INFO_BAR.length - 1 ? 'md:border-r border-copa-gold/40' : ''}`}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Page content (will be blurred) */}
-      <div className="pointer-events-none">
-        {/* Hero Section */}
-        <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 wine-pattern opacity-20"></div>
-          
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center space-y-8">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }} className="flex justify-center">
-                <div className="p-6 wine-gradient rounded-full wine-shadow">
-                  <BookOpen className="h-16 w-16 text-white" />
-                </div>
-              </motion.div>
-
-              <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">
-                Academia del Vino
-              </h1>
-
-              <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
-                Aprende de los mejores sommeliers y expertos en vino. Desde principiante hasta maestro catador.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-6 text-amber-100/80">
-                <div className="flex items-center space-x-2">
-                  <Award className="h-5 w-5 text-amber-400" />
-                  <span>Certificación</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Users className="h-5 w-5 text-amber-400" />
-                  <span>+5000 Estudiantes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-amber-400" />
-                  <span>4.8/5 Valoración</span>
-                </div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <Reveal>
+            <div className="copa-eyebrow">El programa</div>
+            <h2 className="font-cormorant font-light mt-3" style={{ fontSize: 'clamp(30px,4vw,42px)' }}>
+              Seis cursos, un mismo hilo.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.05} className="flex flex-wrap gap-2 font-jost text-[11px] tracking-[0.14em] uppercase">
+            {CATEGORIES.map((category, i) => (
+              <div
+                key={category}
+                className={
+                  i === 0
+                    ? 'px-[18px] py-[11px] border border-copa-burgundy text-copa-cream bg-copa-burgundy'
+                    : 'px-[18px] py-[11px] border border-copa-gold/60 text-copa-ink/65'
+                }
+              >
+                {category}
               </div>
-            </motion.div>
-          </div>
-        </section>
+            ))}
+          </Reveal>
+        </div>
 
-        {/* Categories Filter */}
-        <section className="py-8 wine-glass-effect">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap justify-center gap-4">
-              {categories.map(category => 
-                <motion.button key={category.id} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`px-6 py-3 rounded-full font-medium transition-all duration-300 wine-card text-amber-200`}>
-                  {category.name}
-                </motion.button>
-              )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-9 pb-20">
+          {COURSES.map((course, i) => (
+            <Reveal key={course.numeral} delay={(i % 3) * 0.05} className={`copa-card flex flex-col ${course.writing ? 'opacity-70' : ''}`}>
+              <div className="h-[150px] bg-copa-creamDeep border-b border-copa-gold/40 relative flex items-center justify-center">
+                <div className="font-cormorant font-light text-copa-burgundy/35" style={{ fontSize: 52 }}>{course.numeral}</div>
+                {course.opensFirst && (
+                  <div className="absolute top-3.5 left-3.5 font-jost text-[10px] tracking-[0.16em] uppercase text-copa-cream bg-copa-burgundy px-2.5 py-1.5">
+                    Abre primero
+                  </div>
+                )}
+              </div>
+              <div className="p-6 flex flex-col gap-3 flex-1">
+                <div className="font-jost text-[10px] tracking-[0.18em] uppercase text-copa-gold">{course.tag}</div>
+                <h3 className="font-cormorant" style={{ fontSize: 27, lineHeight: 1.15 }}>{course.title}</h3>
+                <p className="text-copa-ink/70" style={{ fontSize: 16, lineHeight: 1.6 }}>{course.description}</p>
+                {course.writing ? (
+                  <div className="mt-auto pt-[18px] border-t border-copa-gold/35 font-jost text-[11px] tracking-[0.12em] uppercase text-copa-ink/50">
+                    En escritura
+                  </div>
+                ) : (
+                  <div className="mt-auto pt-[18px] border-t border-copa-gold/35 flex justify-between items-center font-jost text-[11px] tracking-[0.12em] uppercase text-copa-ink/60">
+                    <div>{course.lessons}</div>
+                    <div className={course.status === 'Gratis' ? 'text-copa-burgundy' : 'text-copa-ink/45'}>{course.status}</div>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-copa-burgundy text-copa-cream">
+        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 flex flex-wrap gap-12 items-center justify-between">
+          <div className="max-w-xl">
+            <div className="font-jost text-[11px] tracking-[0.22em] uppercase text-copa-cream/65">Mientras tanto</div>
+            <h2 className="font-cormorant font-light leading-[1.08] mt-4" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
+              La guía ya hace el primer curso completo.
+            </h2>
+            <p className="text-copa-cream/80 mt-4" style={{ fontSize: 19, lineHeight: 1.6 }}>
+              83 páginas, siete partes, tres idiomas. Es el mismo recorrido de la Academia, para leer hoy.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3.5 items-start">
+            <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-invert">
+              Conseguir la guía — USD 29.99
+            </Link>
+            <div className="font-jost text-[11px] tracking-[0.1em] text-copa-cream/60">
+              Pago seguro con Stripe · Devolución 7 días
             </div>
           </div>
-        </section>
-
-        {/* Courses Grid */}
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {courses.map((course, index) => 
-                <motion.div key={course.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }} whileHover={{ y: -10 }} className="wine-card rounded-2xl overflow-hidden wine-hover">
-                  <div className="relative">
-                    <img  alt={course.title} className="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1635251595512-dc52146d5ae8" />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-amber-500 text-amber-900 rounded-full text-sm font-medium">
-                        {course.level}
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 wine-gradient text-white rounded-full text-sm font-bold">
-                        {course.price}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-6 space-y-4">
-                    <h3 className="font-playfair text-xl font-semibold text-amber-200 line-clamp-2">
-                      {course.title}
-                    </h3>
-                    <p className="text-amber-100/70 text-sm line-clamp-2">
-                      {course.description}
-                    </p>
-                    <div className="flex items-center justify-between text-sm text-amber-100/60">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{course.duration}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Play className="h-4 w-4" />
-                        <span>{course.lessons} lecciones</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center space-x-1">
-                          <Star className="h-4 w-4 text-amber-400 fill-current" />
-                          <span className="text-amber-200 font-medium">{course.rating}</span>
-                        </div>
-                        <span className="text-amber-100/60 text-sm">
-                          ({course.students} estudiantes)
-                        </span>
-                      </div>
-                      <ChevronRight className="h-5 w-5 text-amber-400" />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Learning Path Section */}
-        <section className="py-20 wine-glass-effect">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center mb-16">
-              <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient mb-6">
-                Tu Camino de Aprendizaje
-              </h2>
-              <p className="text-xl text-amber-100/80 max-w-3xl mx-auto">
-                Sigue nuestro programa estructurado para convertirte en un experto en vinos.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[{
-                step: '01',
-                title: 'Fundamentos',
-                description: 'Aprende los conceptos básicos de la cata y tipos de vino.',
-                icon: Grape,
-                color: 'from-green-500 to-emerald-600'
-              }, {
-                step: '02',
-                title: 'Técnicas Avanzadas',
-                description: 'Desarrolla tu paladar y técnicas de análisis sensorial.',
-                icon: Eye,
-                color: 'from-blue-500 to-indigo-600'
-              }, {
-                step: '03',
-                title: 'Maestría',
-                description: 'Conviértete en sommelier y obtén tu certificación.',
-                icon: Award,
-                color: 'from-purple-500 to-pink-600'
-              }].map((step, index) => {
-                const Icon = step.icon;
-                return <motion.div key={index} initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: index * 0.2 }} className="relative">
-                      <div className="wine-card rounded-2xl p-8 text-center h-full">
-                        <div className="relative mb-6">
-                          <div className={`inline-flex p-4 rounded-full bg-gradient-to-r ${step.color} mb-4`}>
-                            <Icon className="h-8 w-8 text-white" />
-                          </div>
-                          <div className="absolute -top-2 -right-2 w-8 h-8 wine-gradient rounded-full flex items-center justify-center text-white font-bold text-sm">
-                            {step.step}
-                          </div>
-                        </div>
-                        
-                        <h3 className="font-playfair text-2xl font-semibold text-amber-200 mb-4">
-                          {step.title}
-                        </h3>
-                        
-                        <p className="text-amber-100/80 leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
-                      
-                      {index < 2 && <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                          <ChevronRight className="h-8 w-8 text-amber-400" />
-                        </div>}
-                    </motion.div>;
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="space-y-8">
-              <Wine className="h-16 w-16 text-amber-400 mx-auto" />
-              
-              <h2 className="font-playfair text-4xl md:text-5xl font-bold wine-text-gradient">
-                Comienza Tu Viaje Hoy
-              </h2>
-              
-              <p className="text-xl text-amber-100/80 max-w-2xl mx-auto">
-                Únete a miles de estudiantes que ya han transformado su pasión por el vino en conocimiento experto.
-              </p>
-              
-              <Button className="px-8 py-4 text-lg wine-gradient hover:opacity-90 transition-all duration-300 wine-shadow">
-                <Play className="mr-2 h-5 w-5" />
-                Comenzar Ahora
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-      </div>
+        </Reveal>
+      </section>
     </div>
   );
 };
+
 export default Educacion;

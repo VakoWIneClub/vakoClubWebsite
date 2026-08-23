@@ -1,11 +1,36 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
-import { Wine, Book, Grape, Store, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Reveal from '@/components/copa/Reveal';
 
-const AboutUs = () => {
+const PILLARS = [
+  {
+    number: '01',
+    title: 'Las guías',
+    description: 'Regiones, uvas, cata y maridaje ordenados una sola vez, para leerse de principio a fin. Aprendés a tu ritmo, de una manera amena y visual.',
+  },
+  {
+    number: '02',
+    title: 'Las experiencias',
+    description: 'Catas y encuentros, virtuales y presenciales, para aprender de otros y no solo de un PDF. Lo compartido se entiende mejor.',
+  },
+  {
+    number: '03',
+    title: 'La comunidad',
+    description: 'Un foro donde nadie te corrige por decir «me gusta este». Miembros en España, Argentina y Brasil, en tres idiomas.',
+  },
+];
+
+const VALUES = [
+  { label: 'Accesible', description: 'Si hace falta un diccionario para leernos, escribimos mal.' },
+  { label: 'Curioso', description: 'Preguntar es el método, no la falta de nivel.' },
+  { label: 'Honesto', description: 'No vendemos vino: no tenemos nada que defender.' },
+  { label: 'Sin esnobismo', description: 'Un sommelier amigo, no un manual técnico.' },
+];
+
+const SobreNosotros = () => {
   return (
-    <>
+    <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
         <title>Sobre Nosotros - Vako Club</title>
         <meta name="description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
@@ -13,95 +38,78 @@ const AboutUs = () => {
         <meta property="og:description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
       </Helmet>
 
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 wine-pattern opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center space-y-8">
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }} className="flex justify-center">
-              <div className="p-6 wine-gradient rounded-full wine-shadow">
-                <Wine className="h-16 w-16 text-white" />
-              </div>
-            </motion.div>
-            <h1 className="font-playfair text-5xl md:text-6xl font-bold wine-text-gradient">Nuestra Historia</h1>
-            <p className="text-xl md:text-2xl text-amber-100/90 max-w-3xl mx-auto">
-              Nacimos de una simple pasión: el amor por el vino y el deseo de compartirlo.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="wine-card rounded-2xl p-8 md:p-12 space-y-10 text-amber-100/80">
-            <motion.p
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-lg md:text-xl leading-relaxed"
-            >
-              Vako Club es más que un simple club de vinos; es una comunidad global para aficionados, expertos y curiosos. Nuestro viaje comenzó con la idea de crear un espacio accesible y enriquecedor donde cualquier persona pudiera explorar el vasto y fascinante mundo del vino, sin importar su nivel de conocimiento. Creemos que cada botella tiene una historia que contar, y nuestra misión es ayudarte a descubrirla.
-            </motion.p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.5 }}
-                className="space-y-4"
-              >
-                <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
-                  <Book className="mr-3 h-8 w-8 text-amber-400" />
-                  Nuestra Guía
-                </h2>
-                <p className="text-md md:text-lg leading-relaxed">
-                  Ofrecemos una guía completa y en constante crecimiento, con artículos detallados sobre regiones vinícolas, variedades de uva, técnicas de cata y maridajes. Queremos que aprendas a tu propio ritmo, de una manera amena y visual.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.7 }}
-                className="space-y-4"
-              >
-                <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
-                  <Grape className="mr-3 h-8 w-8 text-amber-400" />
-                  Nuestras Experiencias
-                </h2>
-                <p className="text-md md:text-lg leading-relaxed">
-                  Organizamos eventos y catas, tanto virtuales como presenciales, para que puedas conectar con otros miembros y aprender directamente de los expertos. Creemos en el poder de las experiencias compartidas para enriquecer la pasión por el vino.
-                </p>
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.9 }}
-              className="space-y-4"
-            >
-              <h2 className="font-playfair text-3xl font-bold wine-text-gradient flex items-center">
-                <Store className="mr-3 h-8 w-8 text-amber-400" />
-                Nuestra Tienda
-              </h2>
-              <p className="text-md md:text-lg leading-relaxed">
-                Nuestra tienda no solo ofrece una selección curada de vinos, sino también merchandising exclusivo y accesorios para que puedas vivir la cultura del vino en todos los aspectos de tu vida. Cada producto es elegido con el mismo cuidado y pasión que dedicamos a nuestro contenido.
-              </p>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 1.1 }}
-              className="text-lg md:text-xl leading-relaxed font-semibold text-center mt-10 wine-text-gradient"
-            >
-              Te invitamos a unirte a nuestra mesa, a levantar tu copa y a brindar con nosotros por las infinitas historias que el vino tiene para ofrecer. ¡Salud!
-            </motion.p>
+      <section className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] border-b border-copa-gold/50">
+        <Reveal className="px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
+          <div className="copa-eyebrow">Quiénes somos</div>
+          <h1 className="font-cormorant font-light leading-[1.02] mt-6" style={{ fontSize: 'clamp(36px,6vw,66px)' }}>
+            No somos una bodega. Somos los que te explican <span className="text-copa-burgundy">qué estás tomando</span>.
+          </h1>
+          <p className="text-copa-ink/80 max-w-xl mt-7" style={{ fontSize: 19, lineHeight: 1.65 }}>
+            Vako Club nació de una idea simple: que entender el vino no debería depender de haber ido a una escuela. Sin escuela y sin atajos — leyendo, probando, preguntando y volviendo a probar. Nos llevó diez años llegar hasta acá, y buena parte de ese camino fue dar vueltas de más por no tener a nadie que nos dijera por dónde empezar.
+          </p>
+          <p className="font-cormorant italic text-copa-burgundy mt-8 pl-5 border-l-2 border-copa-gold" style={{ fontSize: 25 }}>
+            «Cada botella tiene una historia que contar.»
+          </p>
+        </Reveal>
+        <Reveal delay={0.1} className="bg-copa-creamDeep border-t lg:border-t-0 lg:border-l border-copa-gold/50 flex items-center justify-center p-10">
+          <div className="w-full max-w-xs aspect-[3/4] border border-copa-gold/60 flex flex-col items-center justify-center gap-2.5 text-center text-copa-ink/45 px-6">
+            <div className="font-jost text-[11px] tracking-[0.18em] uppercase">Foto pendiente</div>
+            <div className="text-sm max-w-[210px]" style={{ lineHeight: 1.5 }}>Retrato de Julian o mesa de cata — vertical, luz cálida</div>
           </div>
+        </Reveal>
+      </section>
+
+      <section className="grid grid-cols-1 md:grid-cols-3">
+        {PILLARS.map((pillar, i) => (
+          <Reveal
+            key={pillar.number}
+            delay={i * 0.08}
+            className={`p-10 sm:p-12 ${i < PILLARS.length - 1 ? 'md:border-r border-copa-gold/40' : ''}`}
+          >
+            <div className="font-cormorant font-light text-copa-burgundy/40" style={{ fontSize: 34 }}>{pillar.number}</div>
+            <h2 className="font-cormorant mt-3" style={{ fontSize: 30 }}>{pillar.title}</h2>
+            <p className="text-copa-ink/70 mt-3" style={{ fontSize: 17, lineHeight: 1.65 }}>{pillar.description}</p>
+          </Reveal>
+        ))}
+      </section>
+
+      <section className="bg-copa-creamDeep border-t border-copa-gold/50">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-20 flex flex-wrap gap-14">
+          <Reveal className="flex-1 min-w-[280px]">
+            <div className="copa-eyebrow">Lo que creemos</div>
+            <h2 className="font-cormorant font-light leading-[1.08] mt-4" style={{ fontSize: 'clamp(26px,4vw,42px)' }}>
+              Elegancia sin pretensión.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08} className="flex-[1.4] min-w-[320px] flex flex-col">
+            {VALUES.map((value, i) => (
+              <div
+                key={value.label}
+                className={`flex gap-5 py-5 ${i < VALUES.length - 1 ? 'border-b border-copa-gold/40' : ''}`}
+              >
+                <div className="font-jost text-[11px] tracking-[0.16em] uppercase text-copa-burgundy min-w-[120px]">{value.label}</div>
+                <div className="text-copa-ink/75" style={{ fontSize: 17, lineHeight: 1.6 }}>{value.description}</div>
+              </div>
+            ))}
+          </Reveal>
         </div>
       </section>
-    </>
+
+      <Reveal className="max-w-3xl mx-auto px-6 py-20 sm:py-24 text-center border-t border-copa-gold/50">
+        <p className="font-cormorant font-light leading-[1.1]" style={{ fontSize: 'clamp(26px,4vw,46px)' }}>
+          Te invitamos a nuestra mesa. Levantá la copa: brindemos por las historias que faltan.
+        </p>
+        <div className="flex flex-wrap gap-6 items-center justify-center mt-9">
+          <Link to="/suscripcion" className="copa-btn-primary">
+            Unirme gratis al club
+          </Link>
+          <Link to="/guia" className="copa-btn-secondary">
+            Ver la guía
+          </Link>
+        </div>
+      </Reveal>
+    </div>
   );
 };
 
-export default AboutUs;
+export default SobreNosotros;
