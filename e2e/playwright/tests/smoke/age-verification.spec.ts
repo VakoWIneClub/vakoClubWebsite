@@ -10,12 +10,12 @@ test.describe('Age verification gate', () => {
 
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('Verificación de Edad')).toBeVisible();
+    await expect(page.getByText('¿Tenés 18 años o más?')).toBeVisible();
 
-    const acceptButton = page.getByRole('button', { name: 'Aceptar' });
+    const acceptButton = page.getByRole('button', { name: 'Continuar' });
     await expect(acceptButton).toBeDisabled();
 
-    await page.getByRole('checkbox', { name: /tengo la edad necesaria/i }).check();
+    await page.getByRole('checkbox', { name: /confirmo que soy mayor de 18/i }).check();
     await expect(acceptButton).toBeEnabled();
 
     await acceptButton.click();
@@ -25,8 +25,8 @@ test.describe('Age verification gate', () => {
   test('remembers acceptance across a reload', async ({ page }) => {
     test.setTimeout(45000);
     await page.goto('/');
-    await page.getByRole('checkbox', { name: /tengo la edad necesaria/i }).check();
-    await page.getByRole('button', { name: 'Aceptar' }).click();
+    await page.getByRole('checkbox', { name: /confirmo que soy mayor de 18/i }).check();
+    await page.getByRole('button', { name: 'Continuar' }).click();
     await expect(page.getByRole('dialog')).toBeHidden();
 
     await page.reload();
