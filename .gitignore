@@ -4,9 +4,19 @@
 .env
 .env.local
 .env.*.local
+.mcp.json
 supabase/.temp/
 vite.config.js.timestamp-*.mjs
 .agents/
 .claude/skills/supabase
 .claude/skills/supabase-postgres-best-practices
 skills-lock.json
+
+# Playwright/Allure run artifacts — e2e/playwright/.gitignore already covers these relative to
+# that folder, but these unanchored patterns catch them wherever a test run happens to write them
+# (e.g. if `playwright test` or `allure generate` is ever run from the repo root instead).
+test-results/
+playwright-report/
+blob-report/
+allure-results/
+allure-report/

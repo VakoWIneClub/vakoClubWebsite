@@ -29,6 +29,10 @@ export default async function handler(req, res) {
     return res.status(200).json({
       paid: true,
       guideName: guia?.nombre || null,
+      // Lo junta Stripe Checkout solo (siempre pide email para mandar el recibo) — se expone acá
+      // para poder etiquetar al comprador en Hostinger Reach del lado del cliente, sin agregar
+      // otra llamada a Stripe.
+      email: session.customer_details?.email || session.customer_email || null,
       // Value/currency van al frontend para el evento de compra de GA4/Meta Pixel — se leen del
       // catálogo (fuente de verdad del precio), no del session_id, para no confiar en nada editable
       // del lado del cliente.

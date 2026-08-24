@@ -590,6 +590,16 @@ const ElMundoDeLaCopaLanding = () => {
           if (typeof window.fbq === 'function') {
             window.fbq('track', 'Purchase', { value: data.value, currency: valorMoneda }, { eventID: sessionId });
           }
+
+          // Etiqueta al comprador en Hostinger Reach (útil para excluirlo de la automatización de
+          // conversión del lead magnet y para futuros upsells) — best-effort, igual que el resto.
+          if (data.email) {
+            fetch('/api/subscribe-lead', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: data.email, source: 'comprador-el-mundo-de-la-copa' }),
+            }).catch(() => {});
+          }
         }
 
         if (data.paid && data.downloadUrl && !autoDownloadRef.current) {
@@ -705,6 +715,15 @@ const ElMundoDeLaCopaLanding = () => {
         EMAILJS_PUBLIC_KEY
       )
       .catch(() => {});
+
+    // Queda etiquetado en Hostinger Reach para la automatización de conversión (4 emails,
+    // días 1/3/6/9) que se arma a mano en el panel de Reach — best-effort, igual que el aviso
+    // de arriba: nunca debe afectar lo que ve el lead.
+    fetch('/api/subscribe-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'lead-magnet-copa' }),
+    }).catch(() => {});
 
     // Auto-respuesta real con el extracto — esta es la que determina lo que ve el lead.
     emailjs
