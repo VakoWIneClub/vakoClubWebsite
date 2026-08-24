@@ -4,6 +4,7 @@
 .env
 .env.local
 .env.*.local
+.mcp.json
 supabase/.temp/
 vite.config.js.timestamp-*.mjs
 .agents/
