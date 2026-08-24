@@ -109,6 +109,15 @@ const Suscripcion = () => {
         title: "¡Registro exitoso!",
         description: "Te hemos enviado un correo de verificación. Por favor, revisa tu bandeja de entrada.",
       });
+
+      // Queda etiquetado en Hostinger Reach para la secuencia de bienvenida de socios gratuitos
+      // (se arma a mano en el panel de Reach) — best-effort, nunca debe afectar el alta real.
+      fetch('/api/subscribe-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, name: formData.name, source: 'socio-gratuito' }),
+      }).catch(() => {});
+
       navigate('/email-verification');
     }
     setLoading(false);
