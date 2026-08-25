@@ -30,6 +30,7 @@ const Guia = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [countries, setCountries] = useState([]);
+  const [totalWineries, setTotalWineries] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const nameFilter = useMemo(() => searchParams.get('name') || '', [searchParams]);
   const countryFilter = useMemo(() => searchParams.get('country') || '', [searchParams]);
@@ -63,6 +64,17 @@ const Guia = () => {
         setAllWineriesForMap(mapData);
       } catch (error) {
         console.error('Error fetching wineries for map:', error);
+      }
+
+      try {
+        const {
+          count: totalCount,
+          error: totalError
+        } = await supabase.from('wineries').select('id', { count: 'exact', head: true });
+        if (totalError) throw totalError;
+        setTotalWineries(totalCount ?? 0);
+      } catch (error) {
+        console.error('Error fetching total wineries count:', error);
       }
     };
     fetchInitialData();
@@ -181,11 +193,16 @@ const Guia = () => {
         <Reveal className="text-center mb-12">
           <div className="copa-eyebrow">Vako Club</div>
           <h1 className="font-cormorant font-light leading-[1.05] mt-4" style={{ fontSize: 'clamp(36px,5.5vw,56px)' }}>
-            Guía de Bodegas
+            Explora el mundo de bodegas
           </h1>
           <p className="mt-5 text-copa-ink/75 max-w-3xl mx-auto" style={{ fontSize: 18, lineHeight: 1.6 }}>
-            Encontrá tu bodega favorita en nuestra guía. Podés filtrar en la lista o buscar en el mapa.
+            Descubrí bodegas de todos los rincones del mundo, curadas por Vako Club. Filtrá en la lista o explorá el mapa.
           </p>
+          {totalWineries !== null && totalWineries > 0 && (
+            <p className="mt-4 font-jost text-[11px] tracking-[0.14em] uppercase text-copa-burgundy">
+              +{totalWineries} bodegas registradas
+            </p>
+          )}
         </Reveal>
 
         <Reveal delay={0.05} className="border border-copa-gold bg-copa-creamDeep p-6 mb-12">
