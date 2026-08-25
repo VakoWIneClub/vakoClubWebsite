@@ -14,18 +14,24 @@
   </script>
   <!-- Meta Pixel Code -->
   <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return;
-      n = f.fbq = function () {
-        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-      };
-      if (!f._fbq) f._fbq = n;
-      n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
-      t = b.createElement(e); t.async = !0; t.src = v;
-      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
-    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1031219903027170');
-    fbq('track', 'PageView');
+    // Skipped entirely on localhost so local dev/e2e runs never reach the live pixel — those
+    // runs were the source of the "Purchase events missing value" warning in Meta's dashboard
+    // (its sample events were all http://localhost/). window.fbq is left undefined here, which
+    // the app's own `typeof window.fbq === 'function'` guards already treat as "don't track".
+    if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+        t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1031219903027170');
+      fbq('track', 'PageView');
+    }
   </script>
   <!-- End Meta Pixel Code -->
   <meta charset="UTF-8" />
