@@ -1,7 +1,7 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
+import Seo from '@/components/Seo';
 
 const LegalSection = ({ title, children }) => (
   <motion.div
@@ -20,10 +20,11 @@ const LegalSection = ({ title, children }) => (
 const Terminos = () => {
   return (
     <>
-      <Helmet>
-        <title>Términos y Condiciones - Vako Club</title>
-        <meta name="description" content="Consulta los términos y condiciones de uso de la plataforma Vako Club." />
-      </Helmet>
+      <Seo
+        title="Términos y Condiciones - Vako Club"
+        description="Consulta los términos y condiciones de uso de la plataforma Vako Club."
+        path="/terminos"
+      />
       <div className="min-h-screen wine-pattern py-20 px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

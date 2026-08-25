@@ -1,16 +1,17 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { MessageCircle } from 'lucide-react';
 import ContactInfo from '@/components/contacto/ContactInfo';
 import Reveal from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 const Contacto = () => {
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Contacto - Vako Club</title>
-        <meta name="description" content="¿Tienes preguntas o sugerencias? Ponte en contacto con el equipo de Vako Club. Estamos aquí para ayudarte." />
-      </Helmet>
+      <Seo
+        title="Contacto - Vako Club"
+        description="¿Tienes preguntas o sugerencias? Ponte en contacto con el equipo de Vako Club. Estamos aquí para ayudarte."
+        path="/contacto"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <Reveal className="text-center mb-16">

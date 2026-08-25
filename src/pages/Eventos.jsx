@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Helmet } from 'react-helmet';
 import { Calendar, MapPin, Clock, Loader2, PlusCircle, Pencil, Globe, Map, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -13,6 +12,7 @@ import DeleteEventDialog from '@/components/eventos/DeleteEventDialog';
 import Reveal from '@/components/copa/Reveal';
 import { isAdminUser } from '@/lib/utils';
 import DOMPurify from 'dompurify';
+import Seo from '@/components/Seo';
 
 // Plain-text snippet for the card preview — mirrors ArticleList.jsx's createSnippet. Replaces a
 // hand-rolled `.replace(/<[^>]+>/g, '')` regex tag-stripper (the one spot in the codebase not
@@ -185,10 +185,11 @@ const Eventos = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Eventos de Vino - Vako Club</title>
-        <meta name="description" content="Descubre y participa en eventos de vino. Catas, talleres y encuentros para amantes del vino en Vako Club." />
-      </Helmet>
+      <Seo
+        title="Eventos de Vino - Vako Club"
+        description="Descubre y participa en eventos de vino. Catas, talleres y encuentros para amantes del vino en Vako Club."
+        path="/eventos"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <Reveal className="text-center mb-12">

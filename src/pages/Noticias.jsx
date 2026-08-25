@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Helmet } from 'react-helmet';
 import { Loader2, PlusCircle, ChevronsDown } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -8,6 +7,7 @@ import ArticleList from '@/components/noticias/ArticleList';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
 import { isAdminUser } from '@/lib/utils';
+import Seo from '@/components/Seo';
 
 const TAGS = ["Bodegas", "Vinos", "Maridajes", "Regiones", "Experiencias", "Noticias"];
 const ARTICLES_PER_PAGE = 6;
@@ -124,10 +124,11 @@ const Noticias = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Noticias del Vino - Vako Club</title>
-        <meta name="description" content="Mantente al día con las últimas noticias, artículos y tendencias del mundo del vino. Descubre bodegas, maridajes y más en Vako Club." />
-      </Helmet>
+      <Seo
+        title="Noticias del Vino - Vako Club"
+        description="Mantente al día con las últimas noticias, artículos y tendencias del mundo del vino. Descubre bodegas, maridajes y más en Vako Club."
+        path="/noticias"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <Reveal className="text-center mb-12">

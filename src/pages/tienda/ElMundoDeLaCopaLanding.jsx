@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -7,6 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 // Same EmailJS project already used by the contact form and the "notify me" waitlist
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
@@ -747,10 +747,13 @@ const ElMundoDeLaCopaLanding = () => {
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
       {/* Cormorant/EB Garamond/Jost now load globally from index.html — no per-page <link> needed. */}
-      <Helmet htmlAttributes={{ lang }}>
-        <title>{t.meta.title}</title>
-        <meta name="description" content={t.meta.description} />
-      </Helmet>
+      <Seo
+        title={t.meta.title}
+        description={t.meta.description}
+        path="/tienda/el-mundo-de-la-copa"
+        image={t.hero.coverSrc}
+        lang={lang}
+      />
 
       {/* Puerta de entrada — idioma + confirmación de mayoría de edad, ambos en el mismo paso.
           No tiene botón de cerrar ni se cierra clickeando afuera: hay que completar los dos

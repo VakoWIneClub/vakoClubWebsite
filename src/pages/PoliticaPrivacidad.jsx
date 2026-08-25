@@ -1,7 +1,7 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
+import Seo from '@/components/Seo';
 
 const LegalSection = ({ title, children }) => (
   <motion.div
@@ -20,10 +20,11 @@ const LegalSection = ({ title, children }) => (
 const PoliticaPrivacidad = () => {
   return (
     <>
-      <Helmet>
-        <title>Política de Privacidad - Vako Club</title>
-        <meta name="description" content="Conoce cómo Vako Club recopila, usa y protege tu información personal." />
-      </Helmet>
+      <Seo
+        title="Política de Privacidad - Vako Club"
+        description="Conoce cómo Vako Club recopila, usa y protege tu información personal."
+        path="/politica-privacidad"
+      />
       <div className="min-h-screen wine-pattern py-20 px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

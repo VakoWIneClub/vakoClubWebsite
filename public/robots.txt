@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# /guia está detrás de un login (ProtectedRoute) — un crawler anónimo solo ve la puerta de
+# registro, nunca contenido real, así que no vale la pena rastrearlo.
+Disallow: /guia
+
+# Formularios de admin, no son páginas de contenido.
+Disallow: /noticias/crear
+Disallow: /noticias/editar/
+Disallow: /eventos/crear
+Disallow: /eventos/editar/
+
+# Cuentas, utilidades de auth y una sección todavía no lanzada al público.
+Disallow: /login
+Disallow: /perfil
+Disallow: /email-verification
+Disallow: /auth/callback
+Disallow: /educacion
+
+Sitemap: https://vakoclub.com/sitemap.xml

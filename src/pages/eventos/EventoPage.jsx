@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2, Calendar, MapPin, Pencil, ArrowLeft, Globe, Map } from 'lucide-react';
@@ -11,6 +10,7 @@ import DOMPurify from 'dompurify';
 import DeleteEventDialog from '@/components/eventos/DeleteEventDialog';
 import { useNavigate } from 'react-router-dom';
 import { isAdminUser } from '@/lib/utils';
+import Seo from '@/components/Seo';
 
 const EventoPage = () => {
   const { slug } = useParams();
@@ -93,10 +93,13 @@ const EventoPage = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>{`${event.title} - Vako Club`}</title>
-        <meta name="description" content={(event.description || '').replace(/<[^>]+>/g, '').substring(0, 160)} />
-      </Helmet>
+      <Seo
+        title={`${event.title} - Vako Club`}
+        description={(event.description || '').replace(/<[^>]+>/g, '').substring(0, 160)}
+        path={`/eventos/${event.slug}`}
+        image={event.image_url || undefined}
+        type="article"
+      />
 
       <div className="pt-12 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
