@@ -204,6 +204,23 @@ const Suscripcion = () => {
                 </div>
               );
             })}
+
+            {/* Secundario a propósito: no compite con "Registrarse Gratis" (copa-btn-primary),
+                pero le da una salida a quien llegó buscando directamente la guía paga, no la
+                membresía — hoy esta página no la mencionaba en absoluto. */}
+            <div className="pt-8 border-t border-copa-gold/40">
+              <p className="font-jost text-[10px] tracking-[0.14em] uppercase text-copa-ink/50 mb-2">
+                ¿Buscás algo más inmediato?
+              </p>
+              <p className="text-copa-ink/70" style={{ fontSize: 15, lineHeight: 1.6 }}>
+                La membresía gratuita es el punto de partida, pero si ya sabés que querés aprender ya:
+                nuestra guía completa en PDF, <strong className="text-copa-ink font-medium">El Mundo de la Copa</strong>,
+                está disponible ahora mismo, sin esperar el registro.
+              </p>
+              <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-secondary inline-flex items-center mt-4">
+                Conseguir la guía — USD 29.99
+              </Link>
+            </div>
           </Reveal>
         </div>
       </div>
