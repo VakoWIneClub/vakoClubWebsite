@@ -35,6 +35,14 @@ import SobreNosotros from '@/pages/SobreNosotros';
 import Educacion from '@/pages/Educacion';
 import AgeVerificationPopup from '@/components/AgeVerificationPopup';
 import PerfilSuscripcion from '@/pages/perfil/PerfilSuscripcion';
+import GuideCtaBar from '@/components/tienda/GuideCtaBar';
+
+// Guía, Eventos and Noticias (list pages + detail subpages) get the floating guide CTA —
+// but not their /crear or /editar/:slug admin forms, which aren't content-browsing pages.
+const GUIDE_PROMO_SECTIONS = ['/guia', '/eventos', '/noticias'];
+const isGuidePromoPath = pathname =>
+  GUIDE_PROMO_SECTIONS.some(base => pathname === base || pathname.startsWith(`${base}/`)) &&
+  !/\/(crear|editar)(\/|$)/.test(pathname);
 
 function App() {
   const location = useLocation();
@@ -43,6 +51,7 @@ function App() {
   // instead of fighting them with overrides, even though both now share its crema/borgoña/oro
   // design system.
   const isCopaLanding = location.pathname === '/tienda/el-mundo-de-la-copa';
+  const showGuidePromo = isGuidePromoPath(location.pathname);
 
   return (
     <>
@@ -96,6 +105,7 @@ function App() {
         </main>
 
         {!isCopaLanding && <Footer />}
+        {showGuidePromo && <GuideCtaBar />}
         <Toaster />
           <SpeedInsights />
           <Analytics />
