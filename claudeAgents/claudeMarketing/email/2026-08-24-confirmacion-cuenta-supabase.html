@@ -1,0 +1,118 @@
+<!--
+  Plantilla "Confirm signup" para Supabase Auth — Vako Club.
+  Pegar tal cual en: Supabase Dashboard → Authentication → Email Templates → "Confirm signup".
+  Usa la misma identidad visual de /suscripcion y /tienda/el-mundo-de-la-copa (paleta "copa":
+  crema/borgoña/oro, Cormorant Garamond + EB Garamond + Jost). Requiere SMTP propio configurado
+  (Resend u otro) para enviarse de verdad a más de 2 personas por hora — ver instrucciones aparte.
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Confirmá tu cuenta — Vako Club</title>
+<style>
+  body, table, td { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  body { margin: 0; padding: 0; width: 100% !important; background-color: #EFE6D6; }
+  img { border: 0; display: block; }
+  a { text-decoration: none; }
+  @media (max-width: 600px) {
+    .copa-wrap { width: 100% !important; }
+    .copa-pad { padding-left: 24px !important; padding-right: 24px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#EFE6D6;">
+
+  <!-- Preheader oculto -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0; font-size:1px; line-height:1px; color:#EFE6D6;">
+    Un clic y tu cuenta queda activa — directorio de bodegas, favoritos y comunidad, listos para usar.
+    &#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EFE6D6;">
+    <tr>
+      <td align="center" style="padding: 40px 16px;">
+
+        <table role="presentation" class="copa-wrap" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px; max-width:100%; background-color:#F7F1E6; border:1px solid #B08D57;">
+
+          <!-- Eyebrow -->
+          <tr>
+            <td align="center" class="copa-pad" style="padding: 44px 48px 0;">
+              <span style="font-family: 'Jost', Verdana, Arial, sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#B08D57;">Vako Club</span>
+            </td>
+          </tr>
+
+          <!-- Regla dorada -->
+          <tr>
+            <td align="center" style="padding: 14px 0 0;">
+              <table role="presentation" width="40" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="border-top:1px solid #B08D57; font-size:0; line-height:0;">&nbsp;</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Título -->
+          <tr>
+            <td align="center" class="copa-pad" style="padding: 22px 48px 0;">
+              <h1 style="margin:0; font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; font-weight:300; font-size:34px; line-height:1.15; color:#2B2320;">
+                {{ if .Data.name }}Bienvenido/a, {{ .Data.name }}{{ else }}Bienvenido/a a Vako Club{{ end }}
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Cuerpo -->
+          <tr>
+            <td class="copa-pad" style="padding: 20px 48px 0; font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; font-size:17px; line-height:1.6; color:#2B2320;">
+              <p style="margin:0 0 16px;">Ya casi está: confirmá tu email con un clic y tu cuenta queda activa.</p>
+              <p style="margin:0 0 16px;">A partir de ahí tenés acceso al directorio curado de bodegas y vinos, a tus Favoritos para guardar lo que te va gustando, y a la Comunidad de Vako Club.</p>
+            </td>
+          </tr>
+
+          <!-- Botón -->
+          <tr>
+            <td align="center" style="padding: 28px 48px 8px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="background-color:#6B1F2A;">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block; padding: 17px 40px; font-family: 'Jost', Verdana, Arial, sans-serif; font-size:12px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:#F7F1E6;">Confirmar mi cuenta</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Link alternativo -->
+          <tr>
+            <td class="copa-pad" style="padding: 18px 48px 0; font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; font-size:13px; line-height:1.5; color:#2B2320; opacity:0.65;">
+              <p style="margin:0 0 6px;">Si el botón no funciona, copiá y pegá este link en tu navegador:</p>
+              <p style="margin:0; word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:#6B1F2A;">{{ .ConfirmationURL }}</a></p>
+            </td>
+          </tr>
+
+          <!-- Regla dorada inferior -->
+          <tr>
+            <td align="center" style="padding: 36px 0 0;">
+              <table role="presentation" width="40" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="border-top:1px solid #B08D57; font-size:0; line-height:0;">&nbsp;</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Pie -->
+          <tr>
+            <td align="center" class="copa-pad" style="padding: 18px 48px 40px; font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; font-size:13px; line-height:1.6; color:#2B2320; opacity:0.6;">
+              <p style="margin:0;">Si no creaste una cuenta en Vako Club, podés ignorar este email.</p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
