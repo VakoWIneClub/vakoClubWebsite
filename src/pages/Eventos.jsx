@@ -138,7 +138,7 @@ const Eventos = () => {
       let query = supabase
         .from('events')
         .select('*')
-        .order('event_date', { ascending: showPastEvents });
+        .order('event_date', { ascending: !showPastEvents });
 
       if (selectedCountry !== 'Todos') {
         query = query.eq('country', selectedCountry);
