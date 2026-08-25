@@ -7,6 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
+import { supabase } from '@/lib/customSupabaseClient';
+
+// Fácil de subir a 100 el día que se decida extender el bono — un solo número para cambiar.
+const FOUNDER_SLOTS_TOTAL = 50;
 
 // Same EmailJS project already used by the contact form and the "notify me" waitlist
 // (src/components/contacto/ContactForm.jsx, src/components/tienda/NotifyGuideDialog.jsx).
@@ -132,7 +136,8 @@ const COPY = {
       },
       ctaConGarantia: 'Conseguir la guía — USD 29.99 · Devolución garantizada 7 días',
       secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en tu email',
-      escasez: 'El estatus de Fundador/a está disponible para los primeros 50 compradores de esta campaña.',
+      escasez: (remaining) => `Quedan ${remaining} de ${FOUNDER_SLOTS_TOTAL} cupos para el estatus de Fundador/a.`,
+      founderPerk: 'Estatus de Fundador/a de Vako Club: invitación a la Membresía Gratuita + aviso prioritario cuando salga la serie regional (España, Argentina, Francia)',
       langNotice: null,
       incluye: [
         'Las 83 páginas en PDF de alta calidad',
@@ -140,7 +145,6 @@ const COPY = {
         'Diagramas y fichas de cata para imprimir',
         'Acceso inmediato, sin vencimiento',
         'Actualizaciones futuras sin costo',
-        'Estatus de Fundador/a de Vako Club: invitación a la Membresía Gratuita + aviso prioritario cuando salga la serie regional (España, Argentina, Francia)',
       ],
     },
     compra: {
@@ -264,7 +268,8 @@ const COPY = {
       },
       ctaConGarantia: 'Get the guide — USD 29.99 · 7-day money-back guarantee',
       secureNote: 'Secure payment with Stripe · You get the download link instantly by email',
-      escasez: 'Founding Member status is available to the first 50 buyers of this campaign.',
+      escasez: (remaining) => `${remaining} of ${FOUNDER_SLOTS_TOTAL} Founding Member spots left.`,
+      founderPerk: 'Vako Club Founding Member status: invitation to the Free Membership + priority notice when the regional series (Spain, Argentina, France) launches',
       langNotice: null,
       incluye: [
         'All 83 pages in high-quality PDF',
@@ -272,7 +277,6 @@ const COPY = {
         'Printable diagrams and tasting sheets',
         'Instant access, no expiration',
         'Future updates at no extra cost',
-        'Vako Club Founding Member status: invitation to the Free Membership + priority notice when the regional series (Spain, Argentina, France) launches',
       ],
     },
     compra: {
@@ -396,7 +400,8 @@ const COPY = {
       },
       ctaConGarantia: 'Consiga o guia — USD 29.99 · Garantia de devolução em 7 dias',
       secureNote: 'Pagamento seguro com Stripe · Você recebe o link de download na hora, por email',
-      escasez: 'O status de Fundador(a) está disponível para os primeiros 50 compradores desta campanha.',
+      escasez: (remaining) => `Restam ${remaining} de ${FOUNDER_SLOTS_TOTAL} vagas de Fundador(a).`,
+      founderPerk: 'Status de Fundador(a) da Vako Club: convite para a Membresia Gratuita + aviso prioritário quando sair a série regional (Espanha, Argentina, França)',
       langNotice: null,
       incluye: [
         'As 83 páginas em PDF de alta qualidade',
@@ -404,7 +409,6 @@ const COPY = {
         'Diagramas e fichas de degustação para imprimir',
         'Acesso imediato, sem vencimento',
         'Atualizações futuras sem custo',
-        'Status de Fundador(a) da Vako Club: convite para a Membresia Gratuita + aviso prioritário quando sair a série regional (Espanha, Argentina, França)',
       ],
     },
     compra: {
@@ -522,6 +526,9 @@ const ElMundoDeLaCopaLanding = () => {
   // below only runs when sessionId is present.
   const [compraStatus, setCompraStatus] = useState(compra === 'exito' ? (sessionId ? 'verificando' : 'error') : null);
   const [compraResultado, setCompraResultado] = useState(null);
+  // null mientras no sabemos el valor real todavía — evita mostrar "50 de 50" un instante antes
+  // de tener el dato real. La escasez de Fundador/a solo se renderiza una vez que esto resuelve.
+  const [founderRemaining, setFounderRemaining] = useState(null);
 
   const t = COPY[lang];
   const gateT = GATE_COPY[gateLang || 'es'];
@@ -534,6 +541,23 @@ const ElMundoDeLaCopaLanding = () => {
     document.body.classList.add('copa-landing-active');
     return () => document.body.classList.remove('copa-landing-active');
   }, []);
+
+  // Cupo real de "Fundador/a" — reemplaza el número fijo que antes solo se podía verificar a
+  // mano contra Stripe. Se re-consulta después de confirmar una compra (abajo) para que el
+  // contador ya refleje esa compra sin esperar a un refresh manual de la página.
+  useEffect(() => {
+    let cancelado = false;
+    supabase
+      .rpc('founder_claims_count')
+      .then(({ data, error }) => {
+        if (cancelado || error || typeof data !== 'number') return;
+        setFounderRemaining(Math.max(0, FOUNDER_SLOTS_TOTAL - data));
+      })
+      .catch(() => {});
+    return () => {
+      cancelado = true;
+    };
+  }, [compraStatus]);
 
   // Mientras la puerta de idioma/edad está abierta, bloqueamos el scroll de fondo.
   useEffect(() => {
@@ -1179,9 +1203,9 @@ const ElMundoDeLaCopaLanding = () => {
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
               {t.oferta.secureNote}
             </div>
-            {t.oferta.escasez && (
+            {founderRemaining !== null && founderRemaining > 0 && (
               <div className="text-copa-ink/55 mt-3" style={{ fontSize: 13.5, lineHeight: 1.5, fontStyle: 'italic' }}>
-                {t.oferta.escasez}
+                {t.oferta.escasez(founderRemaining)}
               </div>
             )}
             {t.oferta.langNotice && (
@@ -1197,6 +1221,12 @@ const ElMundoDeLaCopaLanding = () => {
                 <span style={{ fontSize: 18, lineHeight: 1.55 }}>{item}</span>
               </Reveal>
             ))}
+            {founderRemaining !== null && founderRemaining > 0 && (
+              <Reveal delay={Math.min(t.oferta.incluye.length * 0.03, 0.15)} className="flex items-baseline gap-5">
+                <span className="flex-none w-7 h-px bg-copa-gold -translate-y-2" />
+                <span style={{ fontSize: 18, lineHeight: 1.55 }}>{t.oferta.founderPerk}</span>
+              </Reveal>
+            )}
           </div>
         </div>
       </section>

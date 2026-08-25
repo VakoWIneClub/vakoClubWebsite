@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { GUIAS_CATALOG } from './_lib/catalog.js';
+import { recordFounderClaim } from './_lib/founderClaims.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -26,6 +27,15 @@ export default async function handler(req, res) {
     }
     const guideId = session.metadata?.guideId;
     const guia = GUIAS_CATALOG[guideId];
+
+    // Cuenta esta compra para el cupo de "primeros 50 Fundadores/as" — best-effort e idempotente
+    // (session_id es único), nunca debe romper la confirmación de pago ni la descarga si falla.
+    await recordFounderClaim({
+      sessionId,
+      guideId,
+      email: session.customer_details?.email || session.customer_email || null,
+    });
+
     return res.status(200).json({
       paid: true,
       guideName: guia?.nombre || null,
