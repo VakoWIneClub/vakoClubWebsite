@@ -1,7 +1,7 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 const PILLARS = [
   {
@@ -31,12 +31,11 @@ const VALUES = [
 const SobreNosotros = () => {
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Sobre Nosotros - Vako Club</title>
-        <meta name="description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
-        <meta property="og:title" content="Sobre Nosotros - Vako Club" />
-        <meta property="og:description" content="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados." />
-      </Helmet>
+      <Seo
+        title="Sobre Nosotros - Vako Club"
+        description="Conoce la historia y la misión de Vako Club, un proyecto nacido de la pasión por el vino y el deseo de crear una comunidad global de aficionados."
+        path="/sobre-nosotros"
+      />
 
       <section className="border-b border-copa-gold/50">
         <Reveal className="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-24 text-center">

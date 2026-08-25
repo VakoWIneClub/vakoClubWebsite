@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { Users, MessageCircle, Heart, Share2, Instagram, Youtube, UserPlus } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +8,7 @@ import { TikTokIcon } from '@/components/ui/TikTokIcon';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import Reveal from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 const socialLinks = [
   { icon: Instagram, href: 'https://www.instagram.com/vakoclub', label: 'Instagram' },
@@ -31,10 +31,11 @@ const Comunidad = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Comunidad - Vako Club</title>
-        <meta name="description" content="Únete a la comunidad de Vako Club. Participa en nuestro foro de vinos, conoce a otros miembros y comparte tu pasión." />
-      </Helmet>
+      <Seo
+        title="Comunidad - Vako Club"
+        description="Únete a la comunidad de Vako Club. Participa en nuestro foro de vinos, conoce a otros miembros y comparte tu pasión."
+        path="/comunidad"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <Reveal className="text-center mb-16">

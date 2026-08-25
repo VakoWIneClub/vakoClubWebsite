@@ -3,8 +3,8 @@ import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import { Toaster } from '@/components/ui/toaster';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Home from '@/pages/Home';
@@ -44,6 +44,15 @@ const isGuidePromoPath = pathname =>
   GUIDE_PROMO_SECTIONS.some(base => pathname === base || pathname.startsWith(`${base}/`)) &&
   !/\/(crear|editar)(\/|$)/.test(pathname);
 
+// Mirrors public/robots.txt's Disallow list — /guia sits behind a login wall (crawlers only ever
+// see ProtectedRoute's signup gate there, never real content) and the rest are admin/account
+// utility pages with nothing worth indexing. robots.txt only stops crawling; this stops indexing
+// if one of these URLs ever gets linked from somewhere robots.txt can't control.
+const NOINDEX_PATHS = ['/guia', '/login', '/perfil', '/email-verification', '/auth/callback', '/educacion'];
+const isNoindexPath = pathname =>
+  NOINDEX_PATHS.some(base => pathname === base || pathname.startsWith(`${base}/`)) ||
+  /\/(crear|editar)(\/|$)/.test(pathname);
+
 function App() {
   const location = useLocation();
   // "El mundo de la copa" is a standalone sales landing with its own minimal chrome
@@ -52,6 +61,7 @@ function App() {
   // design system.
   const isCopaLanding = location.pathname === '/tienda/el-mundo-de-la-copa';
   const showGuidePromo = isGuidePromoPath(location.pathname);
+  const noindex = isNoindexPath(location.pathname);
 
   return (
     <>
@@ -62,10 +72,16 @@ function App() {
           site-wide age gate to avoid showing two age checks back to back. */}
       {!isCopaLanding && <AgeVerificationPopup />}
       <div className={isCopaLanding ? 'min-h-screen flex flex-col' : 'min-h-screen wine-pattern flex flex-col'}>
-        <Helmet>
-          <title>Vako Club - Descubre el Mundo del Vino</title>
-          <meta name="description" content="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales." />
-        </Helmet>
+        {/* Baseline OG/Twitter tags for any route without its own <Seo> (login, perfil, /guia,
+            admin editors) — pages that need something more specific render their own further
+            down the tree and win, same override behavior the old per-page <Helmet> blocks
+            already relied on. */}
+        <Seo
+          title="Vako Club - Descubre el Mundo del Vino"
+          description="Explora el fascinante mundo del vino con nuestra comunidad de expertos en Vako Club. Aprende sobre catas, maridajes y descubre vinos excepcionales."
+          path={location.pathname}
+          noindex={noindex}
+        />
 
         {!isCopaLanding && <Navbar />}
 

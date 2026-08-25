@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Calendar, User, ArrowLeft, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
@@ -10,6 +9,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import DOMPurify from 'dompurify';
 import ArticleComments from '@/components/noticias/ArticleComments';
 import { isAdminUser } from '@/lib/utils';
+import Seo from '@/components/Seo';
 
 const ArticlePage = () => {
   const { slug } = useParams();
@@ -115,10 +115,13 @@ const ArticlePage = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>{`${article.title} - Noticias de Vako Club`}</title>
-        <meta name="description" content={createSnippet(article.content)} />
-      </Helmet>
+      <Seo
+        title={`${article.title} - Noticias de Vako Club`}
+        description={createSnippet(article.content)}
+        path={`/noticias/${article.slug}`}
+        image={article.image_url || undefined}
+        type="article"
+      />
 
       <div className="pt-12 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

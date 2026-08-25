@@ -1,8 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Users, Calendar, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Reveal from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 const features = [
   {
@@ -39,13 +39,11 @@ const sectionParagraph = 'text-copa-ink/70 max-w-2xl mx-auto mt-5 text-center';
 const Home = () => {
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Vako Club - Tu Comunidad de Vinos</title>
-        <meta
-          name="description"
-          content="Bienvenido a Vako Club, un espacio para amantes del vino. Explora nuestra tienda, eventos y únete a una comunidad apasionada."
-        />
-      </Helmet>
+      <Seo
+        title="Vako Club - Tu Comunidad de Vinos"
+        description="Bienvenido a Vako Club, un espacio para amantes del vino. Explora nuestra tienda, eventos y únete a una comunidad apasionada."
+        path="/"
+      />
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-36 pb-20 sm:pb-28 text-center">

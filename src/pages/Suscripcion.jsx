@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { Gem, Star, CheckCircle, UserPlus, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
@@ -7,6 +6,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import Reveal from '@/components/copa/Reveal';
+import Seo from '@/components/Seo';
 
 const copaInput = 'rounded-none border-copa-gold bg-copa-cream text-copa-ink placeholder:text-copa-ink/40 focus-visible:ring-1 focus-visible:ring-copa-burgundy';
 const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/70';
@@ -127,10 +127,11 @@ const Suscripcion = () => {
 
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
-      <Helmet>
-        <title>Suscripción - Vako Club</title>
-        <meta name="description" content="Únete a Vako Club y accede a un mundo de beneficios exclusivos para amantes del vino." />
-      </Helmet>
+      <Seo
+        title="Suscripción - Vako Club"
+        description="Únete a Vako Club y accede a un mundo de beneficios exclusivos para amantes del vino."
+        path="/suscripcion"
+      />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">
         <Reveal className="text-center mb-12">
           <div className="copa-eyebrow">Vako Club</div>
