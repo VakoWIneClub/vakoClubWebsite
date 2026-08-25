@@ -577,8 +577,12 @@ const ElMundoDeLaCopaLanding = () => {
         if (data.paid && !eventoCompraDisparado.current) {
           eventoCompraDisparado.current = true;
           const valorMoneda = data.currency?.toUpperCase() || 'USD';
+          // Meta (y el value-based bidding de Google Ads) exigen un value numérico > 0 en el
+          // evento de compra — mandarlo undefined/null en vez de omitir el evento es lo que hizo
+          // que el Pixel de Meta marcara el 100% de los Purchase como "falta el valor".
+          const valorValido = Number.isFinite(data.value) && data.value > 0;
 
-          if (typeof window.gtag === 'function') {
+          if (valorValido && typeof window.gtag === 'function') {
             window.gtag('event', 'purchase', {
               transaction_id: sessionId,
               value: data.value,
@@ -587,7 +591,7 @@ const ElMundoDeLaCopaLanding = () => {
             });
           }
 
-          if (typeof window.fbq === 'function') {
+          if (valorValido && typeof window.fbq === 'function') {
             window.fbq('track', 'Purchase', { value: data.value, currency: valorMoneda }, { eventID: sessionId });
           }
 
