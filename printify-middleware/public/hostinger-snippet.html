@@ -1,0 +1,38 @@
+<!-- Snippet para pegar en la página de confirmación/thank-you de Hostinger -->
+<!-- Ajusta `ENDPOINT` con la URL de tu deploy en Vercel -->
+<script>
+(function(){
+  const ENDPOINT = 'https://<tu-proyecto>.vercel.app/api/printify/create-order';
+  // Debes extraer los datos reales del pedido del DOM/variables que Hostinger expone en la página de confirmación.
+  const order = {
+    id: window.HOSTINGER_ORDER_ID || 'order-12345',
+    items: [
+      // Cada item necesita el campo printify_variant_id para que el middleware lo envíe a Printify
+      // Ejemplo:
+      // { printify_variant_id: 11111111, quantity: 1 }
+    ],
+    customer: {
+      first_name: window.HOSTINGER_CUSTOMER_FIRST_NAME || '',
+      last_name: window.HOSTINGER_CUSTOMER_LAST_NAME || '',
+      email: window.HOSTINGER_CUSTOMER_EMAIL || ''
+    },
+    address: {
+      line1: window.HOSTINGER_CUSTOMER_ADDRESS1 || '',
+      city: window.HOSTINGER_CUSTOMER_CITY || '',
+      postal_code: window.HOSTINGER_CUSTOMER_POSTAL || '',
+      country: window.HOSTINGER_CUSTOMER_COUNTRY || ''
+    }
+  };
+
+  // Shared secret (insecure if visible in client). Better: generate server-side token per session.
+  const SECRET = '<HOST_FORWARD_SECRET>'; // replace with your secret stored in Vercel env and also pasted here
+
+  fetch(ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' , 'x-forward-secret': SECRET},
+    body: JSON.stringify({ order, secret: SECRET })
+  }).then(r=>r.json()).then(j=>{
+    console.log('Printify middleware response', j);
+  }).catch(err=>console.error('Error forwarding order to Printify middleware', err));
+})();
+</script>
