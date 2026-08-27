@@ -1,13 +1,17 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /*
-  list-variants.js
+  list-variants.js (ESM)
   Usage:
-    PRINTIFY_TOKEN=yourtoken node list-variants.js
+    $env:PRINTIFY_TOKEN='yourtoken'; node printify-middleware/scripts/list-variants.js
   Output:
     printify-middleware/output/mapping.json
 */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const token = process.env.PRINTIFY_TOKEN;
 if (!token) {
@@ -15,7 +19,7 @@ if (!token) {
   process.exit(1);
 }
 
-const shopId = process.argv[2] || '28715716'; // default to provided shop id
+const shopId = process.argv[2] || '28715716';
 const limit = 50;
 const outDir = path.join(__dirname, '..', 'output');
 const outFile = path.join(outDir, 'mapping.json');
