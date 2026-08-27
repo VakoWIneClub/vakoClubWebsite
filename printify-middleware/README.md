@@ -1,49 +1,42 @@
-Printify middleware for Vercel (Next.js)
+Puente Printify ↔ Hostinger para Vako Club
+===========================================
 
-Resumen
--------
-Esta carpeta contiene una implementación minimal y lista para desplegar en Vercel (Next.js API routes) que actúa como puente entre tu tienda en Hostinger Website Builder y la API de Printify.
-
-Características
----------------
-- Endpoint para crear órdenes en Printify (/api/printify/create-order)
-- Endpoint para crear productos en Printify (/api/printify/create-product)
-- Endpoint para recibir webhooks de Printify (/api/printify/webhook)
-- Endpoint de health check (/api/printify/health)
-- Snippet JS para pegar en la página de confirmación de compra de Hostinger
-
-Requisitos de entorno (Vercel env vars)
---------------------------------------
-- PRINTIFY_TOKEN: Token de API de Printify (Personal access token o token de aplicación)
-- PRINTIFY_SHOP_ID: ID de la tienda Printify (numérico)
-- HOST_FORWARD_SECRET: Secreto compartido para validar requests desde Hostinger (string)
-
-Instalación y deploy
+Por qué existe esto
 --------------------
-1. Copia esta carpeta a tu repo Next.js en la ruta deseada (p.ej. en la raíz: /printify-middleware o integra los archivos /api en tu proyecto Next.js).
-2. Añade las variables de entorno en Vercel (Project Settings → Environment Variables).
-3. Despliega en Vercel (push a GitHub/GitLab/Bitbucket vinculado a Vercel) — las API routes estarán disponibles en https://<tu-proyecto>.vercel.app/api/printify/*
+Hostinger Website Builder solo tiene integración nativa de print-on-demand con **Printful**, no con
+Printify. Como el catálogo ya está cargado en Printify, este puente reemplaza esa integración nativa
+que no existe.
 
-Uso desde Hostinger
--------------------
-Pega el archivo `hostinger-snippet.html` (o su contenido) en la página de confirmación de pedido (thank-you/checkout success). El snippet hace POST al endpoint `/api/printify/create-order` con los datos mínimos de la orden.
+Dónde vive el código
+---------------------
+Los endpoints reales están en `api/printify/` (raíz del repo, junto al resto de `api/*`), no en esta
+carpeta — Vercel solo despliega funciones serverless desde `/api`. Esta carpeta (`printify-middleware/`)
+solo guarda documentación, el snippet para Hostinger y scripts de uso puntual:
 
-Seguridad y recomendaciones
----------------------------
-- Para un flujo de producción, usar OAuth si planeas soportar múltiples tiendas o usuarios.
-- Validar pagos en el backend antes de enviar órdenes automáticamente a Printify.
-- Revisa la documentación de Printify para formatos exactos de `line_items` si tus productos tienen variantes complejas: https://developers.printify.com/
+- `api/printify/health.js` — health check
+- `api/printify/create-order.js` — recibe el pedido desde el snippet de Hostinger y lo crea en Printify
+- `api/printify/create-product.js` — crea (y opcionalmente publica) un producto en Printify
+- `api/printify/webhook.js` — recibe eventos de Printify (verifica firma HMAC si `PRINTIFY_WEBHOOK_SECRET` está seteado)
+- `printify-middleware/public/hostinger-snippet.html` — se pega en el "Custom code" de la página de gracias de la tienda de Hostinger
+- `printify-middleware/scripts/list-variants.js` — exporta el mapeo producto/variante de tu shop Printify a `printify-middleware/output/mapping.json`
 
-Qué contiene este patch
-------------------------
-- /api/create-order.js
-- /api/create-product.js
-- /api/webhook.js
-- /api/health.js
-- /api/printify_utils.js
-- /public/hostinger-snippet.html
-- .env.example
+Variables de entorno (Vercel)
+------------------------------
+Ver `.env.example`. Se configuran en el mismo proyecto de Vercel donde ya vive vakoclub.com.
 
-Siguientes pasos
-----------------
-Dime si quieres que genere un patch/zip descargable listo para aplicar como PR o si prefieres que lo adapte a la estructura de tu repo (si me das la ruta específica).
+Lo que falta para que esto funcione de punta a punta
+------------------------------------------------------
+1. **Setear las env vars en Vercel** (`PRINTIFY_TOKEN`, `PRINTIFY_SHOP_ID`, `HOST_FORWARD_SECRET`, `PRINTIFY_WEBHOOK_SECRET`) y redesplegar.
+2. **Correr `scripts/list-variants.js`** con tu `PRINTIFY_TOKEN` real para generar el mapeo de variantes — el snippet necesita el `printify_variant_id` de cada producto que vendas.
+3. **Confirmar qué expone realmente la página de confirmación de Hostinger.** No está documentado públicamente. Hay que abrir un pedido de prueba en la tienda de Hostinger, inspeccionar esa página (DOM/variables disponibles) y reescribir la parte marcada `TODO` de `hostinger-snippet.html` para leer ahí el pedido real — el archivo actual usa nombres de variable de ejemplo (`window.HOSTINGER_ORDER_ID`, etc.) que no están confirmados contra la plataforma real.
+4. **Pegar el snippet ya corregido** en Hostinger Website Builder → (⋮) → Integrations → Custom code, solo en la página de confirmación/gracias.
+5. **Registrar el webhook en Printify** (Shop settings → Webhooks) apuntando a `https://www.vakoclub.com/api/printify/webhook`, con el mismo secreto que `PRINTIFY_WEBHOOK_SECRET`.
+6. **Probar con un pedido real de bajo valor** antes de anunciar la tienda: confirmar que el pedido aparece en Printify con la dirección y variante correctas, y que Printify efectivamente lo manda a producción.
+
+Límite de seguridad conocido
+------------------------------
+`HOST_FORWARD_SECRET` queda visible en el HTML público de la página de gracias — no es un secreto
+real, solo frena bots genéricos. Hostinger Website Builder no ofrece un webhook servidor-a-servidor
+de "pedido pagado" para integraciones externas (solo Printful está integrado de forma nativa), así
+que no hay forma de evitar esto sin cambiar de plataforma de tienda. Rotar el secreto si se filtra o
+si empiezan a aparecer pedidos falsos en Printify.
