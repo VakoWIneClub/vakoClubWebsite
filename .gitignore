@@ -20,3 +20,7 @@ playwright-report/
 blob-report/
 allure-results/
 allure-report/
+
+# Generado por list-variants.js/.ps1 contra el catálogo real de Printify — se desactualiza apenas
+# se edita un producto ahí, así que no tiene sentido versionarlo.
+printify-middleware/output/

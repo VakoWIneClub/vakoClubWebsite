@@ -38,15 +38,17 @@ const outFile = path.join(outDir, 'mapping.json');
         const text = await res.text();
         throw new Error(`Printify API error: ${res.status} ${text}`);
       }
-      const products = await res.json();
-      if (!products || products.length === 0) break;
+      // Printify pagina al estilo Laravel: { data: [...], current_page, last_page }, no un array plano.
+      const body = await res.json();
+      const products = body.data || [];
+      if (products.length === 0) break;
 
       for (const p of products) {
         const variants = (p.variants || []).map(v => ({ variant_id: v.id, sku: v.sku, title: v.title }));
         results.push({ product_id: p.id, title: p.title, variants });
       }
 
-      if (products.length < limit) break; // likely last page
+      if (body.current_page >= body.last_page) break;
       page++;
     }
 

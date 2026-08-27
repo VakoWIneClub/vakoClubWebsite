@@ -27,9 +27,11 @@ while ($true) {
     exit 2
   }
 
-  if (-not $resp -or $resp.Count -eq 0) { break }
+  # Printify pagina al estilo Laravel: { data: [...], current_page, last_page }, no un array plano.
+  $products = $resp.data
+  if (-not $products -or $products.Count -eq 0) { break }
 
-  foreach ($p in $resp) {
+  foreach ($p in $products) {
     $variants = @()
     if ($p.variants) {
       foreach ($v in $p.variants) {
@@ -39,7 +41,7 @@ while ($true) {
     $results += [PSCustomObject]@{ product_id = $p.id; title = $p.title; variants = $variants }
   }
 
-  if ($resp.Count -lt $Limit) { break }
+  if ($resp.current_page -ge $resp.last_page) { break }
   $page++
 }
 
