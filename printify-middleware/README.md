@@ -9,9 +9,10 @@ el catálogo ya está cargado en Printify, este puente reemplaza esa integració
 
 Cómo funciona (arquitectura actual)
 -------------------------------------
-Se descartó la idea original de un snippet JS pegado en la página de confirmación de compra:
-Hostinger Ecommerce no expone ese tipo de código personalizado, y el enfoque además dependía de un
-secreto visible en HTML público. En su lugar, `api/printify/sync-orders.js` corre por cron (una vez
+Se descartó la idea original de un snippet JS pegado en la página de confirmación de compra (junto
+con `create-order.js` y `HOST_FORWARD_SECRET`, ya borrados): Hostinger Ecommerce no expone ese tipo
+de código personalizado, y el enfoque además dependía de un secreto visible en HTML público. En su
+lugar, `api/printify/sync-orders.js` corre por cron (una vez
 al día, `vercel.json` → `crons`, límite del plan Hobby de Vercel) y:
 
 1. Trae los pedidos de la tienda vía la API real de Hostinger Ecommerce
@@ -39,17 +40,15 @@ Dónde vive el código
   Printify. **Actualizar esto cada vez que se agregue un producto nuevo a la tienda** — si un item
   no está mapeado, el sync lo omite y lo loguea (no rompe el resto del pedido).
 - `supabase/migrations/20260827210000_printify_synced_orders.sql` — tabla de idempotencia.
-- `api/printify/health.js`, `create-order.js`, `create-product.js`, `webhook.js` — quedaron del
-  enfoque anterior (snippet + webhooks de Printify). `create-order.js` y el snippet en
-  `public/hostinger-snippet.html` están obsoletos con la arquitectura actual (nadie los llama) —
-  decidir si conviene borrarlos o dejarlos como fallback manual.
+- `api/printify/health.js`, `create-product.js`, `webhook.js` — quedan del enfoque anterior
+  (`webhook.js` sigue vivo: recibe eventos de envío/entrega de Printify, ver más abajo).
 - `scripts/list-variants.js` / `.ps1` — exporta el catálogo completo de Printify (variant_id, sku,
   título) a `output/mapping.json`, útil para armar `hostingerVariantMap.js` a mano.
 
 Variables de entorno (Vercel)
 ------------------------------
 Ver `.env.example`. Además de lo que ya estaba (`PRINTIFY_TOKEN`, `PRINTIFY_SHOP_ID`,
-`HOST_FORWARD_SECRET`, `PRINTIFY_WEBHOOK_SECRET`), el sync necesita:
+`PRINTIFY_WEBHOOK_SECRET`), el sync necesita:
 - `CRON_SECRET` — la manda Vercel solo al invocar el cron.
 - `PRINTIFY_SYNC_SECRET` — para dispararlo a mano o desde afuera.
 - `HOSTINGER_API_TOKEN` — ya debería existir (lo usa Reach).
@@ -65,4 +64,3 @@ Lo que falta para que esto funcione de punta a punta
 4. **Probar el sync a mano** llamando `POST /api/printify/sync-orders?secret=<PRINTIFY_SYNC_SECRET>`
    después de un pedido de prueba real, y confirmar en el dashboard de Printify que el pedido
    apareció con la dirección y variante correctas.
-5. Decidir qué hacer con el snippet/`create-order.js` del enfoque anterior (borrar o dejar).
