@@ -10,5 +10,8 @@
     "api/download-guide.js": {
       "includeFiles": "private/**"
     }
-  }
+  },
+  "crons": [
+    { "path": "/api/printify/sync-orders", "schedule": "0 6 * * *" }
+  ]
 }
