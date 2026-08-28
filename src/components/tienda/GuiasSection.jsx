@@ -31,6 +31,8 @@ const guias = [
     etiqueta: 'Colección Regional · 1/3',
     precio: 12,
     precioRegular: 19,
+    image: '/images/guias/guia-vino-espanol-tapa-card.jpg',
+    imagePosition: 'top',
   },
   {
     id: 'guia-argentino',
@@ -68,7 +70,7 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
             {guia.etiqueta}
           </span>
           {!disponible && (
-            <span className="font-jost text-[10px] tracking-[0.14em] uppercase border border-copa-gold bg-copa-cream/90 text-copa-ink px-3 py-1">
+            <span className="font-jost text-[10px] tracking-[0.14em] uppercase bg-copa-gold text-copa-ink px-3 py-1 shadow-sm">
               Próximamente
             </span>
           )}
@@ -76,10 +78,20 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
         {guia.image ? (
           landingPath ? (
             <Link to={landingPath} aria-label={guia.nombre} className="block w-full h-full">
-              <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+              <img
+                src={guia.image}
+                alt={guia.nombre}
+                className="object-cover w-full h-full"
+                style={{ objectPosition: guia.imagePosition || 'center' }}
+              />
             </Link>
           ) : (
-            <img src={guia.image} alt={guia.nombre} className="object-cover w-full h-full" />
+            <img
+              src={guia.image}
+              alt={guia.nombre}
+              className="object-cover w-full h-full"
+              style={{ objectPosition: guia.imagePosition || 'center' }}
+            />
           )
         ) : disponible ? (
           <BookOpen className="h-12 w-12 text-copa-gold" />
