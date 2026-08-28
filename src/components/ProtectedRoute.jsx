@@ -51,8 +51,8 @@ const ProtectedRoute = ({
             <div className="flex items-start gap-3">
               <BookOpen className="h-6 w-6 text-copa-gold mt-1 flex-shrink-0" />
               <div>
-                <h3 className="font-cormorant" style={{ fontSize: 19 }}>Guía Exclusiva</h3>
-                <p className="text-sm text-copa-ink/70 mt-1">Accede a nuestra guía de bodegas con puntajes únicos.</p>
+                <h3 className="font-cormorant" style={{ fontSize: 19 }}>Explorador Exclusivo</h3>
+                <p className="text-sm text-copa-ink/70 mt-1">Accede a nuestro explorador de bodegas con puntajes únicos.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">

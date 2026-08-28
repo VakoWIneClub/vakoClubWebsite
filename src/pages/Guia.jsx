@@ -185,8 +185,8 @@ const Guia = () => {
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
-        <title>Guía de Bodegas - Vako Club</title>
-        <meta name="description" content="Explora nuestra guía exclusiva de bodegas. Descubre lugares únicos, vinos excepcionales y experiencias inolvidables con la curaduría de Vako Club." />
+        <title>Explorador de Bodegas - Vako Club</title>
+        <meta name="description" content="Descubre nuestro Explorador exclusivo de bodegas. Lugares únicos, vinos excepcionales y experiencias inolvidables con la curaduría de Vako Club." />
       </Helmet>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-20">

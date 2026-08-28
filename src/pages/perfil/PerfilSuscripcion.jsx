@@ -53,7 +53,7 @@ const PerfilSuscripcion = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-3">
                 <CheckCircle className="h-4 w-4 text-copa-burgundy shrink-0" />
-                <span className="text-copa-ink/80">Acceso a la Guía Exclusiva de Bodegas</span>
+                <span className="text-copa-ink/80">Acceso al Explorador Exclusivo de Bodegas</span>
               </li>
               <li className="flex items-center gap-3">
                 <CheckCircle className="h-4 w-4 text-copa-burgundy shrink-0" />

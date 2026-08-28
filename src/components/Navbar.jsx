@@ -9,7 +9,7 @@ import { isAdminUser } from '@/lib/utils';
 
 const NAV_ITEMS = [
   { name: 'Inicio', path: '/' },
-  { name: 'Guía', path: '/guia' },
+  { name: 'Explorador', path: '/guia' },
   { name: 'Noticias', path: '/noticias' },
   { name: 'Tienda', path: '/tienda' },
   { name: 'Eventos', path: '/eventos' },

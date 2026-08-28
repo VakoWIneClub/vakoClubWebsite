@@ -53,9 +53,9 @@ const FavoriteWineries = ({ userId }) => {
       <div className="text-center py-10 px-6 border border-dashed border-copa-gold/60">
         <Compass className="mx-auto h-10 w-10 text-copa-gold/60" />
         <h3 className="mt-4 font-cormorant" style={{ fontSize: 18 }}>Aún no tienes bodegas favoritas</h3>
-        <p className="mt-1 text-sm text-copa-ink/60">Explora la guía y añade tus bodegas preferidas a tu colección.</p>
+        <p className="mt-1 text-sm text-copa-ink/60">Recorré el Explorador y añadí tus bodegas preferidas a tu colección.</p>
         <Link to="/guia" className="copa-link-nav font-jost text-[11px] tracking-[0.14em] uppercase inline-block mt-4">
-          Ir a la Guía
+          Ir al Explorador
         </Link>
       </div>
     );

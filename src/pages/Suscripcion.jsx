@@ -14,7 +14,7 @@ const copaLabel = 'font-jost text-[11px] tracking-[0.14em] uppercase text-copa-i
 const perks = [
   {
     icon: Gem,
-    title: 'Acceso a la Guía Exclusiva',
+    title: 'Acceso al Explorador Exclusivo',
     description: 'Explora nuestra selección curada de bodegas y vinos.',
   },
   {

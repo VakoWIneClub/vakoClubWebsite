@@ -98,7 +98,7 @@ const WineryPage = () => {
   return (
     <div className="bg-copa-cream text-copa-ink min-h-screen" style={{ fontFamily: "'EB Garamond', serif" }}>
       <Helmet>
-        <title>{`${winery.title} - Guía de Bodegas Vako Club`}</title>
+        <title>{`${winery.title} - Explorador de Bodegas Vako Club`}</title>
         <meta name="description" content={(winery.description || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)} />
       </Helmet>
 
@@ -110,7 +110,7 @@ const WineryPage = () => {
         >
           <div className="mb-6">
             <Link to="/guia" className="copa-btn-secondary inline-flex items-center">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Volver a la Guía
+              <ArrowLeft className="mr-2 h-4 w-4" /> Volver al Explorador
             </Link>
           </div>
           <div className="border border-copa-gold overflow-hidden">

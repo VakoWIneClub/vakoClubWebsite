@@ -70,7 +70,7 @@ const Home = () => {
         </Reveal>
         <Reveal delay={0.2} className="flex flex-wrap items-center justify-center gap-6 mt-12">
           <Link to="/guia" className="copa-btn-primary">
-            Explorar Guía
+            Ver Explorador
           </Link>
           <Link to="/noticias" className="copa-btn-secondary">
             Ver Noticias
