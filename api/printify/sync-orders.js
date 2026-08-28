@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { callPrintify } from './_lib/printify.js';
-import { listAllOrders, tryFulfillOrder } from './_lib/hostinger.js';
+import { listAllOrders, getOrder, tryFulfillOrder } from './_lib/hostinger.js';
 import { HOSTINGER_TO_PRINTIFY_VARIANT } from './_lib/hostingerVariantMap.js';
 
 const HOSTINGER_STORE_ID = 'store_01M0YWCN5GTW7AGM0YBNYR8B2W';
@@ -75,7 +75,10 @@ export default async function handler(req, res) {
       summary.claimed++;
 
       try {
-        const items = order.items
+        // El listado no trae items ni shipping_address — solo el detalle de un pedido individual.
+        const detail = await getOrder(HOSTINGER_STORE_ID, order.id, hostingerToken);
+
+        const items = detail.items
           .map((item) => ({ ...item, printifyVariant: HOSTINGER_TO_PRINTIFY_VARIANT[item.variant_id] }))
           .filter((item) => {
             if (!item.printifyVariant) {
@@ -87,7 +90,7 @@ export default async function handler(req, res) {
 
         if (items.length === 0) throw new Error('Ningún item del pedido tiene variante mapeada a Printify.');
 
-        const { first, last } = splitName(order.shipping_address?.name);
+        const { first, last } = splitName(detail.shipping_address?.name);
         const printifyOrder = {
           external_id: order.id,
           label: `Hostinger #${order.display_id}`,
@@ -98,14 +101,14 @@ export default async function handler(req, res) {
           shipping_address: {
             first_name: first,
             last_name: last,
-            email: order.customer_email,
-            phone: order.shipping_address?.phone || '',
-            address1: order.shipping_address?.address_1,
-            address2: order.shipping_address?.address_2 || '',
-            city: order.shipping_address?.city,
-            state: order.shipping_address?.province_code || '',
-            zip: order.shipping_address?.postal_code,
-            country: order.shipping_address?.country_code?.toUpperCase() || 'ES',
+            email: detail.customer_email,
+            phone: detail.shipping_address?.phone || '',
+            address1: detail.shipping_address?.address_1,
+            address2: detail.shipping_address?.address_2 || '',
+            city: detail.shipping_address?.city,
+            state: detail.shipping_address?.province_code || '',
+            zip: detail.shipping_address?.postal_code,
+            country: detail.shipping_address?.country_code?.toUpperCase() || 'ES',
           },
           send_shipping_notification: true,
         };
@@ -118,7 +121,7 @@ export default async function handler(req, res) {
           .update({ status: 'sent', printify_order_id: result.data.id, updated_at: new Date().toISOString() })
           .eq('hostinger_order_id', order.id);
 
-        await tryFulfillOrder(HOSTINGER_STORE_ID, order.id, order.items, hostingerToken);
+        await tryFulfillOrder(HOSTINGER_STORE_ID, order.id, detail.items, hostingerToken);
 
         summary.sent++;
         summary.details.push({ hostinger_order_id: order.id, printify_order_id: result.data.id, status: 'sent' });
