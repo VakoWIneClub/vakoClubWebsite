@@ -9,7 +9,7 @@
 export const GUIAS_CATALOG = {
   'guia-general': {
     nombre: 'El Mundo de la Copa',
-    amountCents: 2999,
+    amountCents: 1499,
     currency: 'usd',
     disponible: true,
     // Español es el archivo por defecto (`filePath`, usado si el idioma pedido no tiene edición

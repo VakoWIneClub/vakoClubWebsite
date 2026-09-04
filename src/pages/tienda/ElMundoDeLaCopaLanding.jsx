@@ -23,7 +23,6 @@ const EMAILJS_TEMPLATE_ID_EXTRACTO = 'template_l6a109b';
 const EMAILJS_PUBLIC_KEY = 'G7BJcfLPx0PBVWBOT';
 
 const GUIDE_ID = 'guia-general';
-const PRICE_LABEL = 'USD 29.99';
 
 const LANGS = ['es', 'en', 'pt'];
 const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
@@ -134,7 +133,7 @@ const COPY = {
         titulo: 'Garantía de devolución — 7 días.',
         texto: 'Si no te sirve, escribinos a info@vakoclub.com dentro de los 7 días y te devolvemos el 100%, sin pedirte explicaciones.',
       },
-      ctaConGarantia: 'Conseguir la guía — USD 29.99 · Devolución garantizada 7 días',
+      ctaConGarantia: 'Conseguir la guía — Devolución garantizada 7 días',
       secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en tu email',
       escasez: (remaining) => `Quedan ${remaining} de ${FOUNDER_SLOTS_TOTAL} cupos para el estatus de Fundador/a.`,
       founderPerk: 'Estatus de Fundador/a de Vako Club: invitación a la Membresía Gratuita + aviso prioritario cuando salga la serie regional (España, Argentina, Francia)',
@@ -266,7 +265,7 @@ const COPY = {
         titulo: '7-day money-back guarantee.',
         texto: "If it's not for you, email us at info@vakoclub.com within 7 days and we'll refund you in full, no questions asked.",
       },
-      ctaConGarantia: 'Get the guide — USD 29.99 · 7-day money-back guarantee',
+      ctaConGarantia: 'Get the guide — 7-day money-back guarantee',
       secureNote: 'Secure payment with Stripe · You get the download link instantly by email',
       escasez: (remaining) => `${remaining} of ${FOUNDER_SLOTS_TOTAL} Founding Member spots left.`,
       founderPerk: 'Vako Club Founding Member status: invitation to the Free Membership + priority notice when the regional series (Spain, Argentina, France) launches',
@@ -398,7 +397,7 @@ const COPY = {
         titulo: 'Garantia de devolução — 7 dias.',
         texto: 'Se não for para você, escreva para info@vakoclub.com dentro de 7 dias e devolvemos 100%, sem perguntas.',
       },
-      ctaConGarantia: 'Consiga o guia — USD 29.99 · Garantia de devolução em 7 dias',
+      ctaConGarantia: 'Consiga o guia — Garantia de devolução em 7 dias',
       secureNote: 'Pagamento seguro com Stripe · Você recebe o link de download na hora, por email',
       escasez: (remaining) => `Restam ${remaining} de ${FOUNDER_SLOTS_TOTAL} vagas de Fundador(a).`,
       founderPerk: 'Status de Fundador(a) da Vako Club: convite para a Membresia Gratuita + aviso prioritário quando sair a série regional (Espanha, Argentina, França)',
@@ -993,7 +992,7 @@ const ElMundoDeLaCopaLanding = () => {
             </Reveal>
             <Reveal delay={0.15} className="flex flex-wrap items-center gap-7 mt-12">
               <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-                {comprando ? t.nav.redirecting : `${t.nav.cta} — ${PRICE_LABEL}`}
+                {comprando ? t.nav.redirecting : t.nav.cta}
               </button>
               <a
                 href="#adentro"
@@ -1176,15 +1175,7 @@ const ElMundoDeLaCopaLanding = () => {
         <div className="bg-copa-creamDeep border-y border-copa-gold py-14 sm:py-20 lg:py-24 px-6 sm:px-8 flex flex-wrap gap-10 sm:gap-16 lg:gap-20 items-center justify-center">
           <div className="flex-[0_1_340px] text-center">
             <Reveal className={eyebrow}>{t.oferta.eyebrow}</Reveal>
-            <Reveal delay={0.05}>
-              <div
-                className="font-cormorant font-light leading-none text-copa-burgundy mt-5"
-                style={{ fontSize: 'clamp(52px,7vw,72px)', fontFeatureSettings: "'tnum'" }}
-              >
-                {PRICE_LABEL}
-              </div>
-            </Reveal>
-            <Reveal delay={0.1} className="font-jost text-[11px] tracking-[0.16em] uppercase text-copa-ink/60 mt-[18px]">
+            <Reveal delay={0.1} className="font-jost text-[11px] tracking-[0.16em] uppercase text-copa-ink/60 mt-5">
               {t.oferta.paymentNote}
             </Reveal>
             <Reveal delay={0.12} className="mt-8 py-4 px-5 border border-copa-gold bg-copa-cream text-left">

@@ -143,7 +143,7 @@ const Home = () => {
               </Reveal>
               <Reveal delay={0.15} className="flex flex-wrap items-center gap-6 mt-8">
                 <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-primary">
-                  Conseguir la guía — USD 29.99
+                  Conseguir la guía
                 </Link>
                 <Link to="/tienda" className="copa-btn-secondary">
                   Ver todas las guías

@@ -218,7 +218,7 @@ const Suscripcion = () => {
                 está disponible ahora mismo, sin esperar el registro.
               </p>
               <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-secondary inline-flex items-center mt-4">
-                Conseguir la guía — USD 29.99
+                Conseguir la guía
               </Link>
             </div>
           </Reveal>

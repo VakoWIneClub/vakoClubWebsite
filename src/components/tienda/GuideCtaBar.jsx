@@ -56,7 +56,7 @@ const GuideCtaBar = () => {
           <p className="font-cormorant leading-tight truncate" style={{ fontSize: 18 }}>
             El Mundo de la Copa{' '}
             <span className="text-copa-ink/60 font-jost text-[10px] tracking-[0.1em] uppercase align-middle">
-              · Guía digital · USD 29.99
+              · Guía digital
             </span>
           </p>
           <p className="hidden sm:block text-copa-ink/70 truncate" style={{ fontSize: 14 }}>

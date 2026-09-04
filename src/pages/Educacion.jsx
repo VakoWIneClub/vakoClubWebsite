@@ -172,7 +172,7 @@ const Educacion = () => {
           </div>
           <div className="flex flex-col gap-3.5 items-start">
             <Link to="/tienda/el-mundo-de-la-copa" className="copa-btn-invert">
-              Conseguir la guía — USD 29.99
+              Conseguir la guía
             </Link>
             <div className="font-jost text-[11px] tracking-[0.1em] text-copa-cream/60">
               Pago seguro con Stripe · Devolución 7 días
