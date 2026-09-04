@@ -18,7 +18,6 @@ const guias = [
       'Uvas, regiones y maridajes para entender qué estás bebiendo. 82 páginas: de los cinco componentes del vino a un recorrido completo por Francia, Italia, España, Argentina, Chile, Estados Unidos, Australia y más.',
     estado: 'disponible',
     etiqueta: 'Guía General',
-    precio: 29.99,
     image: '/images/guias/el-mundo-de-la-copa-tapa.jpg',
   },
   {
@@ -29,8 +28,6 @@ const guias = [
       'Crianza, Reserva y Gran Reserva explicados de una vez. Rioja, Ribera del Duero, Rías Baixas, Jerez y las uvas que hacen único al vino español.',
     estado: 'proximamente',
     etiqueta: 'Colección Regional · 1/3',
-    precio: 12,
-    precioRegular: 19,
     image: '/images/guias/guia-vino-espanol-tapa-card.jpg',
     imagePosition: 'top',
   },
@@ -42,8 +39,6 @@ const guias = [
       'Más allá del Malbec: Bonarda, Torrontés y por qué la altura del viñedo cambia lo que hay en tu copa. Mendoza, Salta y Patagonia explicadas de una vez.',
     estado: 'proximamente',
     etiqueta: 'Colección Regional · 2/3',
-    precio: 12,
-    precioRegular: 19,
   },
   {
     id: 'guia-frances',
@@ -53,8 +48,6 @@ const guias = [
       'El traductor definitivo de qué uva se esconde detrás de cada región: Burdeos vs. Borgoña, Champagne y el resto del mapa francés, sin intimidación.',
     estado: 'proximamente',
     etiqueta: 'Colección Regional · 3/3',
-    precio: 12,
-    precioRegular: 19,
   },
 ];
 
@@ -117,22 +110,7 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
           </p>
         </div>
 
-        <div className="flex items-end justify-between gap-3">
-          <div>
-            {guia.precio ? (
-              <div className="flex items-baseline gap-2">
-                <span className="font-cormorant text-copa-burgundy" style={{ fontSize: 28 }}>
-                  ${guia.precio}
-                </span>
-                {guia.precioRegular && <span className="text-copa-ink/40 line-through text-sm">${guia.precioRegular}</span>}
-              </div>
-            ) : (
-              <span className="text-copa-ink/60 text-sm italic">{guia.precioNota}</span>
-            )}
-            {guia.precioRegular && (
-              <p className="font-jost text-[10px] tracking-[0.1em] uppercase text-copa-ink/50 mt-1">Precio Fundador</p>
-            )}
-          </div>
+        <div className="flex items-end justify-end gap-3">
           {disponible && landingPath ? (
             // Guides with a dedicated landing page must go through it — that's where the
             // language is selected before checkout. Buying straight from this grid skipped
