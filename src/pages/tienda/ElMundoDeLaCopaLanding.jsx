@@ -67,8 +67,7 @@ const COPY = {
       titlePre: 'El vino se disfruta más cuando lo ',
       titleEm: 'entendés',
       titlePost: '.',
-      paragraph:
-        'Ochenta y tres páginas para dejar de elegir a ciegas. Cómo se cata, cómo se sirve, qué dice una etiqueta y con qué va cada botella. Sin esnobismo y sin tecnicismos vacíos.',
+      paragraph: 'Dejá de elegir a ciegas. Empezá hoy.',
       ctaSecondary: 'Ver páginas de adentro',
       microcopy: 'Descarga inmediata · Pago seguro · Devolución garantizada 7 días',
       coverAlt: 'Tapa de la guía El mundo de la copa, de Vako Club',
@@ -199,8 +198,7 @@ const COPY = {
       titlePre: 'Wine is more enjoyable when you ',
       titleEm: 'understand it',
       titlePost: '.',
-      paragraph:
-        'Eighty-three pages to stop choosing wine blind. How to taste it, how to serve it, what a label actually says, and what to pair with each bottle. No snobbery, no empty jargon.',
+      paragraph: 'Stop choosing blind. Start today.',
       ctaSecondary: 'See the inside pages',
       microcopy: 'Instant download · Secure payment · 7-day money-back guarantee',
       coverAlt: 'Cover of The World of the Glass guide, by Vako Club',
@@ -331,8 +329,7 @@ const COPY = {
       titlePre: 'O vinho é mais gostoso quando você ',
       titleEm: 'entende',
       titlePost: '.',
-      paragraph:
-        'Oitenta e três páginas para parar de escolher vinho no escuro. Como degustar, como servir, o que um rótulo realmente diz e com que harmonizar cada garrafa. Sem esnobismo e sem jargão vazio.',
+      paragraph: 'Pare de escolher no escuro. Comece hoje.',
       ctaSecondary: 'Ver páginas internas',
       microcopy: 'Download imediato · Pagamento seguro · Garantia de devolução em 7 dias',
       coverAlt: 'Capa do guia O Mundo da Taça, da Vako Club',
@@ -767,8 +764,14 @@ const ElMundoDeLaCopaLanding = () => {
 
   const toggleFaq = (i) => setOpenFaq((s) => ({ ...s, [i]: !s[i] }));
 
+  // La mayoría del tráfico entra desde el celular — esta barra fija le da un botón de compra
+  // siempre a mano mientras scrollea, sin esperar a llegar a la sección de oferta. Se oculta
+  // durante el gate de idioma/edad y una vez que la compra ya se confirmó (no tiene sentido
+  // seguir pidiéndole al comprador que compre de nuevo).
+  const showStickyCta = !gateOpen && !(compra === 'exito' && compraStatus === 'pagado');
+
   return (
-    <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
+    <div className="bg-copa-cream text-copa-ink pb-16 sm:pb-0" style={{ fontFamily: "'EB Garamond', serif" }}>
       {/* Cormorant/EB Garamond/Jost now load globally from index.html — no per-page <link> needed. */}
       <Seo
         title={t.meta.title}
@@ -889,12 +892,36 @@ const ElMundoDeLaCopaLanding = () => {
         />
       </div>
 
+      {/* Barra de compra fija — solo mobile. El botón de la oferta principal está varias
+          pantallas más abajo; en celular queremos un CTA siempre visible mientras se scrollea. */}
+      {showStickyCta && (
+        <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 border-t border-copa-gold bg-copa-creamDeep text-copa-ink shadow-[0_-4px_20px_rgba(0,0,0,0.12)]">
+          <div className="px-4 py-3 flex items-center gap-3">
+            <div className="flex-grow min-w-0">
+              <p className="font-cormorant leading-tight truncate" style={{ fontSize: 16 }}>
+                {t.meta.title.split(' — ')[0]}
+              </p>
+              <p className="text-copa-ink/60 truncate font-jost tracking-[0.08em] uppercase" style={{ fontSize: 10 }}>
+                {t.oferta.secureNote}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={irACheckout}
+              disabled={comprando}
+              className="copa-btn-nav flex-shrink-0"
+            >
+              {comprando ? t.nav.redirecting : t.nav.cta}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 0 · Barra superior */}
       <header className="copa-header">
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-3.5 flex items-center justify-between gap-6">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="rounded-full" />
-            <span className="font-jost text-[11px] tracking-[0.22em] uppercase">Vako Club</span>
+          <Link to="/" aria-label="Vako Club" className="flex items-center gap-3">
+            <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="h-[34px] w-[34px] shrink-0 rounded-full" />
           </Link>
           <div className="flex items-center gap-4 sm:gap-8">
             <nav aria-label="Language / Idioma / Idioma" className="flex items-center gap-2.5 font-jost text-[11px] tracking-[0.14em]">
@@ -973,7 +1000,7 @@ const ElMundoDeLaCopaLanding = () => {
       {/* 1 · Hero */}
       <section id="top" className="max-w-[1160px] mx-auto px-6 sm:px-8 pt-20 sm:pt-28 lg:pt-[132px] pb-16 sm:pb-24 lg:pb-[110px]">
         <div className="flex flex-wrap items-center gap-10 sm:gap-16 lg:gap-20">
-          <div className="flex-[1_1_420px] min-w-[300px] max-w-[640px]">
+          <div className="flex-[1_1_420px] min-w-[300px] max-w-[640px] text-center sm:text-left">
             <Reveal className={eyebrow}>{t.hero.eyebrow}</Reveal>
             <Reveal delay={0.05}>
               <h1
@@ -986,11 +1013,11 @@ const ElMundoDeLaCopaLanding = () => {
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="max-w-[34em] text-copa-ink/90 mt-10" style={{ fontSize: 'clamp(18px,1.6vw,22px)', lineHeight: 1.6 }}>
+              <p className="max-w-[34em] mx-auto sm:mx-0 text-copa-ink/90 mt-10" style={{ fontSize: 'clamp(18px,1.6vw,22px)', lineHeight: 1.6 }}>
                 {t.hero.paragraph}
               </p>
             </Reveal>
-            <Reveal delay={0.15} className="flex flex-wrap items-center gap-7 mt-12">
+            <Reveal delay={0.15} className="flex flex-wrap items-center justify-center sm:justify-start gap-7 mt-12">
               <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
                 {comprando ? t.nav.redirecting : t.nav.cta}
               </button>
@@ -1019,75 +1046,8 @@ const ElMundoDeLaCopaLanding = () => {
         </div>
       </section>
 
-      {/* 2 · Barra de datos */}
-      <section aria-label={t.dataBar.ariaLabel} className="border-y border-copa-gold">
-        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-6 flex flex-wrap gap-x-6 gap-y-2.5 justify-between font-jost text-[11px] tracking-[0.18em] uppercase">
-          {t.dataBar.items.map((item, i) => (
-            <React.Fragment key={item}>
-              {i > 0 && <span className="text-copa-gold">·</span>}
-              <span>{item}</span>
-            </React.Fragment>
-          ))}
-        </div>
-      </section>
-
-      {/* 3 · El problema — única sección en borgoña a sangre */}
-      <section ref={problemaRef} className="bg-copa-burgundy text-copa-cream py-24 sm:py-36 lg:py-[200px] px-6 sm:px-8">
-        <div className="max-w-[900px] mx-auto text-center">
-          <Reveal className="font-jost text-[11px] tracking-[0.22em] uppercase text-copa-gold">{t.problema.eyebrow}</Reveal>
-          <Reveal delay={0.05}>
-            <h2
-              className="font-cormorant font-light leading-[1.02] mt-6"
-              style={{ fontSize: 'clamp(34px,5vw,64px)' }}
-            >
-              {t.problema.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1} className="w-[90px] h-px bg-copa-gold mx-auto my-14" />
-          <div className="flex flex-wrap gap-7 sm:gap-14 text-left justify-center">
-            <Reveal className="flex-[1_1_300px] max-w-[34em] text-copa-cream/85" style={{ fontSize: 'clamp(17px,1.4vw,19px)', lineHeight: 1.65 }}>
-              {t.problema.p1}
-            </Reveal>
-            <Reveal delay={0.05} className="flex-[1_1_300px] max-w-[34em] text-copa-cream/85" style={{ fontSize: 'clamp(17px,1.4vw,19px)', lineHeight: 1.65 }}>
-              {t.problema.p2}
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* 4 · El índice */}
-      <section id="indice" className="max-w-[1160px] mx-auto px-6 sm:px-8 py-20 sm:py-32 lg:py-40">
-        <Reveal className={eyebrow}>{t.indice.eyebrow}</Reveal>
-        <Reveal delay={0.05}>
-          <h2 className="font-cormorant leading-[1.05] mt-6" style={{ fontSize: 'clamp(28px,3.6vw,40px)' }}>
-            {t.indice.title}
-          </h2>
-        </Reveal>
-        <div className="mt-20 border-t border-copa-gold">
-          {t.indice.rows.map((row, i) => (
-            <Reveal key={row.titulo} delay={Math.min(i * 0.04, 0.2)}>
-              <div className="group flex flex-wrap items-baseline gap-4 sm:gap-10 py-6 sm:py-8 px-3 sm:px-6 border-b border-copa-gold/55 transition-colors duration-300 hover:bg-copa-creamDeep">
-                <span
-                  className="flex-[0_0_58px] font-cormorant italic text-copa-gold transition-colors duration-300 group-hover:text-copa-burgundy"
-                  style={{ fontSize: 'clamp(28px,3.4vw,40px)' }}
-                >
-                  {row.num}
-                </span>
-                <div className="flex-[1_1_280px] min-w-[240px]">
-                  <div className="font-cormorant leading-[1.1]" style={{ fontSize: 'clamp(24px,2.8vw,32px)' }}>
-                    {row.titulo}
-                  </div>
-                  <div className="text-copa-ink/70 mt-2" style={{ fontSize: 17, lineHeight: 1.6 }}>
-                    {row.desc}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* 5 · Adentro se ve así */}
+      {/* 2 · Adentro se ve así — justo debajo de la tapa, es lo segundo que ve el visitante al
+          bajar: la mejor prueba de que el contenido es real, antes de pedirle nada más. */}
       <section id="adentro" className="py-20 sm:py-32 lg:py-40 bg-copa-creamDeep">
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8">
           <Reveal className={eyebrow}>{t.adentro.eyebrow}</Reveal>
@@ -1120,6 +1080,86 @@ const ElMundoDeLaCopaLanding = () => {
             {t.adentro.previewNote}
           </div>
         )}
+        {/* CTA de media página — justo después de ver contenido real es el momento de mayor
+            intención de compra antes de llegar a la oferta formal más abajo. */}
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 mt-14 text-center">
+          <Reveal>
+            <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
+              {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
+            </button>
+          </Reveal>
+          <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-4 leading-loose">
+            {t.oferta.secureNote}
+          </div>
+        </div>
+      </section>
+
+      {/* 3 · Barra de datos */}
+      <section aria-label={t.dataBar.ariaLabel} className="border-y border-copa-gold">
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-6 flex flex-wrap gap-x-6 gap-y-2.5 justify-between font-jost text-[11px] tracking-[0.18em] uppercase">
+          {t.dataBar.items.map((item, i) => (
+            <React.Fragment key={item}>
+              {i > 0 && <span className="text-copa-gold">·</span>}
+              <span>{item}</span>
+            </React.Fragment>
+          ))}
+        </div>
+      </section>
+
+      {/* 4 · El problema — única sección en borgoña a sangre */}
+      <section ref={problemaRef} className="bg-copa-burgundy text-copa-cream py-24 sm:py-36 lg:py-[200px] px-6 sm:px-8">
+        <div className="max-w-[900px] mx-auto text-center">
+          <Reveal className="font-jost text-[11px] tracking-[0.22em] uppercase text-copa-gold">{t.problema.eyebrow}</Reveal>
+          <Reveal delay={0.05}>
+            <h2
+              className="font-cormorant font-light leading-[1.02] mt-6"
+              style={{ fontSize: 'clamp(34px,5vw,64px)' }}
+            >
+              {t.problema.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="w-[90px] h-px bg-copa-gold mx-auto my-14" />
+          <div className="flex flex-wrap gap-7 sm:gap-14 text-left justify-center">
+            <Reveal className="flex-[1_1_300px] max-w-[34em] text-copa-cream/85" style={{ fontSize: 'clamp(17px,1.4vw,19px)', lineHeight: 1.65 }}>
+              {t.problema.p1}
+            </Reveal>
+            <Reveal delay={0.05} className="flex-[1_1_300px] max-w-[34em] text-copa-cream/85" style={{ fontSize: 'clamp(17px,1.4vw,19px)', lineHeight: 1.65 }}>
+              {t.problema.p2}
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 5 · El índice */}
+      <section id="indice" className="max-w-[1160px] mx-auto px-6 sm:px-8 py-20 sm:py-32 lg:py-40">
+        <Reveal className={eyebrow}>{t.indice.eyebrow}</Reveal>
+        <Reveal delay={0.05}>
+          <h2 className="font-cormorant leading-[1.05] mt-6" style={{ fontSize: 'clamp(28px,3.6vw,40px)' }}>
+            {t.indice.title}
+          </h2>
+        </Reveal>
+        <div className="mt-20 border-t border-copa-gold">
+          {t.indice.rows.map((row, i) => (
+            <Reveal key={row.titulo} delay={Math.min(i * 0.04, 0.2)}>
+              <div className="group flex flex-wrap items-baseline gap-4 sm:gap-10 py-6 sm:py-8 px-3 sm:px-6 border-b border-copa-gold/55 transition-colors duration-300 hover:bg-copa-creamDeep">
+                <span
+                  className="flex-[0_0_58px] font-cormorant italic text-copa-gold transition-colors duration-300 group-hover:text-copa-burgundy"
+                  style={{ fontSize: 'clamp(28px,3.4vw,40px)' }}
+                >
+                  {row.num}
+                </span>
+                <div className="flex-[1_1_280px] min-w-[240px]">
+                  <div className="font-cormorant leading-[1.1]" style={{ fontSize: 'clamp(24px,2.8vw,32px)' }}>
+                    {row.titulo}
+                  </div>
+                  <div className="text-copa-ink/70 mt-2" style={{ fontSize: 17, lineHeight: 1.6 }}>
+                    {row.desc}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       {/* 6 · Quién está atrás */}
