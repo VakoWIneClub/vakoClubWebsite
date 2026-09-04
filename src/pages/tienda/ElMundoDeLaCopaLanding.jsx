@@ -920,9 +920,8 @@ const ElMundoDeLaCopaLanding = () => {
       {/* 0 · Barra superior */}
       <header className="copa-header">
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-3.5 flex items-center justify-between gap-6">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="rounded-full" />
-            <span className="font-jost text-[11px] tracking-[0.22em] uppercase">Vako Club</span>
+          <Link to="/" aria-label="Vako Club" className="flex items-center gap-3">
+            <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="h-[34px] w-[34px] shrink-0 rounded-full" />
           </Link>
           <div className="flex items-center gap-4 sm:gap-8">
             <nav aria-label="Language / Idioma / Idioma" className="flex items-center gap-2.5 font-jost text-[11px] tracking-[0.14em]">
