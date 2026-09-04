@@ -67,8 +67,7 @@ const COPY = {
       titlePre: 'El vino se disfruta más cuando lo ',
       titleEm: 'entendés',
       titlePost: '.',
-      paragraph:
-        'Ochenta y tres páginas para dejar de elegir a ciegas. Cómo se cata, cómo se sirve, qué dice una etiqueta y con qué va cada botella. Sin esnobismo y sin tecnicismos vacíos.',
+      paragraph: 'Dejá de elegir a ciegas. Empezá hoy.',
       ctaSecondary: 'Ver páginas de adentro',
       microcopy: 'Descarga inmediata · Pago seguro · Devolución garantizada 7 días',
       coverAlt: 'Tapa de la guía El mundo de la copa, de Vako Club',
@@ -199,8 +198,7 @@ const COPY = {
       titlePre: 'Wine is more enjoyable when you ',
       titleEm: 'understand it',
       titlePost: '.',
-      paragraph:
-        'Eighty-three pages to stop choosing wine blind. How to taste it, how to serve it, what a label actually says, and what to pair with each bottle. No snobbery, no empty jargon.',
+      paragraph: 'Stop choosing blind. Start today.',
       ctaSecondary: 'See the inside pages',
       microcopy: 'Instant download · Secure payment · 7-day money-back guarantee',
       coverAlt: 'Cover of The World of the Glass guide, by Vako Club',
@@ -331,8 +329,7 @@ const COPY = {
       titlePre: 'O vinho é mais gostoso quando você ',
       titleEm: 'entende',
       titlePost: '.',
-      paragraph:
-        'Oitenta e três páginas para parar de escolher vinho no escuro. Como degustar, como servir, o que um rótulo realmente diz e com que harmonizar cada garrafa. Sem esnobismo e sem jargão vazio.',
+      paragraph: 'Pare de escolher no escuro. Comece hoje.',
       ctaSecondary: 'Ver páginas internas',
       microcopy: 'Download imediato · Pagamento seguro · Garantia de devolução em 7 dias',
       coverAlt: 'Capa do guia O Mundo da Taça, da Vako Club',
@@ -1004,7 +1001,7 @@ const ElMundoDeLaCopaLanding = () => {
       {/* 1 · Hero */}
       <section id="top" className="max-w-[1160px] mx-auto px-6 sm:px-8 pt-20 sm:pt-28 lg:pt-[132px] pb-16 sm:pb-24 lg:pb-[110px]">
         <div className="flex flex-wrap items-center gap-10 sm:gap-16 lg:gap-20">
-          <div className="flex-[1_1_420px] min-w-[300px] max-w-[640px]">
+          <div className="flex-[1_1_420px] min-w-[300px] max-w-[640px] text-center sm:text-left">
             <Reveal className={eyebrow}>{t.hero.eyebrow}</Reveal>
             <Reveal delay={0.05}>
               <h1
@@ -1017,7 +1014,7 @@ const ElMundoDeLaCopaLanding = () => {
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="max-w-[34em] text-copa-ink/90 mt-10" style={{ fontSize: 'clamp(18px,1.6vw,22px)', lineHeight: 1.6 }}>
+              <p className="max-w-[34em] mx-auto sm:mx-0 text-copa-ink/90 mt-10" style={{ fontSize: 'clamp(18px,1.6vw,22px)', lineHeight: 1.6 }}>
                 {t.hero.paragraph}
               </p>
             </Reveal>
