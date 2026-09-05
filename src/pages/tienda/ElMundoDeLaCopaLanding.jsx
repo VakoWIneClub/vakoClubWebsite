@@ -2,14 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import { useToast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import { supabase } from '@/lib/customSupabaseClient';
 import CartWidget from '@/components/tienda/CartWidget';
-import { useCart } from '@/contexts/CartContext';
+import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 
 // Fácil de subir a 100 el día que se decida extender el bono — un solo número para cambiar.
 const FOUNDER_SLOTS_TOTAL = 50;
@@ -63,7 +62,6 @@ const COPY = {
       description:
         'Guía digital de 83 páginas de Vako Club para dejar de elegir vino a ciegas: cata, servicio, etiquetas y maridaje, sin esnobismo. Descarga inmediata en español, inglés y portugués.',
     },
-    nav: { cta: 'Conseguir la guía', redirecting: 'Redirigiendo…' },
     hero: {
       eyebrow: 'Guía digital · 83 páginas · Español, inglés y portugués',
       titlePre: 'El vino se disfruta más cuando lo ',
@@ -134,7 +132,6 @@ const COPY = {
         titulo: 'Garantía de devolución — 7 días.',
         texto: 'Si no te sirve, escribinos a info@vakoclub.com dentro de los 7 días y te devolvemos el 100%, sin pedirte explicaciones.',
       },
-      ctaConGarantia: 'Conseguir la guía — Devolución garantizada 7 días',
       agregarCarrito: 'Agregar al carrito',
       yaEnCarrito: 'Ya está en el carrito',
       agregada: 'Agregada ✓',
@@ -188,7 +185,6 @@ const COPY = {
     },
     cierre: { title: 'La próxima botella que abras puede tener sentido.' },
     footer: { instagram: 'Instagram', terminos: 'Términos', privacidad: 'Privacidad', contacto: 'Contacto', copyright: (y) => `© ${y} Vako Club` },
-    toastError: { title: 'No se pudo iniciar el pago', fallbackDescription: 'Intenta de nuevo en unos minutos.', fallbackError: 'No se pudo iniciar el pago.' },
   },
 
   en: {
@@ -197,7 +193,6 @@ const COPY = {
       description:
         'An 83-page digital guide from Vako Club to help you stop choosing wine blind: tasting, serving, labels, and pairing, without the snobbery. Instant download, available in Spanish, English, and Portuguese.',
     },
-    nav: { cta: 'Get the guide', redirecting: 'Redirecting…' },
     hero: {
       eyebrow: 'Digital guide · 83 pages · Spanish, English and Portuguese',
       titlePre: 'Wine is more enjoyable when you ',
@@ -268,7 +263,6 @@ const COPY = {
         titulo: '7-day money-back guarantee.',
         texto: "If it's not for you, email us at info@vakoclub.com within 7 days and we'll refund you in full, no questions asked.",
       },
-      ctaConGarantia: 'Get the guide — 7-day money-back guarantee',
       agregarCarrito: 'Add to cart',
       yaEnCarrito: 'Already in your cart',
       agregada: 'Added ✓',
@@ -322,7 +316,6 @@ const COPY = {
     },
     cierre: { title: 'The next bottle you open might actually make sense.' },
     footer: { instagram: 'Instagram', terminos: 'Terms', privacidad: 'Privacy', contacto: 'Contact', copyright: (y) => `© ${y} Vako Club` },
-    toastError: { title: "We couldn't start the payment", fallbackDescription: 'Try again in a few minutes.', fallbackError: "We couldn't start the payment." },
   },
 
   pt: {
@@ -331,7 +324,6 @@ const COPY = {
       description:
         'Um guia digital de 83 páginas da Vako Club para você parar de escolher vinho no escuro: degustação, serviço, rótulos e harmonização, sem esnobismo. Download imediato, disponível em espanhol, inglês e português.',
     },
-    nav: { cta: 'Consiga o guia', redirecting: 'Redirecionando…' },
     hero: {
       eyebrow: 'Guia digital · 83 páginas · Espanhol, inglês e português',
       titlePre: 'O vinho é mais gostoso quando você ',
@@ -402,7 +394,6 @@ const COPY = {
         titulo: 'Garantia de devolução — 7 dias.',
         texto: 'Se não for para você, escreva para info@vakoclub.com dentro de 7 dias e devolvemos 100%, sem perguntas.',
       },
-      ctaConGarantia: 'Consiga o guia — Garantia de devolução em 7 dias',
       agregarCarrito: 'Adicionar ao carrinho',
       yaEnCarrito: 'Já está no carrinho',
       agregada: 'Adicionada ✓',
@@ -456,7 +447,6 @@ const COPY = {
     },
     cierre: { title: 'A próxima garrafa que você abrir pode fazer sentido.' },
     footer: { instagram: 'Instagram', terminos: 'Termos', privacidad: 'Privacidade', contacto: 'Contato', copyright: (y) => `© ${y} Vako Club` },
-    toastError: { title: 'Não foi possível iniciar o pagamento', fallbackDescription: 'Tente novamente em alguns minutos.', fallbackError: 'Não foi possível iniciar o pagamento.' },
   },
 };
 
@@ -502,7 +492,6 @@ const readHasCompraParam = () => {
 };
 
 const ElMundoDeLaCopaLanding = () => {
-  const { toast } = useToast();
   const { addItem, items: cartItems } = useCart();
   const [lang, setLang] = useState(readStoredLang);
   const [gateOpen, setGateOpen] = useState(() => !readGatePassed() && !readHasCompraParam());
@@ -511,7 +500,6 @@ const ElMundoDeLaCopaLanding = () => {
   // posible cambiar de idioma antes de continuar; solo cambia el estado inicial del botón.
   const [gateLang, setGateLang] = useState('es');
   const [gateAge, setGateAge] = useState(false);
-  const [comprando, setComprando] = useState(false);
   const [agregado, setAgregado] = useState(false);
   const yaEnCarrito = cartItems.some((it) => it.id === GUIDE_ID);
   const [email, setEmail] = useState('');
@@ -718,35 +706,22 @@ const ElMundoDeLaCopaLanding = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const irACheckout = async () => {
-    setComprando(true);
-    try {
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guideId: GUIDE_ID, lang, returnPath: '/tienda/el-mundo-de-la-copa' }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error || t.toastError.fallbackError);
-      window.location.href = data.url;
-    } catch (error) {
-      toast({
-        title: t.toastError.title,
-        description: error.message || t.toastError.fallbackDescription,
-        variant: 'destructive',
-      });
-      setComprando(false);
-    }
-  };
-
-  // El idioma elegido en el header viaja con el ítem del carrito — así, si el checkout final
-  // incluye esta guía junto a otras, se sigue entregando en el idioma que el visitante ya eligió
-  // acá, no siempre en español.
+  // Único botón de compra en toda la landing: agrega al carrito, nunca va directo a Stripe. El
+  // pago real se hace desde el panel del carrito (CartWidget) con "Pagar todo". El idioma elegido
+  // en el header viaja con el ítem del carrito — así, si el checkout final incluye esta guía
+  // junto a otras, se sigue entregando en el idioma que el visitante ya eligió acá, no siempre en
+  // español.
   const agregarAlCarrito = () => {
     addItem(GUIDE_ID, lang);
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
   };
+
+  const precio = formatUsd(CART_CATALOG[GUIDE_ID].amountCents);
+  // Versión corta (sin precio) para la barra fija de mobile, donde el espacio es angosto; el
+  // resto de los botones de compra de la página usan `cartLabel`, con precio incluido.
+  const cartLabelCorto = agregado ? t.oferta.agregada : yaEnCarrito ? t.oferta.yaEnCarrito : t.oferta.agregarCarrito;
+  const cartLabel = agregado ? t.oferta.agregada : yaEnCarrito ? t.oferta.yaEnCarrito : `${t.oferta.agregarCarrito} — ${precio}`;
 
   const enviarEmail = (e) => {
     e.preventDefault();
@@ -939,11 +914,10 @@ const ElMundoDeLaCopaLanding = () => {
             </div>
             <button
               type="button"
-              onClick={irACheckout}
-              disabled={comprando}
+              onClick={agregarAlCarrito}
               className="copa-btn-nav flex-shrink-0"
             >
-              {comprando ? t.nav.redirecting : t.nav.cta}
+              {cartLabelCorto}
             </button>
           </div>
         </div>
@@ -1042,9 +1016,9 @@ const ElMundoDeLaCopaLanding = () => {
                 {t.hero.paragraph}
               </p>
             </Reveal>
-            <Reveal delay={0.15} className="flex flex-wrap items-center justify-center sm:justify-start gap-7 mt-12">
-              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-                {comprando ? t.nav.redirecting : t.nav.cta}
+            <Reveal delay={0.15} className="flex flex-wrap items-center justify-center sm:justify-start gap-5 sm:gap-7 mt-12">
+              <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+                {cartLabel}
               </button>
               <a
                 href="#adentro"
@@ -1109,8 +1083,8 @@ const ElMundoDeLaCopaLanding = () => {
             intención de compra antes de llegar a la oferta formal más abajo. */}
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8 mt-14 text-center">
           <Reveal>
-            <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-              {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
+            <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+              {cartLabel}
             </button>
           </Reveal>
           <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-4 leading-loose">
@@ -1251,12 +1225,9 @@ const ElMundoDeLaCopaLanding = () => {
                 {t.oferta.garantia.texto}
               </div>
             </Reveal>
-            <Reveal delay={0.15} className="flex flex-wrap gap-4 justify-center mt-8">
-              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-                {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
-              </button>
-              <button type="button" onClick={agregarAlCarrito} className="copa-btn-secondary">
-                {agregado ? t.oferta.agregada : yaEnCarrito ? t.oferta.yaEnCarrito : t.oferta.agregarCarrito}
+            <Reveal delay={0.15}>
+              <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+                {cartLabel}
               </button>
             </Reveal>
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
@@ -1385,8 +1356,8 @@ const ElMundoDeLaCopaLanding = () => {
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
-          <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-14`}>
-            {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
+          <button type="button" onClick={agregarAlCarrito} className={`${btnPrimary} mt-14`}>
+            {cartLabel}
           </button>
         </Reveal>
       </section>

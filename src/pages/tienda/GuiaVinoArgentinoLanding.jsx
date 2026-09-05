@@ -81,7 +81,6 @@ const CONTENT = {
       titulo: 'Garantía de devolución — 14 días.',
       texto: 'Si sentís que no te aportó valor, escribinos a info@vakoclub.com dentro de los 14 días posteriores a la compra y te devolvemos el 100%, sin pedirte explicaciones.',
     },
-    ctaConGarantia: 'Conseguir la guía — USD 14.99',
     secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en esta misma página',
     incluye: [
       'Las 66 páginas en PDF de alta calidad',

@@ -24,6 +24,10 @@ export const CART_CATALOG = {
   },
 };
 
+// Compartido por CartWidget y las landings (para mostrar el precio en el botón "Agregar al
+// carrito") — un solo lugar para el formato de precio en USD.
+export const formatUsd = (cents) => `USD ${(cents / 100).toFixed(2)}`;
+
 const STORAGE_KEY = 'vako-carrito';
 
 const readStoredItems = () => {
