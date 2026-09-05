@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import CompraResultBanner from '@/components/tienda/CompraResultBanner';
 import CartWidget from '@/components/tienda/CartWidget';
-import { useCart } from '@/contexts/CartContext';
+import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 // Plantilla compartida para las landings de la Colección Regional (España, Argentina, y Francia
@@ -51,15 +50,14 @@ const QUIENES = {
 };
 
 const GuiaRegionalLanding = ({ content }) => {
-  const { toast } = useToast();
   const { addItem, items: cartItems } = useCart();
-  const [comprando, setComprando] = useState(false);
   const [agregado, setAgregado] = useState(false);
   const yaEnCarrito = cartItems.some((it) => it.id === content.guideId);
   const [openFaq, setOpenFaq] = useState({});
   // Código del idioma que abrió el aviso de "todavía no disponible" (null = diálogo cerrado).
   const [langNotice, setLangNotice] = useState(null);
   const ofertaRef = useRef(null);
+  const precio = formatUsd(CART_CATALOG[content.guideId].amountCents);
 
   const toggleFaq = (i) => setOpenFaq((s) => ({ ...s, [i]: !s[i] }));
 
@@ -68,32 +66,16 @@ const GuiaRegionalLanding = ({ content }) => {
     setLangNotice(code);
   };
 
-  const irACheckout = async () => {
-    setComprando(true);
-    try {
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guideId: content.guideId, returnPath: content.path }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error || 'No se pudo iniciar el pago.');
-      window.location.href = data.url;
-    } catch (error) {
-      toast({
-        title: 'No se pudo iniciar el pago',
-        description: error.message || 'Intenta de nuevo en unos minutos.',
-        variant: 'destructive',
-      });
-      setComprando(false);
-    }
-  };
-
+  // Único botón de compra en toda la landing: agrega al carrito, nunca va directo a Stripe. El
+  // pago real se hace desde el panel del carrito (CartWidget) con "Pagar todo", sea de una guía
+  // o de varias — así hay un solo camino de compra, no dos formas distintas de terminar en Stripe.
   const agregarAlCarrito = () => {
     addItem(content.guideId);
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
   };
+
+  const cartLabel = agregado ? 'Agregada ✓' : yaEnCarrito ? 'Ya está en el carrito' : `Agregar al carrito — ${precio}`;
 
   return (
     <div className="bg-copa-cream text-copa-ink" style={{ fontFamily: "'EB Garamond', serif" }}>
@@ -150,9 +132,9 @@ const GuiaRegionalLanding = ({ content }) => {
                 {content.hero.paragraph}
               </p>
             </Reveal>
-            <Reveal delay={0.15} className="flex flex-wrap items-center justify-center sm:justify-start gap-7 mt-10">
-              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-                {comprando ? 'Redirigiendo…' : content.oferta.ctaConGarantia}
+            <Reveal delay={0.15} className="flex flex-wrap items-center justify-center sm:justify-start gap-5 sm:gap-7 mt-10">
+              <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+                {cartLabel}
               </button>
               <a href="#adentro" className="copa-btn-secondary">
                 {content.hero.ctaSecondary}
@@ -202,8 +184,8 @@ const GuiaRegionalLanding = ({ content }) => {
         </div>
         <div className="max-w-[1160px] mx-auto px-6 sm:px-8 mt-14 text-center">
           <Reveal>
-            <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-              {comprando ? 'Redirigiendo…' : content.oferta.ctaConGarantia}
+            <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+              {cartLabel}
             </button>
           </Reveal>
           <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-4 leading-loose">
@@ -333,12 +315,9 @@ const GuiaRegionalLanding = ({ content }) => {
                 {content.oferta.garantia.texto}
               </div>
             </Reveal>
-            <Reveal delay={0.15} className="flex flex-wrap gap-4 justify-center mt-8">
-              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
-                {comprando ? 'Redirigiendo…' : content.oferta.ctaConGarantia}
-              </button>
-              <button type="button" onClick={agregarAlCarrito} className="copa-btn-secondary">
-                {agregado ? 'Agregada ✓' : yaEnCarrito ? 'Ya está en el carrito' : 'Agregar al carrito'}
+            <Reveal delay={0.15}>
+              <button type="button" onClick={agregarAlCarrito} className={btnPrimary}>
+                {cartLabel}
               </button>
             </Reveal>
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
@@ -432,8 +411,8 @@ const GuiaRegionalLanding = ({ content }) => {
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
-          <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-14`}>
-            {comprando ? 'Redirigiendo…' : content.oferta.ctaConGarantia}
+          <button type="button" onClick={agregarAlCarrito} className={`${btnPrimary} mt-14`}>
+            {cartLabel}
           </button>
         </Reveal>
       </section>

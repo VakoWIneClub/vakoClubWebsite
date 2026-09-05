@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { ShoppingBag, X, Loader2 } from 'lucide-react';
-import { useCart, CART_CATALOG } from '@/contexts/CartContext';
+import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-
-const formatUsd = (cents) => `USD ${(cents / 100).toFixed(2)}`;
 
 // Este widget vive en /tienda y en las 3 landings de guías. Solo El Mundo de la Copa es
 // realmente trilingüe, así que es la única que pasa `lang` — el resto lo deja en 'es' (default),
