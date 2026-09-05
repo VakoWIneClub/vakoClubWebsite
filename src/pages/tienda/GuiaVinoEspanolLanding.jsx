@@ -8,7 +8,13 @@ import GuiaRegionalLanding from '@/pages/tienda/GuiaRegionalLanding';
 const CONTENT = {
   guideId: 'guia-espanol',
   path: '/tienda/guia-vino-espanol',
-  nombre: 'La Guía del Vino Español',
+  // Nombre traducido a los tres idiomas — se usa en el aviso de "todavía no disponible en
+  // inglés/portugués" (ver GuiaRegionalLanding.jsx), que se muestra en el idioma que se clickeó.
+  nombre: {
+    es: 'La Guía del Vino Español',
+    en: 'The Spanish Wine Guide',
+    pt: 'O Guia do Vinho Espanhol',
+  },
   meta: {
     title: 'Guía del Vino Español — Vako Club',
     description:

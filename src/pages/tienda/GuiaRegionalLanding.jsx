@@ -26,6 +26,21 @@ const eyebrow = 'copa-eyebrow';
 const LANGS = ['es', 'en', 'pt'];
 const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
 
+// El aviso se muestra en el idioma que el visitante eligió — si alguien clickea "EN" es porque
+// probablemente no lee bien español, así que el propio aviso de "todavía no existe en inglés"
+// tiene que estar en inglés para que se entienda. `content.nombre` trae el nombre de la guía ya
+// traducido a los tres idiomas (ver guiaVinoEspanol.js / guiaVinoArgentino.js).
+const NOTICE_COPY = {
+  en: {
+    title: 'Not yet available in English',
+    body: (nombre) => `${nombre} is only available in Spanish for now. As soon as the English edition exists, you'll be able to pick it right here.`,
+  },
+  pt: {
+    title: 'Ainda não disponível em Português',
+    body: (nombre) => `${nombre} está disponível apenas em espanhol, por enquanto. Assim que existir a edição em português, você vai poder escolhê-la bem aqui.`,
+  },
+};
+
 const QUIENES = {
   eyebrow: 'Vako Club',
   title: 'No somos una bodega. Somos los que te explican qué estás tomando.',
@@ -409,16 +424,16 @@ const GuiaRegionalLanding = ({ content }) => {
         </Reveal>
       </section>
 
-      {/* Aviso al elegir inglés o portugués — la guía todavía es solo en español. */}
+      {/* Aviso al elegir inglés o portugués — en el idioma que se clickeó, no en español, para
+          que quien no lee español lo entienda igual. */}
       <Dialog open={langNotice !== null} onOpenChange={(open) => !open && setLangNotice(null)}>
         <DialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
           <DialogHeader>
             <DialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
-              Todavía no disponible en {langNotice ? LANG_NAMES[langNotice] : ''}
+              {langNotice ? NOTICE_COPY[langNotice].title : ''}
             </DialogTitle>
             <DialogDescription className="text-copa-ink/70" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16 }}>
-              {content.nombre} todavía está disponible solo en español. En cuanto exista la edición en{' '}
-              {langNotice ? LANG_NAMES[langNotice] : ''}, la vas a poder elegir acá mismo.
+              {langNotice ? NOTICE_COPY[langNotice].body(content.nombre[langNotice]) : ''}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
