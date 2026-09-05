@@ -16,6 +16,8 @@ import Eventos from '@/pages/Eventos';
 import Comunidad from '@/pages/Comunidad';
 import Tienda from '@/pages/Tienda';
 import ElMundoDeLaCopaLanding from '@/pages/tienda/ElMundoDeLaCopaLanding';
+import GuiaVinoEspanolLanding from '@/pages/tienda/GuiaVinoEspanolLanding';
+import GuiaVinoArgentinoLanding from '@/pages/tienda/GuiaVinoArgentinoLanding';
 import Contacto from '@/pages/Contacto';
 import Suscripcion from '@/pages/Suscripcion';
 import Perfil from '@/pages/Perfil';
@@ -105,6 +107,8 @@ function App() {
             <Route path="/comunidad" element={<Comunidad />} />
             <Route path="/tienda" element={<Tienda />} />
             <Route path="/tienda/el-mundo-de-la-copa" element={<ElMundoDeLaCopaLanding />} />
+            <Route path="/tienda/guia-vino-espanol" element={<GuiaVinoEspanolLanding />} />
+            <Route path="/tienda/guia-vino-argentino" element={<GuiaVinoArgentinoLanding />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/suscripcion" element={<Suscripcion />} />
             <Route path="/login" element={<Login />} />

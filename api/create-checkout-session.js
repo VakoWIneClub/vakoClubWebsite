@@ -3,7 +3,7 @@ import { GUIAS_CATALOG, normalizarIdioma } from './_lib/catalog.js';
 
 // A dónde puede volver Stripe después del pago. Se valida contra esta lista en vez de confiar en
 // el `returnPath` que manda el cliente, para no abrir un open-redirect vía el body del POST.
-const RETURN_PATHS = ['/tienda', '/tienda/el-mundo-de-la-copa'];
+const RETURN_PATHS = ['/tienda', '/tienda/el-mundo-de-la-copa', '/tienda/guia-vino-espanol', '/tienda/guia-vino-argentino'];
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
