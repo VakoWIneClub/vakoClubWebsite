@@ -5,6 +5,8 @@ import { useToast } from '@/components/ui/use-toast';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import CompraResultBanner from '@/components/tienda/CompraResultBanner';
+import CartWidget from '@/components/tienda/CartWidget';
+import { useCart } from '@/contexts/CartContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 // Plantilla compartida para las landings de la Colección Regional (España, Argentina, y Francia
@@ -50,7 +52,10 @@ const QUIENES = {
 
 const GuiaRegionalLanding = ({ content }) => {
   const { toast } = useToast();
+  const { addItem, items: cartItems } = useCart();
   const [comprando, setComprando] = useState(false);
+  const [agregado, setAgregado] = useState(false);
+  const yaEnCarrito = cartItems.some((it) => it.id === content.guideId);
   const [openFaq, setOpenFaq] = useState({});
   // Código del idioma que abrió el aviso de "todavía no disponible" (null = diálogo cerrado).
   const [langNotice, setLangNotice] = useState(null);
@@ -82,6 +87,12 @@ const GuiaRegionalLanding = ({ content }) => {
       });
       setComprando(false);
     }
+  };
+
+  const agregarAlCarrito = () => {
+    addItem(content.guideId);
+    setAgregado(true);
+    setTimeout(() => setAgregado(false), 2000);
   };
 
   return (
@@ -322,9 +333,12 @@ const GuiaRegionalLanding = ({ content }) => {
                 {content.oferta.garantia.texto}
               </div>
             </Reveal>
-            <Reveal delay={0.15}>
-              <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-8`}>
+            <Reveal delay={0.15} className="flex flex-wrap gap-4 justify-center mt-8">
+              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
                 {comprando ? 'Redirigiendo…' : content.oferta.ctaConGarantia}
+              </button>
+              <button type="button" onClick={agregarAlCarrito} className="copa-btn-secondary">
+                {agregado ? 'Agregada ✓' : yaEnCarrito ? 'Ya está en el carrito' : 'Agregar al carrito'}
               </button>
             </Reveal>
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
@@ -438,6 +452,8 @@ const GuiaRegionalLanding = ({ content }) => {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+      <CartWidget />
     </div>
   );
 };

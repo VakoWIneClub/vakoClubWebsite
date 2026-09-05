@@ -59,3 +59,25 @@ export function getGuideFilePath(guia, lang) {
   const idioma = normalizarIdioma(lang);
   return guia.filePathByLang?.[idioma] || guia.filePathByLang?.es || guia.filePath || null;
 }
+
+// Lee qué guías se pagaron en una Checkout Session, en cualquiera de los dos formatos que puede
+// traer `metadata`: el del carrito (`items`, JSON con uno o más `{ id, lang }`) o el de compra
+// directa de antes de que existiera el carrito (`guideId`/`lang` sueltos). Una Checkout Session
+// de Stripe sigue siendo válida hasta 24h después de creada, así que un link de éxito con el
+// formato viejo todavía puede llegar a /api/verify-session o /api/download-guide después de un
+// deploy que cambie el formato — por eso ambos endpoints comparten este parser en vez de asumir
+// un solo formato.
+export function parseSessionItems(metadata) {
+  if (metadata?.items) {
+    try {
+      const parsed = JSON.parse(metadata.items);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // metadata corrupta/no-JSON — cae al formato legado de abajo.
+    }
+  }
+  if (metadata?.guideId) {
+    return [{ id: metadata.guideId, lang: metadata.lang }];
+  }
+  return [];
+}

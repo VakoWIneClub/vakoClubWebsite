@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, XCircle, Loader2, Download } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
 
 const CompraResultBanner = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { removeItem } = useCart();
   const compra = searchParams.get('compra');
   const sessionId = searchParams.get('session_id');
   // A missing session_id (mistyped/truncated link, tracking-param stripper) must resolve to
@@ -14,7 +16,8 @@ const CompraResultBanner = () => {
   const [resultado, setResultado] = useState(null);
   // Evita disparar el evento de compra dos veces si el efecto se reejecuta (StrictMode en dev,
   // o el usuario recarga la misma URL de éxito) — el transaction_id igual dedupea en GA4/Meta,
-  // pero así no dependemos solo de eso.
+  // pero así no dependemos solo de eso. También sirve de guarda para no reintentar sacar del
+  // carrito las guías ya compradas en cada re-render.
   const eventoDisparado = useRef(false);
 
   useEffect(() => {
@@ -29,6 +32,7 @@ const CompraResultBanner = () => {
 
           if (data.paid && !eventoDisparado.current) {
             eventoDisparado.current = true;
+            const items = data.items || [];
             const valorMoneda = data.currency?.toUpperCase() || 'USD';
             // Meta (y el value-based bidding de Google Ads) exigen un value numérico > 0 en el
             // evento de compra — mandarlo undefined/null en vez de omitir el evento es lo que hizo
@@ -40,13 +44,16 @@ const CompraResultBanner = () => {
                 transaction_id: sessionId,
                 value: data.value,
                 currency: valorMoneda,
-                items: [{ item_id: data.guideId, item_name: data.guideName, price: data.value, quantity: 1 }],
+                items: items.map((it) => ({ item_id: it.guideId, item_name: it.guideName, price: it.value, quantity: 1 })),
               });
             }
 
             if (valorValido && typeof window.fbq === 'function') {
               window.fbq('track', 'Purchase', { value: data.value, currency: valorMoneda }, { eventID: sessionId });
             }
+
+            // Ya se pagaron — no tiene sentido que sigan mostradas en el carrito del navegador.
+            items.forEach((it) => removeItem(it.guideId));
           }
         })
         .catch(() => {
@@ -56,6 +63,7 @@ const CompraResultBanner = () => {
     return () => {
       cancelado = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compra, sessionId]);
 
   if (!compra) return null;
@@ -65,6 +73,8 @@ const CompraResultBanner = () => {
     searchParams.delete('session_id');
     setSearchParams(searchParams, { replace: true });
   };
+
+  const items = resultado?.items || [];
 
   return (
     <motion.div
@@ -95,14 +105,24 @@ const CompraResultBanner = () => {
         {compra === 'exito' && status === 'pagado' && (
           <>
             <CheckCircle2 className="h-8 w-8 text-emerald-600 shrink-0" />
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               <h3 className="font-cormorant" style={{ fontSize: 22 }}>
-                ¡Gracias por tu compra{resultado?.guideName ? ` de "${resultado.guideName}"` : ''}!
+                ¡Gracias por tu compra{items.length === 1 ? ` de "${items[0].guideName}"` : ''}!
               </h3>
-              {resultado?.downloadUrl ? (
-                <a href={resultado.downloadUrl} download className="copa-btn-nav inline-flex items-center">
-                  <Download className="mr-2 h-4 w-4" /> Descargar guía
-                </a>
+              {items.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  {items.map((it) => (
+                    <a
+                      key={it.guideId}
+                      href={it.downloadUrl}
+                      download
+                      className="copa-btn-nav inline-flex items-center w-fit"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      {items.length > 1 ? `Descargar "${it.guideName}"` : 'Descargar guía'}
+                    </a>
+                  ))}
+                </div>
               ) : (
                 <p className="text-copa-ink/70 text-sm">
                   Tu pago se confirmó. Estamos preparando el enlace de descarga — si no lo recibís
