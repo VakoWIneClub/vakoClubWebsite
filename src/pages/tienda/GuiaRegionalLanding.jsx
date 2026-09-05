@@ -5,6 +5,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import CompraResultBanner from '@/components/tienda/CompraResultBanner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 // Plantilla compartida para las landings de la Colección Regional (España, Argentina, y Francia
 // cuando esté lista) — misma estructura y sistema visual `copa-*` que
@@ -18,6 +19,13 @@ import CompraResultBanner from '@/components/tienda/CompraResultBanner';
 const btnPrimary = 'copa-btn-primary';
 const eyebrow = 'copa-eyebrow';
 
+// Estas guías regionales solo existen en español por ahora — a diferencia de El Mundo de la
+// Copa, que sí tiene edición real en los tres idiomas. Mostramos los tres botones igual (Julian
+// lo pidió así, para dejar ver que el idioma es una opción) pero EN/PT abren un aviso en vez de
+// cambiar el contenido de la página.
+const LANGS = ['es', 'en', 'pt'];
+const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
+
 const QUIENES = {
   eyebrow: 'Vako Club',
   title: 'No somos una bodega. Somos los que te explican qué estás tomando.',
@@ -29,9 +37,16 @@ const GuiaRegionalLanding = ({ content }) => {
   const { toast } = useToast();
   const [comprando, setComprando] = useState(false);
   const [openFaq, setOpenFaq] = useState({});
+  // Código del idioma que abrió el aviso de "todavía no disponible" (null = diálogo cerrado).
+  const [langNotice, setLangNotice] = useState(null);
   const ofertaRef = useRef(null);
 
   const toggleFaq = (i) => setOpenFaq((s) => ({ ...s, [i]: !s[i] }));
+
+  const handleLangClick = (code) => {
+    if (code === 'es') return;
+    setLangNotice(code);
+  };
 
   const irACheckout = async () => {
     setComprando(true);
@@ -64,6 +79,30 @@ const GuiaRegionalLanding = ({ content }) => {
       />
 
       <CompraResultBanner />
+
+      {/* Selector de idioma — la guía hoy solo existe en español, así que EN/PT abren un aviso
+          en vez de cambiar el contenido. Mismo patrón visual que la tira de idioma de
+          El Mundo de la Copa (src/pages/tienda/ElMundoDeLaCopaLanding.jsx). */}
+      <div className="border-b border-copa-gold bg-copa-cream">
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-2.5 flex items-center justify-end">
+          <nav aria-label="Idioma" className="flex items-center gap-2.5 font-jost text-[11px] tracking-[0.14em]">
+            {LANGS.map((code, i) => (
+              <React.Fragment key={code}>
+                {i > 0 && <span className="text-copa-ink/30">·</span>}
+                <button
+                  type="button"
+                  onClick={() => handleLangClick(code)}
+                  aria-current={code === 'es' ? 'page' : undefined}
+                  aria-label={LANG_NAMES[code]}
+                  className={code === 'es' ? 'text-copa-burgundy cursor-default' : 'copa-link-nav'}
+                >
+                  {code.toUpperCase()}
+                </button>
+              </React.Fragment>
+            ))}
+          </nav>
+        </div>
+      </div>
 
       {/* 1 · Hero */}
       <section className="max-w-[1160px] mx-auto px-6 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24 lg:pb-[110px]">
@@ -369,6 +408,21 @@ const GuiaRegionalLanding = ({ content }) => {
           </button>
         </Reveal>
       </section>
+
+      {/* Aviso al elegir inglés o portugués — la guía todavía es solo en español. */}
+      <Dialog open={langNotice !== null} onOpenChange={(open) => !open && setLangNotice(null)}>
+        <DialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
+          <DialogHeader>
+            <DialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
+              Todavía no disponible en {langNotice ? LANG_NAMES[langNotice] : ''}
+            </DialogTitle>
+            <DialogDescription className="text-copa-ink/70" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16 }}>
+              {content.nombre} todavía está disponible solo en español. En cuanto exista la edición en{' '}
+              {langNotice ? LANG_NAMES[langNotice] : ''}, la vas a poder elegir acá mismo.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

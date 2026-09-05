@@ -8,6 +8,7 @@ import GuiaRegionalLanding from '@/pages/tienda/GuiaRegionalLanding';
 const CONTENT = {
   guideId: 'guia-espanol',
   path: '/tienda/guia-vino-espanol',
+  nombre: 'La Guía del Vino Español',
   meta: {
     title: 'Guía del Vino Español — Vako Club',
     description:
