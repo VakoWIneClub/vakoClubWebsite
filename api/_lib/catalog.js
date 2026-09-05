@@ -23,20 +23,17 @@ export const GUIAS_CATALOG = {
   },
   'guia-espanol': {
     nombre: 'Guía del Vino Español',
-    amountCents: 1200,
+    amountCents: 1499,
     currency: 'usd',
-    // Archivo ya subido, pero `disponible` queda en false a propósito: Julian todavía no quiere
-    // vender esta guía. Dejarlo en `false` es lo que bloquea /api/create-checkout-session aunque
-    // el filePath ya esté resuelto.
-    disponible: false,
+    disponible: true,
     filePath: 'private/guias/guia-vino-espanol.pdf',
   },
   'guia-argentino': {
     nombre: 'Guía del Vino Argentino',
-    amountCents: 1200,
+    amountCents: 1499,
     currency: 'usd',
-    disponible: false,
-    filePath: null,
+    disponible: true,
+    filePath: 'private/guias/guia-vino-argentino.pdf',
   },
   'guia-frances': {
     nombre: 'Guía del Vino Francés',

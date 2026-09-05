@@ -26,7 +26,7 @@ const guias = [
     subtitulo: 'Primera entrega · Colección Regional',
     descripcion:
       'Crianza, Reserva y Gran Reserva explicados de una vez. Rioja, Ribera del Duero, Rías Baixas, Jerez y las uvas que hacen único al vino español.',
-    estado: 'proximamente',
+    estado: 'disponible',
     etiqueta: 'Colección Regional · 1/3',
     image: '/images/guias/guia-vino-espanol-tapa-card.jpg',
     imagePosition: 'top',
@@ -37,7 +37,7 @@ const guias = [
     subtitulo: 'Segunda entrega · Colección Regional',
     descripcion:
       'Más allá del Malbec: Bonarda, Torrontés y por qué la altura del viñedo cambia lo que hay en tu copa. Mendoza, Salta y Patagonia explicadas de una vez.',
-    estado: 'proximamente',
+    estado: 'disponible',
     etiqueta: 'Colección Regional · 2/3',
   },
   {

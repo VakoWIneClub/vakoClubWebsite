@@ -22,7 +22,7 @@ test.describe('Tienda — guías grid', () => {
   test('"Avísame" still opens the notify dialog for a not-yet-available guide', async ({ page }) => {
     await page.goto('/tienda');
 
-    const card = page.locator('.copa-card').filter({ hasText: 'Guía del Vino Español' });
+    const card = page.locator('.copa-card').filter({ hasText: 'Guía del Vino Francés' });
     await card.getByRole('button', { name: 'Avísame' }).click();
 
     await expect(page.getByRole('dialog')).toBeVisible();
