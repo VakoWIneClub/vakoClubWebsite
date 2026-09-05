@@ -71,7 +71,8 @@ function App() {
       <AnalyticsTracker />
       {/* "El mundo de la copa" has its own language + 18+ gate baked into the landing itself
           (src/pages/tienda/ElMundoDeLaCopaLanding.jsx), so it opts out of the generic
-          site-wide age gate to avoid showing two age checks back to back. */}
+          site-wide age gate to avoid showing two age checks back to back. It still gets the
+          full site Navbar (below) — only the gate and Footer stay opted out. */}
       {!isCopaLanding && <AgeVerificationPopup />}
       <div className={isCopaLanding ? 'min-h-screen flex flex-col' : 'min-h-screen wine-pattern flex flex-col'}>
         {/* Baseline OG/Twitter tags for any route without its own <Seo> (login, perfil, /guia,
@@ -85,7 +86,7 @@ function App() {
           noindex={noindex}
         />
 
-        {!isCopaLanding && <Navbar />}
+        <Navbar />
 
         {/* Navbar is sticky (not fixed), same as the copa landing's own header, so no
             top-padding spacer is needed here anymore. */}
