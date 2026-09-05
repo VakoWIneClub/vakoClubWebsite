@@ -67,6 +67,26 @@ export function getGuideFilePath(guia, lang) {
 // formato viejo todavía puede llegar a /api/verify-session o /api/download-guide después de un
 // deploy que cambie el formato — por eso ambos endpoints comparten este parser en vez de asumir
 // un solo formato.
+// Promo "3x2" de la colección: cada 3 guías en una compra (carrito o, algún día, más de una
+// unidad), la más barata de esas tres sale gratis. Usada tanto al crear la sesión de Stripe
+// (create-checkout-session.js, para poner unit_amount: 0 en la línea que corresponda) como al
+// verificarla después del pago (verify-session.js, para reportarle a GA4/Meta el valor real
+// cobrado y no el precio de lista). El panel del carrito (src/contexts/CartContext.jsx,
+// calcularPromo3x2) tiene la misma regla duplicada solo para mostrar el total antes de pagar, ya
+// que el frontend no comparte módulos con las funciones serverless — si esta regla cambia,
+// actualizarla en los dos lugares.
+export const PROMO_3X2_UNIDADES = 3;
+
+// Recibe un array de objetos que ya traen su `guia` resuelta del catálogo (cada uno con
+// `amountCents`) y devuelve una copia con `gratis: true` en la(s) guía(s) más barata(s) que
+// corresponda regalar. No muta el array ni los objetos originales.
+export function aplicarPromo3x2(items) {
+  const ordenPorPrecio = [...items].sort((a, b) => a.guia.amountCents - b.guia.amountCents);
+  const gratisCount = Math.floor(items.length / PROMO_3X2_UNIDADES);
+  const gratisSet = new Set(ordenPorPrecio.slice(0, gratisCount));
+  return items.map((it) => ({ ...it, gratis: gratisSet.has(it) }));
+}
+
 export function parseSessionItems(metadata) {
   if (metadata?.items) {
     try {

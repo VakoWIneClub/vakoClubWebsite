@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { GUIAS_CATALOG, parseSessionItems } from './_lib/catalog.js';
+import { GUIAS_CATALOG, parseSessionItems, aplicarPromo3x2 } from './_lib/catalog.js';
 import { recordFounderClaim } from './_lib/founderClaims.js';
 
 export default async function handler(req, res) {
@@ -40,24 +40,29 @@ export default async function handler(req, res) {
 
     // El idioma viaja en los metadatos de la sesión de Stripe — es lo único que este endpoint
     // puede consultar después del pago, ya que el checkout redirige afuera del sitio.
-    const items = metaItems
+    const itemsConGuia = metaItems
       .map(({ id, lang }) => {
         const guia = GUIAS_CATALOG[id];
-        if (!guia) return null;
-        return {
-          guideId: id,
-          guideName: guia.nombre,
-          value: guia.amountCents / 100,
-          currency: guia.currency,
-          // download-guide.js vuelve a verificar el pago contra Stripe y que esta guía
-          // efectivamente esté entre las compradas en esta sesión antes de entregar el archivo —
-          // nunca sirve el PDF como link público estático.
-          downloadUrl: guia.filePath
-            ? `/api/download-guide?session_id=${encodeURIComponent(sessionId)}&guideId=${encodeURIComponent(id)}${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`
-            : null,
-        };
+        return guia ? { id, lang, guia } : null;
       })
       .filter(Boolean);
+
+    // Misma promo "3x2" que decidió lo que Stripe realmente cobró al crear la sesión (ver
+    // create-checkout-session.js) — sin esto, el valor reportado acá (y de ahí al evento de
+    // compra de GA4/Meta) sería el precio de lista completo, no lo que se cobró de verdad.
+    const items = aplicarPromo3x2(itemsConGuia).map(({ id, lang, guia, gratis }) => ({
+      guideId: id,
+      guideName: guia.nombre,
+      value: gratis ? 0 : guia.amountCents / 100,
+      currency: guia.currency,
+      // download-guide.js vuelve a verificar el pago contra Stripe y que esta guía
+      // efectivamente esté entre las compradas en esta sesión antes de entregar el archivo —
+      // nunca sirve el PDF como link público estático. La entrega es la misma sea gratis o no:
+      // la promo es de precio, no cambia qué se manda.
+      downloadUrl: guia.filePath
+        ? `/api/download-guide?session_id=${encodeURIComponent(sessionId)}&guideId=${encodeURIComponent(id)}${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`
+        : null,
+    }));
 
     return res.status(200).json({
       paid: true,

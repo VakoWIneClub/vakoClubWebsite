@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { GUIAS_CATALOG, normalizarIdioma } from './_lib/catalog.js';
+import { GUIAS_CATALOG, normalizarIdioma, aplicarPromo3x2 } from './_lib/catalog.js';
 
 // A dónde puede volver Stripe después del pago. Se valida contra esta lista en vez de confiar en
 // el `returnPath` que manda el cliente, para no abrir un open-redirect vía el body del POST.
@@ -49,6 +49,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Hay una guía repetida en el carrito.' });
   }
 
+  const itemsConPromo = aplicarPromo3x2(items);
+
   const basePath = RETURN_PATHS.includes(body.returnPath) ? body.returnPath : '/tienda';
 
   const stripe = new Stripe(secretKey);
@@ -60,11 +62,13 @@ export default async function handler(req, res) {
       // Managed Payments (habilitado por defecto en la cuenta) exige un tax_code de producto que
       // implica decisiones de impuestos que Julian no definió — se desactiva para este checkout simple.
       managed_payments: { enabled: false },
-      line_items: items.map(({ guia }) => ({
+      line_items: itemsConPromo.map(({ guia, gratis }) => ({
         price_data: {
           currency: guia.currency,
-          product_data: { name: guia.nombre },
-          unit_amount: guia.amountCents,
+          // El nombre deja explícito en el propio recibo de Stripe por qué esta línea sale en
+          // $0 — nunca un descuento silencioso que parezca un error de cobro.
+          product_data: { name: gratis ? `${guia.nombre} — Gratis (oferta 3x2)` : guia.nombre },
+          unit_amount: gratis ? 0 : guia.amountCents,
         },
         quantity: 1,
       })),

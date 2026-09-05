@@ -28,6 +28,26 @@ export const CART_CATALOG = {
 // carrito") — un solo lugar para el formato de precio en USD.
 export const formatUsd = (cents) => `USD ${(cents / 100).toFixed(2)}`;
 
+// Promo "3x2" de la colección: cada 3 guías en el carrito, la más barata de esas tres sale
+// gratis. Esta es SOLO la versión de exhibición para el panel del carrito — la que de verdad
+// determina lo que se cobra vive en api/create-checkout-session.js (misma regla, implementada
+// aparte porque el frontend y las funciones serverless no comparten módulos); si esta regla
+// cambia, hay que actualizarla en los dos lugares.
+export const PROMO_3X2_UNIDADES = 3;
+
+export function calcularPromo3x2(items) {
+  const conPrecio = items
+    .map((it) => ({ id: it.id, amountCents: CART_CATALOG[it.id]?.amountCents || 0 }))
+    .sort((a, b) => a.amountCents - b.amountCents);
+  const gratisCount = Math.floor(items.length / PROMO_3X2_UNIDADES);
+  const gratis = conPrecio.slice(0, gratisCount);
+  return {
+    gratisCount,
+    idsGratis: new Set(gratis.map((it) => it.id)),
+    descuentoCents: gratis.reduce((sum, it) => sum + it.amountCents, 0),
+  };
+}
+
 const STORAGE_KEY = 'vako-carrito';
 
 const readStoredItems = () => {
