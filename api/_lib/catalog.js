@@ -23,14 +23,14 @@ export const GUIAS_CATALOG = {
   },
   'guia-espanol': {
     nombre: 'Guía del Vino Español',
-    amountCents: 1200,
+    amountCents: 1499,
     currency: 'usd',
     disponible: true,
     filePath: 'private/guias/guia-vino-espanol.pdf',
   },
   'guia-argentino': {
     nombre: 'Guía del Vino Argentino',
-    amountCents: 1200,
+    amountCents: 1499,
     currency: 'usd',
     disponible: true,
     filePath: 'private/guias/guia-vino-argentino.pdf',
