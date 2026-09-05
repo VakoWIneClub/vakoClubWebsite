@@ -67,7 +67,7 @@ const CartWidget = ({ lang = 'es' }) => {
   const subtotalCents = items.reduce((sum, it) => sum + (CART_CATALOG[it.id]?.amountCents || 0), 0);
   // La promo 3x2 es solo de exhibición acá — lo que de verdad se cobra lo decide el servidor
   // (api/create-checkout-session.js) al crear la sesión de Stripe, con la misma regla.
-  const { idsGratis, descuentoCents, gratisCount } = calcularPromo3x2(items);
+  const { idsGratis, descuentoCents } = calcularPromo3x2(items);
   const totalCents = subtotalCents - descuentoCents;
 
   const pagarTodo = async () => {
@@ -122,11 +122,12 @@ const CartWidget = ({ lang = 'es' }) => {
             </DialogDescription>
           </DialogHeader>
 
-          {gratisCount > 0 && (
-            <div className="bg-copa-gold/15 border border-copa-gold px-4 py-3 text-center">
-              <span className="font-jost text-[12px] tracking-[0.08em] uppercase text-copa-burgundy">{t.promo3x2}</span>
-            </div>
-          )}
+          {/* Se muestra siempre que haya algo en el carrito (desde 1 guía), no solo cuando la
+              promo ya está activa — es un incentivo para sumar una tercera, no solo una
+              confirmación de que ya se activó. */}
+          <div className="bg-copa-gold/15 border border-copa-gold px-4 py-3 text-center">
+            <span className="font-jost text-[12px] tracking-[0.08em] uppercase text-copa-burgundy">{t.promo3x2}</span>
+          </div>
 
           <div className="flex flex-col divide-y divide-copa-gold/40">
             {items.map((it) => {
