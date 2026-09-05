@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import { supabase } from '@/lib/customSupabaseClient';
+import CartWidget from '@/components/tienda/CartWidget';
+import { useCart } from '@/contexts/CartContext';
 
 // Fácil de subir a 100 el día que se decida extender el bono — un solo número para cambiar.
 const FOUNDER_SLOTS_TOTAL = 50;
@@ -133,6 +135,9 @@ const COPY = {
         texto: 'Si no te sirve, escribinos a info@vakoclub.com dentro de los 7 días y te devolvemos el 100%, sin pedirte explicaciones.',
       },
       ctaConGarantia: 'Conseguir la guía — Devolución garantizada 7 días',
+      agregarCarrito: 'Agregar al carrito',
+      yaEnCarrito: 'Ya está en el carrito',
+      agregada: 'Agregada ✓',
       secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en tu email',
       escasez: (remaining) => `Quedan ${remaining} de ${FOUNDER_SLOTS_TOTAL} cupos para el estatus de Fundador/a.`,
       founderPerk: 'Estatus de Fundador/a de Vako Club: invitación a la Membresía Gratuita + aviso prioritario cuando salga la serie regional (España, Argentina, Francia)',
@@ -264,6 +269,9 @@ const COPY = {
         texto: "If it's not for you, email us at info@vakoclub.com within 7 days and we'll refund you in full, no questions asked.",
       },
       ctaConGarantia: 'Get the guide — 7-day money-back guarantee',
+      agregarCarrito: 'Add to cart',
+      yaEnCarrito: 'Already in your cart',
+      agregada: 'Added ✓',
       secureNote: 'Secure payment with Stripe · You get the download link instantly by email',
       escasez: (remaining) => `${remaining} of ${FOUNDER_SLOTS_TOTAL} Founding Member spots left.`,
       founderPerk: 'Vako Club Founding Member status: invitation to the Free Membership + priority notice when the regional series (Spain, Argentina, France) launches',
@@ -395,6 +403,9 @@ const COPY = {
         texto: 'Se não for para você, escreva para info@vakoclub.com dentro de 7 dias e devolvemos 100%, sem perguntas.',
       },
       ctaConGarantia: 'Consiga o guia — Garantia de devolução em 7 dias',
+      agregarCarrito: 'Adicionar ao carrinho',
+      yaEnCarrito: 'Já está no carrinho',
+      agregada: 'Adicionada ✓',
       secureNote: 'Pagamento seguro com Stripe · Você recebe o link de download na hora, por email',
       escasez: (remaining) => `Restam ${remaining} de ${FOUNDER_SLOTS_TOTAL} vagas de Fundador(a).`,
       founderPerk: 'Status de Fundador(a) da Vako Club: convite para a Membresia Gratuita + aviso prioritário quando sair a série regional (Espanha, Argentina, França)',
@@ -492,6 +503,7 @@ const readHasCompraParam = () => {
 
 const ElMundoDeLaCopaLanding = () => {
   const { toast } = useToast();
+  const { addItem, items: cartItems } = useCart();
   const [lang, setLang] = useState(readStoredLang);
   const [gateOpen, setGateOpen] = useState(() => !readGatePassed() && !readHasCompraParam());
   // Preseleccionado en español (idioma principal del sitio y de la campaña de ads) para que el
@@ -500,6 +512,8 @@ const ElMundoDeLaCopaLanding = () => {
   const [gateLang, setGateLang] = useState('es');
   const [gateAge, setGateAge] = useState(false);
   const [comprando, setComprando] = useState(false);
+  const [agregado, setAgregado] = useState(false);
+  const yaEnCarrito = cartItems.some((it) => it.id === GUIDE_ID);
   const [email, setEmail] = useState('');
   const [enviandoEmail, setEnviandoEmail] = useState(false);
   const [emailMsg, setEmailMsg] = useState(null);
@@ -594,6 +608,8 @@ const ElMundoDeLaCopaLanding = () => {
         // la descarga automática (con un pequeño margen abajo) para que el beacon de tracking no
         // compita con la carga provisional que dispara `location.href`, aunque esa URL termine en
         // descarga y no en una navegación real.
+        const items = data.items || [];
+
         if (data.paid && !eventoCompraDisparado.current) {
           eventoCompraDisparado.current = true;
           const valorMoneda = data.currency?.toUpperCase() || 'USD';
@@ -607,7 +623,7 @@ const ElMundoDeLaCopaLanding = () => {
               transaction_id: sessionId,
               value: data.value,
               currency: valorMoneda,
-              items: [{ item_id: data.guideId, item_name: data.guideName, price: data.value, quantity: 1 }],
+              items: items.map((it) => ({ item_id: it.guideId, item_name: it.guideName, price: it.value, quantity: 1 })),
             });
           }
 
@@ -624,14 +640,21 @@ const ElMundoDeLaCopaLanding = () => {
               body: JSON.stringify({ email: data.email, source: 'comprador-el-mundo-de-la-copa' }),
             }).catch(() => {});
           }
+
+          // Ya se pagaron — no tiene sentido que sigan mostradas en el carrito del navegador.
+          items.forEach((it) => removeItem(it.guideId));
         }
 
-        if (data.paid && data.downloadUrl && !autoDownloadRef.current) {
+        // La descarga automática solo es segura y confiable con una sola guía: varias
+        // descargas disparadas juntas vía location.href suelen ser bloqueadas por el navegador
+        // como si fueran pop-ups. Con un carrito de más de una guía, se deja el botón manual de
+        // abajo (uno por guía) en vez de intentarlo.
+        if (data.paid && items.length === 1 && items[0].downloadUrl && !autoDownloadRef.current) {
           autoDownloadRef.current = true;
           // Pequeño respiro para que los beacons de arriba salgan de verdad antes de que el
           // navegador inicie la carga (aunque termine en descarga, no en navegación real).
           setTimeout(() => {
-            window.location.href = data.downloadUrl;
+            window.location.href = items[0].downloadUrl;
           }, 300);
         }
       })
@@ -714,6 +737,15 @@ const ElMundoDeLaCopaLanding = () => {
       });
       setComprando(false);
     }
+  };
+
+  // El idioma elegido en el header viaja con el ítem del carrito — así, si el checkout final
+  // incluye esta guía junto a otras, se sigue entregando en el idioma que el visitante ya eligió
+  // acá, no siempre en español.
+  const agregarAlCarrito = () => {
+    addItem(GUIDE_ID, lang);
+    setAgregado(true);
+    setTimeout(() => setAgregado(false), 2000);
   };
 
   const enviarEmail = (e) => {
@@ -962,10 +994,14 @@ const ElMundoDeLaCopaLanding = () => {
               <div className="flex-1 min-w-[240px]">
                 <h3 className="font-cormorant" style={{ fontSize: 22 }}>{t.compra.exitoTitle}</h3>
                 <p className="text-copa-ink/70 mt-1" style={{ fontSize: 15 }}>{t.compra.exitoParagraph}</p>
-                {compraResultado?.downloadUrl && (
-                  <a href={compraResultado.downloadUrl} download className={`${btnPrimary} mt-4 inline-flex`}>
-                    {t.compra.descargar}
-                  </a>
+                {(compraResultado?.items?.length || 0) > 0 && (
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {compraResultado.items.map((it) => (
+                      <a key={it.guideId} href={it.downloadUrl} download className={`${btnPrimary} inline-flex`}>
+                        {compraResultado.items.length > 1 ? `Descargar "${it.guideName}"` : t.compra.descargar}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
@@ -1215,9 +1251,12 @@ const ElMundoDeLaCopaLanding = () => {
                 {t.oferta.garantia.texto}
               </div>
             </Reveal>
-            <Reveal delay={0.15}>
-              <button type="button" onClick={irACheckout} disabled={comprando} className={`${btnPrimary} mt-8`}>
+            <Reveal delay={0.15} className="flex flex-wrap gap-4 justify-center mt-8">
+              <button type="button" onClick={irACheckout} disabled={comprando} className={btnPrimary}>
                 {comprando ? t.nav.redirecting : t.oferta.ctaConGarantia}
+              </button>
+              <button type="button" onClick={agregarAlCarrito} className="copa-btn-secondary">
+                {agregado ? t.oferta.agregada : yaEnCarrito ? t.oferta.yaEnCarrito : t.oferta.agregarCarrito}
               </button>
             </Reveal>
             <div className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60 mt-5 leading-loose">
@@ -1372,6 +1411,8 @@ const ElMundoDeLaCopaLanding = () => {
           <span className="text-copa-cream/60">{t.footer.copyright(new Date().getFullYear())}</span>
         </div>
       </footer>
+
+      <CartWidget lang={lang} />
     </div>
   );
 };

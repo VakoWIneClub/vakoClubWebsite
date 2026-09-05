@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Stripe from 'stripe';
-import { GUIAS_CATALOG, getGuideFilePath, normalizarIdioma } from './_lib/catalog.js';
+import { GUIAS_CATALOG, getGuideFilePath, parseSessionItems } from './_lib/catalog.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -33,10 +33,20 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Esta compra todavía no está confirmada.' });
   }
 
-  const guideId = session.metadata?.guideId;
-  const guia = GUIAS_CATALOG[guideId];
-  const idioma = normalizarIdioma(session.metadata?.lang);
-  const filePath = getGuideFilePath(guia, idioma);
+  const items = parseSessionItems(session.metadata);
+  // `guideId` es obligatorio desde que existe el carrito (una sesión puede traer más de una
+  // guía) — si no viene en la URL, se asume la primera/única guía de la sesión, así los links de
+  // éxito ya generados antes del carrito (que no lo mandaban) siguen funcionando.
+  const guideId = req.query?.guideId || items[0]?.id;
+  const item = items.find((it) => it.id === guideId);
+  // La guía pedida tiene que estar entre las que efectivamente se pagaron en ESTA sesión — evita
+  // que alguien cambie el guideId de la URL a mano para bajar una guía que no compró.
+  if (!item) {
+    return res.status(403).json({ error: 'Esa guía no forma parte de esta compra.' });
+  }
+
+  const guia = GUIAS_CATALOG[item.id];
+  const filePath = getGuideFilePath(guia, req.query?.lang || item.lang);
   if (!filePath) {
     return res.status(404).json({ error: 'No hay un archivo disponible para esta guía todavía.' });
   }
