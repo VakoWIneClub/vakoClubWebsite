@@ -7,7 +7,11 @@ import NotifyGuideDialog from '@/components/tienda/NotifyGuideDialog';
 
 // Guías con su propia landing de venta dedicada — el título y la imagen llevan ahí
 // en vez de ir directo al checkout.
-const LANDING_PATH = { 'guia-general': '/tienda/el-mundo-de-la-copa' };
+const LANDING_PATH = {
+  'guia-general': '/tienda/el-mundo-de-la-copa',
+  'guia-espanol': '/tienda/guia-vino-espanol',
+  'guia-argentino': '/tienda/guia-vino-argentino',
+};
 
 const guias = [
   {
@@ -39,6 +43,8 @@ const guias = [
       'Más allá del Malbec: Bonarda, Torrontés y por qué la altura del viñedo cambia lo que hay en tu copa. Mendoza, Salta y Patagonia explicadas de una vez.',
     estado: 'disponible',
     etiqueta: 'Colección Regional · 2/3',
+    image: '/images/guias/guia-vino-argentino-tapa.jpg',
+    imagePosition: 'top',
   },
   {
     id: 'guia-frances',

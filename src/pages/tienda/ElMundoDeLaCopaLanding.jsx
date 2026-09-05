@@ -917,44 +917,33 @@ const ElMundoDeLaCopaLanding = () => {
         </div>
       )}
 
-      {/* 0 · Barra superior */}
-      <header className="copa-header">
-        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-3.5 flex items-center justify-between gap-6">
-          <Link to="/" aria-label="Vako Club" className="flex items-center gap-3">
-            <img src="/images/VakoLogo.png" alt="" width="34" height="34" className="h-[34px] w-[34px] shrink-0 rounded-full" />
-          </Link>
-          <div className="flex items-center gap-4 sm:gap-8">
-            <nav aria-label="Language / Idioma / Idioma" className="flex items-center gap-2.5 font-jost text-[11px] tracking-[0.14em]">
-              {LANGS.map((code, i) => (
-                <React.Fragment key={code}>
-                  {i > 0 && <span className="text-copa-ink/30">·</span>}
-                  <button
-                    type="button"
-                    onClick={() => setLang(code)}
-                    aria-current={lang === code ? 'page' : undefined}
-                    aria-label={LANG_NAMES[code]}
-                    className={
-                      lang === code
-                        ? 'text-copa-burgundy cursor-default'
-                        : 'copa-link-nav'
-                    }
-                  >
-                    {code.toUpperCase()}
-                  </button>
-                </React.Fragment>
-              ))}
-            </nav>
-            <button
-              type="button"
-              onClick={irACheckout}
-              disabled={comprando}
-              className="copa-btn-nav"
-            >
-              {comprando ? t.nav.redirecting : t.nav.cta}
-            </button>
-          </div>
+      {/* 0 · Selector de idioma — el Navbar general del sitio (montado por App.jsx para esta
+          ruta también) no tiene selector de idioma, así que esta tira angosta lo reemplaza para
+          no perder la única forma de cambiar de idioma después de pasar el gate inicial. */}
+      <div className="border-b border-copa-gold bg-copa-cream">
+        <div className="max-w-[1160px] mx-auto px-6 sm:px-8 py-2.5 flex items-center justify-end">
+          <nav aria-label="Language / Idioma / Idioma" className="flex items-center gap-2.5 font-jost text-[11px] tracking-[0.14em]">
+            {LANGS.map((code, i) => (
+              <React.Fragment key={code}>
+                {i > 0 && <span className="text-copa-ink/30">·</span>}
+                <button
+                  type="button"
+                  onClick={() => setLang(code)}
+                  aria-current={lang === code ? 'page' : undefined}
+                  aria-label={LANG_NAMES[code]}
+                  className={
+                    lang === code
+                      ? 'text-copa-burgundy cursor-default'
+                      : 'copa-link-nav'
+                  }
+                >
+                  {code.toUpperCase()}
+                </button>
+              </React.Fragment>
+            ))}
+          </nav>
         </div>
-      </header>
+      </div>
 
       {/* Resultado de la compra — Stripe redirige acá con ?compra=exito&session_id=... */}
       {compra && (
