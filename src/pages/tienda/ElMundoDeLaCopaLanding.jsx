@@ -492,7 +492,7 @@ const readHasCompraParam = () => {
 };
 
 const ElMundoDeLaCopaLanding = () => {
-  const { addItem, items: cartItems } = useCart();
+  const { addItem, removeItem, items: cartItems } = useCart();
   const [lang, setLang] = useState(readStoredLang);
   const [gateOpen, setGateOpen] = useState(() => !readGatePassed() && !readHasCompraParam());
   // Preseleccionado en español (idioma principal del sitio y de la campaña de ads) para que el
