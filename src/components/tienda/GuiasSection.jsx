@@ -56,7 +56,7 @@ const guias = [
     estado: 'disponible',
     etiqueta: 'Colección Regional · 3/3',
     image: '/images/guias/guia-vino-frances-tapa.jpg',
-    imagePosition: 'top',
+    imagePosition: 'center',
   },
 ];
 
