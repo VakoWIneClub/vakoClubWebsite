@@ -20,6 +20,12 @@ test.describe('Tienda — guías grid', () => {
   });
 
   test('"Avísame" still opens the notify dialog for a not-yet-available guide', async ({ page }) => {
+    // Every guide in the catalog is 'disponible' right now (Guía del Vino Francés, the last one
+    // still 'proximamente', launched — see src/components/tienda/GuiasSection.jsx) so there's no
+    // live card to click through today. Re-enable by pointing this at whichever guide is next
+    // marked 'proximamente'.
+    test.skip(true, 'No hay ninguna guía en estado "proximamente" en el catálogo actual.');
+
     await page.goto('/tienda');
 
     const card = page.locator('.copa-card').filter({ hasText: 'Guía del Vino Francés' });
