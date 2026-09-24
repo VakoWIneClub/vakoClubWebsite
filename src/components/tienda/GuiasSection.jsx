@@ -11,6 +11,7 @@ const LANDING_PATH = {
   'guia-general': '/tienda/el-mundo-de-la-copa',
   'guia-espanol': '/tienda/guia-vino-espanol',
   'guia-argentino': '/tienda/guia-vino-argentino',
+  'guia-frances': '/tienda/guia-vino-frances',
 };
 
 const guias = [
@@ -52,8 +53,10 @@ const guias = [
     subtitulo: 'Tercera entrega · Colección Regional',
     descripcion:
       'El traductor definitivo de qué uva se esconde detrás de cada región: Burdeos vs. Borgoña, Champagne y el resto del mapa francés, sin intimidación.',
-    estado: 'proximamente',
+    estado: 'disponible',
     etiqueta: 'Colección Regional · 3/3',
+    image: '/images/guias/guia-vino-frances-tapa.jpg',
+    imagePosition: 'top',
   },
 ];
 

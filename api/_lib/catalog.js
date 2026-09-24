@@ -37,10 +37,10 @@ export const GUIAS_CATALOG = {
   },
   'guia-frances': {
     nombre: 'Guía del Vino Francés',
-    amountCents: 1200,
+    amountCents: 1499,
     currency: 'usd',
-    disponible: false,
-    filePath: null,
+    disponible: true,
+    filePath: 'private/guias/guia-vino-frances.pdf',
   },
 };
 
