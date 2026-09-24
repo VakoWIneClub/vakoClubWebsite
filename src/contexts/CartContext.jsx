@@ -32,18 +32,19 @@ export const CART_CATALOG = {
 // carrito") — un solo lugar para el formato de precio en USD.
 export const formatUsd = (cents) => `USD ${(cents / 100).toFixed(2)}`;
 
-// Promo "3x2" de la colección: cada 3 guías en el carrito, la más barata de esas tres sale
-// gratis. Esta es SOLO la versión de exhibición para el panel del carrito — la que de verdad
-// determina lo que se cobra vive en api/create-checkout-session.js (misma regla, implementada
-// aparte porque el frontend y las funciones serverless no comparten módulos); si esta regla
-// cambia, hay que actualizarla en los dos lugares.
-export const PROMO_3X2_UNIDADES = 3;
+// Promo de la colección: a partir de 3 guías en el carrito, la más barata de todas sale gratis —
+// un solo descuento por compra, no uno por cada grupo de 3 (llevando 3 se pagan 2, llevando 4 se
+// pagan 3, llevando 6 se siguen pagando 5, etc). Esta es SOLO la versión de exhibición para el
+// panel del carrito — la que de verdad determina lo que se cobra vive en api/_lib/catalog.js
+// (misma regla, implementada aparte porque el frontend y las funciones serverless no comparten
+// módulos); si esta regla cambia, hay que actualizarla en los dos lugares.
+export const PROMO_3X2_MINIMO = 3;
 
 export function calcularPromo3x2(items) {
   const conPrecio = items
     .map((it) => ({ id: it.id, amountCents: CART_CATALOG[it.id]?.amountCents || 0 }))
     .sort((a, b) => a.amountCents - b.amountCents);
-  const gratisCount = Math.floor(items.length / PROMO_3X2_UNIDADES);
+  const gratisCount = items.length >= PROMO_3X2_MINIMO ? 1 : 0;
   const gratis = conPrecio.slice(0, gratisCount);
   return {
     gratisCount,

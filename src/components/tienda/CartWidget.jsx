@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { ShoppingBag, X, Loader2 } from 'lucide-react';
+import { ShoppingBag, Loader2 } from 'lucide-react';
 import { useCart, CART_CATALOG, formatUsd, calcularPromo3x2 } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
 
-// Este widget vive en /tienda y en las 3 landings de guías. Solo El Mundo de la Copa es
-// realmente trilingüe, así que es la única que pasa `lang` — el resto lo deja en 'es' (default),
-// que es el único idioma real de sus guías.
+// Este widget vive en /tienda, en El Mundo de la Copa y en las 3 landings regionales. Solo El
+// Mundo de la Copa es realmente trilingüe, así que es la única que pasa `lang` — el resto lo deja
+// en 'es' (default), que es el único idioma real de sus guías.
 const T = {
   es: {
     cartLabel: (n) => `Ver carrito (${n} ${n === 1 ? 'guía' : 'guías'})`,
     carrito: 'Carrito',
     titulo: 'Tu carrito',
     subtitulo: 'Un solo pago por todas las guías que elijas.',
-    promo3x2: 'Oferta especial: llevando 3 guías, solo se cobran 2.',
+    promo3x2: 'Llevando 3 guías o más, pagás una menos: la más barata sale gratis.',
+    guiasDisponibles: 'Guías disponibles',
     gratis: 'GRATIS',
-    quitar: (nombre) => `Quitar ${nombre} del carrito`,
     total: 'Total',
     pagar: (monto) => `Pagar todo — ${monto}`,
     redirigiendo: 'Redirigiendo…',
@@ -28,9 +29,9 @@ const T = {
     carrito: 'Cart',
     titulo: 'Your cart',
     subtitulo: 'One single payment for every guide you pick.',
-    promo3x2: 'Special offer: buy 3 guides, only pay for 2.',
+    promo3x2: 'Buy 3 or more guides and pay for one less — the cheapest one is free.',
+    guiasDisponibles: 'Available guides',
     gratis: 'FREE',
-    quitar: (nombre) => `Remove ${nombre} from cart`,
     total: 'Total',
     pagar: (monto) => `Pay all — ${monto}`,
     redirigiendo: 'Redirecting…',
@@ -43,9 +44,9 @@ const T = {
     carrito: 'Carrinho',
     titulo: 'Seu carrinho',
     subtitulo: 'Um único pagamento por todos os guias que escolher.',
-    promo3x2: 'Oferta especial: levando 3 guias, você paga só 2.',
+    promo3x2: 'Levando 3 guias ou mais, você paga uma a menos: a mais barata sai grátis.',
+    guiasDisponibles: 'Guias disponíveis',
     gratis: 'GRÁTIS',
-    quitar: (nombre) => `Remover ${nombre} do carrinho`,
     total: 'Total',
     pagar: (monto) => `Pagar tudo — ${monto}`,
     redirigiendo: 'Redirecionando…',
@@ -57,7 +58,7 @@ const T = {
 
 const CartWidget = ({ lang = 'es' }) => {
   const t = T[lang] || T.es;
-  const { items, removeItem, clear } = useCart();
+  const { items, addItem, removeItem, clear } = useCart();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [pagando, setPagando] = useState(false);
@@ -129,36 +130,43 @@ const CartWidget = ({ lang = 'es' }) => {
             <span className="font-jost text-[12px] tracking-[0.08em] uppercase text-copa-burgundy">{t.promo3x2}</span>
           </div>
 
-          <div className="flex flex-col divide-y divide-copa-gold/40">
-            {items.map((it) => {
-              const guia = CART_CATALOG[it.id];
-              if (!guia) return null;
-              const nombre = guia.nombre[lang] || guia.nombre.es;
-              const esGratis = idsGratis.has(it.id);
-              return (
-                <div key={it.id} className="flex items-center justify-between gap-3 py-3">
-                  <span style={{ fontSize: 16 }}>{nombre}</span>
-                  <div className="flex items-center gap-4 flex-none">
-                    {esGratis ? (
-                      <span className="font-jost text-[13px] tracking-[0.06em]">
-                        <span className="line-through text-copa-ink/40 mr-2">{formatUsd(guia.amountCents)}</span>
-                        <span className="text-copa-burgundy font-medium">{t.gratis}</span>
-                      </span>
-                    ) : (
-                      <span className="font-jost text-[13px] tracking-[0.06em]">{formatUsd(guia.amountCents)}</span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => removeItem(it.id)}
-                      aria-label={t.quitar(nombre)}
-                      className="text-copa-ink/50 hover:text-copa-burgundy transition-colors"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Checklist con TODAS las guías del catálogo, no solo las que ya están en el
+              carrito — así el visitante puede sumar (o sacar) guías sin salir de este popup ni
+              volver a cada landing, justo cuando la oferta por volumen lo está incentivando a
+              llevar una más. */}
+          <div className="flex flex-col gap-2">
+            <span className="font-jost text-[11px] tracking-[0.14em] uppercase text-copa-ink/60">
+              {t.guiasDisponibles}
+            </span>
+            <div className="flex flex-col divide-y divide-copa-gold/40">
+              {Object.entries(CART_CATALOG).map(([id, guia]) => {
+                const checked = items.some((it) => it.id === id);
+                const nombre = guia.nombre[lang] || guia.nombre.es;
+                const esGratis = checked && idsGratis.has(id);
+                return (
+                  <label key={id} htmlFor={`cart-item-${id}`} className="flex items-center justify-between gap-3 py-3 cursor-pointer">
+                    <span className="flex items-center gap-3 min-w-0">
+                      <Checkbox
+                        id={`cart-item-${id}`}
+                        checked={checked}
+                        onCheckedChange={(v) => (v ? addItem(id, lang) : removeItem(id))}
+                      />
+                      <span style={{ fontSize: 16 }}>{nombre}</span>
+                    </span>
+                    <span className="font-jost text-[13px] tracking-[0.06em] flex-none">
+                      {esGratis ? (
+                        <>
+                          <span className="line-through text-copa-ink/40 mr-2">{formatUsd(guia.amountCents)}</span>
+                          <span className="text-copa-burgundy font-medium">{t.gratis}</span>
+                        </>
+                      ) : (
+                        formatUsd(guia.amountCents)
+                      )}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-copa-gold">

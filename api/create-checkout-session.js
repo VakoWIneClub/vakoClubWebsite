@@ -67,7 +67,7 @@ export default async function handler(req, res) {
           currency: guia.currency,
           // El nombre deja explícito en el propio recibo de Stripe por qué esta línea sale en
           // $0 — nunca un descuento silencioso que parezca un error de cobro.
-          product_data: { name: gratis ? `${guia.nombre} — Gratis (oferta 3x2)` : guia.nombre },
+          product_data: { name: gratis ? `${guia.nombre} — Gratis (oferta por 3 guías o más)` : guia.nombre },
           unit_amount: gratis ? 0 : guia.amountCents,
         },
         quantity: 1,
