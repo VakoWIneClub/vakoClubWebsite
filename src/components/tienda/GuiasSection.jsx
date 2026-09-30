@@ -47,8 +47,9 @@ const guias = [
     estado: 'disponible',
     etiqueta: 'Colección Regional · 2/4',
     image: '/images/guias/guia-vino-argentino-tapa.jpg',
-    // Con la grilla de 3 columnas la tarjeta es más ancha y 'top' cortaba la palabra "Argentina".
-    imagePosition: '50% 35%',
+    // Tapa nueva (montañas arriba, título abajo): se encuadra la parte baja para que se lean
+    // "Argentina" y el subtítulo completos, con la cordillera y las vides arriba.
+    imagePosition: '50% 84%',
   },
   {
     id: 'guia-frances',

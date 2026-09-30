@@ -32,7 +32,7 @@ const CONTENT = {
     coverAlt: 'Tapa de la Guía del Vino Argentino, de Vako Club',
     coverSrc: '/images/guias/guia-vino-argentino-tapa.jpg',
     coverWidth: 900,
-    coverHeight: 1273,
+    coverHeight: 1272,
   },
   adentro: {
     eyebrow: 'Un vistazo',
