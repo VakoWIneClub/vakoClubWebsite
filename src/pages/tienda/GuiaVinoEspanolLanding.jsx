@@ -28,7 +28,7 @@ const CONTENT = {
     paragraph:
       'De Rioja a Rías Baixas, de Tempranillo a Albariño: por fin vas a entender qué significa de verdad Crianza, Reserva y Gran Reserva. Todo en un solo PDF — sin abrir 15 pestañas.',
     ctaSecondary: 'Ver páginas de adentro',
-    microcopy: 'Descarga inmediata en PDF · Pago seguro · Garantía de devolución 14 días',
+    microcopy: 'Descarga inmediata en PDF · Pago seguro · Garantía de devolución 7 días',
     coverAlt: 'Tapa de la Guía del Vino Español, de Vako Club',
     coverSrc: '/images/guias/guia-vino-espanol-tapa.jpg',
     coverWidth: 1000,
@@ -72,15 +72,15 @@ const CONTENT = {
     items: [
       'Pago 100% seguro, procesado por Stripe',
       'Mirá páginas reales antes de decidir — no es una maqueta',
-      'Devolución completa dentro de 14 días, sin preguntas',
+      'Devolución completa dentro de 7 días, sin preguntas',
     ],
   },
   oferta: {
     eyebrow: 'La guía completa',
     paymentNote: 'Pago único · Sin vencimiento',
     garantia: {
-      titulo: 'Garantía de devolución — 14 días.',
-      texto: 'Si sentís que no te aportó valor, escribinos a info@vakoclub.com dentro de los 14 días posteriores a la compra y te devolvemos el 100%, sin pedirte explicaciones.',
+      titulo: 'Garantía de devolución — 7 días.',
+      texto: 'Si sentís que no te aportó valor, escribinos a info@vakoclub.com dentro de los 7 días posteriores a la compra y te devolvemos el 100%, sin pedirte explicaciones.',
     },
     secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en esta misma página',
     incluye: [
@@ -107,7 +107,7 @@ const CONTENT = {
       { q: '¿Por qué pagar por esto si hay información gratis en internet?', a: 'Tenés razón: hay muchísima información gratuita sobre vino español. El problema no es que falte información, es que está repartida en decenas de sitios distintos, con niveles de calidad muy distintos. Esta guía la junta una sola vez, curada y pensada para leerse en una sesión. Una guía, no 15 pestañas.' },
       { q: '¿Es para principiantes o para gente que ya sabe de vino?', a: 'Está pensada sobre todo para quien tiene curiosidad y se pierde con los tecnicismos — no hace falta saber nada de vino para empezar. Si ya trabajás en el sector o preparás una certificación profesional, probablemente ya conozcas buena parte de lo básico que cubre.' },
       { q: '¿En qué formato la recibo y cómo la descargo?', a: 'Es un PDF digital. En cuanto se confirma el pago, esta misma página te muestra el botón de descarga — sin envío físico ni esperas. Se lee en el celular, la tablet o la computadora, y también se puede imprimir.' },
-      { q: '¿Puedo pedir un reembolso si no me convence?', a: 'Sí. Tenés 14 días completos desde tu compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin necesidad de justificarlo.' },
+      { q: '¿Puedo pedir un reembolso si no me convence?', a: 'Sí. Tenés 7 días completos desde tu compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin necesidad de justificarlo.' },
       { q: '¿Qué incluye exactamente el precio?', a: 'La Guía del Vino Español completa en PDF, acceso anticipado a la próxima guía de la colección, y una invitación a la Membresía Gratuita de Vako Club. Todo por un único pago, sin suscripción.' },
       { q: '¿Necesito comprar también El Mundo de la Copa?', a: 'No, son productos independientes y podés comprar cualquiera de los dos por separado.' },
       { q: '¿Esta compra incluye las guías de Argentina, Francia o Italia?', a: 'No — cada guía regional se vende por separado. Las guías de Argentina, Francia e Italia ya están disponibles, así que como comprador de España podés sumarlas cuando quieras.' },
