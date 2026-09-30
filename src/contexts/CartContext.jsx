@@ -9,27 +9,52 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 // edición real en inglés y portugués — su carrito puede mostrarse en cualquiera de los tres
 // idiomas (ver CartWidget). "guia-espanol"/"guia-argentino" solo existen en español, así que
 // repiten el mismo nombre en las tres claves: no hay nada más honesto que mostrar para ellas.
+// `idiomas` son las ediciones que realmente existen de cada guía, y es lo que ofrece el selector
+// de idioma al agregarla al carrito (ElegirIdiomaDialog) y lo que muestra la grilla de /tienda.
+// Tiene que coincidir con `filePathByLang` de api/_lib/catalog.js — el servidor rechaza cualquier
+// idioma que no tenga su PDF. Para lanzar una edición nueva (ej. una regional en portugués): subir
+// el PDF, sumarlo en `filePathByLang` del servidor y agregar el código acá.
 export const CART_CATALOG = {
   'guia-general': {
     nombre: { es: 'El Mundo de la Copa', en: 'The World of the Glass', pt: 'O Mundo da Taça' },
     amountCents: 1499,
+    idiomas: ['es', 'en', 'pt'],
   },
   'guia-espanol': {
     nombre: { es: 'Guía del Vino Español', en: 'Guía del Vino Español', pt: 'Guía del Vino Español' },
     amountCents: 1499,
+    idiomas: ['es'],
   },
   'guia-argentino': {
     nombre: { es: 'Guía del Vino Argentino', en: 'Guía del Vino Argentino', pt: 'Guía del Vino Argentino' },
     amountCents: 1499,
+    idiomas: ['es'],
   },
   'guia-frances': {
     nombre: { es: 'Guía del Vino Francés', en: 'Guía del Vino Francés', pt: 'Guía del Vino Francés' },
     amountCents: 1499,
+    idiomas: ['es'],
   },
   'guia-italiano': {
     nombre: { es: 'Guía del Vino Italiano', en: 'Guía del Vino Italiano', pt: 'Guía del Vino Italiano' },
     amountCents: 1499,
+    idiomas: ['es'],
   },
+};
+
+// Todos los idiomas que el sitio contempla, en el orden en que se ofrecen. Cada uno con su nombre
+// en su propio idioma, para que un visitante de Brasil reconozca "Português" aunque la página
+// esté en español.
+export const IDIOMAS = ['es', 'en', 'pt'];
+export const NOMBRE_IDIOMA = { es: 'Español', en: 'English', pt: 'Português' };
+
+export const idiomasDeGuia = (id) => CART_CATALOG[id]?.idiomas || ['es'];
+
+// Idioma válido para una guía: el pedido si esa edición existe, si no el primero disponible. Cubre
+// ítems viejos guardados en localStorage sin `lang` (las regionales, antes del selector).
+const resolverIdioma = (id, lang) => {
+  const disponibles = idiomasDeGuia(id);
+  return disponibles.includes(lang) ? lang : disponibles[0];
 };
 
 // Compartido por CartWidget y las landings (para mostrar el precio en el botón "Agregar al
@@ -65,7 +90,9 @@ const readStoredItems = () => {
     const parsed = raw ? JSON.parse(raw) : [];
     // Filtra cualquier id que ya no exista en el catálogo (guía descontinuada, dato corrupto) para
     // que el widget nunca intente mostrar o cobrar algo que ya no se vende.
-    return Array.isArray(parsed) ? parsed.filter((it) => it && CART_CATALOG[it.id]) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((it) => it && CART_CATALOG[it.id]).map((it) => ({ ...it, lang: resolverIdioma(it.id, it.lang) }))
+      : [];
   } catch {
     return [];
   }
@@ -85,11 +112,11 @@ export const CartProvider = ({ children }) => {
     }
   }, [items]);
 
-  // Un ítem por guía — agregar una que ya está adentro solo actualiza el idioma elegido (relevante
-  // hoy únicamente para "guia-general", la única con más de una edición de idioma) en vez de
+  // Un ítem por guía — agregar una que ya está adentro solo actualiza el idioma elegido en vez de
   // duplicar la línea.
-  const addItem = (id, lang) => {
+  const addItem = (id, rawLang) => {
     if (!CART_CATALOG[id]) return;
+    const lang = resolverIdioma(id, rawLang);
     setItems((prev) => {
       const existe = prev.some((it) => it.id === id);
       if (existe) return prev.map((it) => (it.id === id ? { ...it, lang } : it));

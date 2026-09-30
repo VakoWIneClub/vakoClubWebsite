@@ -8,6 +8,7 @@ import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import { supabase } from '@/lib/customSupabaseClient';
 import CartWidget from '@/components/tienda/CartWidget';
+import ElegirIdiomaDialog from '@/components/tienda/ElegirIdiomaDialog';
 import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 
 // Fácil de subir a 100 el día que se decida extender el bono — un solo número para cambiar.
@@ -501,7 +502,9 @@ const ElMundoDeLaCopaLanding = () => {
   const [gateLang, setGateLang] = useState('es');
   const [gateAge, setGateAge] = useState(false);
   const [agregado, setAgregado] = useState(false);
-  const yaEnCarrito = cartItems.some((it) => it.id === GUIDE_ID);
+  const itemEnCarrito = cartItems.find((it) => it.id === GUIDE_ID);
+  const yaEnCarrito = Boolean(itemEnCarrito);
+  const [eligiendoIdioma, setEligiendoIdioma] = useState(false);
   const [email, setEmail] = useState('');
   const [enviandoEmail, setEnviandoEmail] = useState(false);
   const [emailMsg, setEmailMsg] = useState(null);
@@ -707,12 +710,15 @@ const ElMundoDeLaCopaLanding = () => {
   }, []);
 
   // Único botón de compra en toda la landing: agrega al carrito, nunca va directo a Stripe. El
-  // pago real se hace desde el panel del carrito (CartWidget) con "Pagar todo". El idioma elegido
-  // en el header viaja con el ítem del carrito — así, si el checkout final incluye esta guía
-  // junto a otras, se sigue entregando en el idioma que el visitante ya eligió acá, no siempre en
-  // español.
-  const agregarAlCarrito = () => {
-    addItem(GUIDE_ID, lang);
+  // pago real se hace desde el panel del carrito (CartWidget) con "Pagar todo". El botón abre el
+  // selector de edición (ElegirIdiomaDialog) y la guía se agrega recién al elegir — el idioma de
+  // la página (header) solo decide en qué idioma se muestra el selector, no la edición del PDF,
+  // que el visitante elige explícitamente y viaja con el ítem del carrito hasta el checkout.
+  const agregarAlCarrito = () => setEligiendoIdioma(true);
+
+  const elegirIdioma = (idioma) => {
+    addItem(GUIDE_ID, idioma);
+    setEligiendoIdioma(false);
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
   };
@@ -1382,6 +1388,15 @@ const ElMundoDeLaCopaLanding = () => {
           <span className="text-copa-cream/60">{t.footer.copyright(new Date().getFullYear())}</span>
         </div>
       </footer>
+
+      <ElegirIdiomaDialog
+        guideId={GUIDE_ID}
+        open={eligiendoIdioma}
+        onOpenChange={setEligiendoIdioma}
+        onElegir={elegirIdioma}
+        uiLang={lang}
+        idiomaActual={itemEnCarrito?.lang}
+      />
 
       <CartWidget lang={lang} />
     </div>

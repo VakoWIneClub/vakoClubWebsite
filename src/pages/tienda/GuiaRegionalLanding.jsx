@@ -5,6 +5,7 @@ import Reveal, { COPA_EASE } from '@/components/copa/Reveal';
 import Seo from '@/components/Seo';
 import CompraResultBanner from '@/components/tienda/CompraResultBanner';
 import CartWidget from '@/components/tienda/CartWidget';
+import ElegirIdiomaDialog from '@/components/tienda/ElegirIdiomaDialog';
 import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
@@ -52,7 +53,9 @@ const QUIENES = {
 const GuiaRegionalLanding = ({ content }) => {
   const { addItem, items: cartItems } = useCart();
   const [agregado, setAgregado] = useState(false);
-  const yaEnCarrito = cartItems.some((it) => it.id === content.guideId);
+  const itemEnCarrito = cartItems.find((it) => it.id === content.guideId);
+  const yaEnCarrito = Boolean(itemEnCarrito);
+  const [eligiendoIdioma, setEligiendoIdioma] = useState(false);
   const [openFaq, setOpenFaq] = useState({});
   // Código del idioma que abrió el aviso de "todavía no disponible" (null = diálogo cerrado).
   const [langNotice, setLangNotice] = useState(null);
@@ -69,8 +72,13 @@ const GuiaRegionalLanding = ({ content }) => {
   // Único botón de compra en toda la landing: agrega al carrito, nunca va directo a Stripe. El
   // pago real se hace desde el panel del carrito (CartWidget) con "Pagar todo", sea de una guía
   // o de varias — así hay un solo camino de compra, no dos formas distintas de terminar en Stripe.
-  const agregarAlCarrito = () => {
-    addItem(content.guideId);
+  // Cada botón primero abre el selector de idioma; la guía se agrega recién cuando el visitante
+  // elige la edición (ver ElegirIdiomaDialog).
+  const agregarAlCarrito = () => setEligiendoIdioma(true);
+
+  const elegirIdioma = (lang) => {
+    addItem(content.guideId, lang);
+    setEligiendoIdioma(false);
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
   };
@@ -419,6 +427,14 @@ const GuiaRegionalLanding = ({ content }) => {
 
       {/* Aviso al elegir inglés o portugués — en el idioma que se clickeó, no en español, para
           que quien no lee español lo entienda igual. */}
+      <ElegirIdiomaDialog
+        guideId={content.guideId}
+        open={eligiendoIdioma}
+        onOpenChange={setEligiendoIdioma}
+        onElegir={elegirIdioma}
+        idiomaActual={itemEnCarrito?.lang}
+      />
+
       <Dialog open={langNotice !== null} onOpenChange={(open) => !open && setLangNotice(null)}>
         <DialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
           <DialogHeader>
