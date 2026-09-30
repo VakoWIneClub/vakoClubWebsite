@@ -8,8 +8,8 @@ import CartWidget from '@/components/tienda/CartWidget';
 import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
-// Plantilla compartida para las landings de la Colección Regional (España, Argentina, y Francia
-// cuando esté lista) — misma estructura y sistema visual `copa-*` que
+// Plantilla compartida para las landings de la Colección Regional (España, Argentina, Francia e
+// Italia) — misma estructura y sistema visual `copa-*` que
 // src/pages/tienda/ElMundoDeLaCopaLanding.jsx, pero simplificada porque estas guías son de un solo
 // idioma: sin selector de idioma/edad propio (usa el AgeVerificationPopup genérico del sitio, ya
 // montado en App.jsx para toda página que no sea El Mundo de la Copa) y sin el contador en vivo de

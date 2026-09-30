@@ -26,6 +26,10 @@ export const CART_CATALOG = {
     nombre: { es: 'Guía del Vino Francés', en: 'Guía del Vino Francés', pt: 'Guía del Vino Francés' },
     amountCents: 1499,
   },
+  'guia-italiano': {
+    nombre: { es: 'Guía del Vino Italiano', en: 'Guía del Vino Italiano', pt: 'Guía del Vino Italiano' },
+    amountCents: 1499,
+  },
 };
 
 // Compartido por CartWidget y las landings (para mostrar el precio en el botón "Agregar al
