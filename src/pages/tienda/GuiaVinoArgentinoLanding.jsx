@@ -7,8 +7,9 @@ import GuiaRegionalLanding from '@/pages/tienda/GuiaRegionalLanding';
 const CONTENT = {
   guideId: 'guia-argentino',
   path: '/tienda/guia-vino-argentino',
-  // Nombre traducido a los tres idiomas — se usa en el aviso de "todavía no disponible en
-  // inglés/portugués" (ver GuiaRegionalLanding.jsx), que se muestra en el idioma que se clickeó.
+  // Nombre traducido a los tres idiomas — se usa en el aviso de idioma de la tira ES/EN/PT (ver
+  // GuiaRegionalLanding.jsx), que se muestra en el idioma que se clickeó. Esta guía tiene edición
+  // en portugués (CART_CATALOG en src/contexts/CartContext.jsx); la página sigue en español.
   nombre: {
     es: 'La Guía del Vino Argentino',
     en: 'The Argentine Wine Guide',
@@ -47,7 +48,7 @@ const CONTENT = {
     ],
   },
   dataBar: {
-    items: ['66 páginas', 'PDF descargable', 'Español', 'Descarga inmediata'],
+    items: ['66 páginas', 'PDF descargable', 'Español · Português', 'Descarga inmediata'],
   },
   problema: {
     eyebrow: 'Seamos sinceros',
@@ -84,6 +85,7 @@ const CONTENT = {
     secureNote: 'Pago seguro con Stripe · Recibís el enlace de descarga al instante en esta misma página',
     incluye: [
       'Las 66 páginas en PDF de alta calidad',
+      'Edición en español o en portugués, a elección',
       'Descarga inmediata, sin vencimiento',
       'Actualizaciones futuras sin costo',
       'Invitación a la Membresía Gratuita de Vako Club',
@@ -105,6 +107,7 @@ const CONTENT = {
     items: [
       { q: '¿Por qué pagar por esto si hay información gratis en internet?', a: 'Tenés razón: hay muchísima información gratuita sobre vino argentino. El problema no es que falte información, es que está repartida en blogs de bodegas, videos y publicaciones sueltas. Esta guía la junta una sola vez, curada y pensada para leerse en una sesión. Una guía, no 15 pestañas.' },
       { q: '¿Es para principiantes o para gente que ya sabe de vino?', a: 'Está pensada sobre todo para quien tiene curiosidad y hoy asocia "vino argentino" solo con Malbec — no hace falta saber nada de vino para empezar. Si ya trabajás en el sector, probablemente ya conozcas buena parte de lo básico que cubre.' },
+      { q: '¿Está disponible en portugués?', a: 'Sí. La guía completa también está en portugués: las mismas 66 páginas, traducidas. Al agregarla al carrito elegís "Português" y recibís esa edición. Esta página, por ahora, está solo en español.' },
       { q: '¿En qué formato la recibo y cómo la descargo?', a: 'Es un PDF digital. En cuanto se confirma el pago, esta misma página te muestra el botón de descarga — sin envío físico ni esperas. Se lee en el celular, la tablet o la computadora, y también se puede imprimir.' },
       { q: '¿Puedo pedir un reembolso si no me convence?', a: 'Sí. Tenés 7 días completos desde tu compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin necesidad de justificarlo.' },
       { q: '¿Qué incluye exactamente el precio?', a: 'La Guía del Vino Argentino completa en PDF, acceso anticipado a la próxima guía de la colección, y una invitación a la Membresía Gratuita de Vako Club. Todo por un único pago, sin suscripción.' },

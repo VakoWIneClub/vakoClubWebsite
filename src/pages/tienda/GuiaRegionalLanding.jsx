@@ -6,7 +6,7 @@ import Seo from '@/components/Seo';
 import CompraResultBanner from '@/components/tienda/CompraResultBanner';
 import CartWidget from '@/components/tienda/CartWidget';
 import ElegirIdiomaDialog from '@/components/tienda/ElegirIdiomaDialog';
-import { useCart, CART_CATALOG, formatUsd } from '@/contexts/CartContext';
+import { useCart, CART_CATALOG, formatUsd, idiomasDeGuia } from '@/contexts/CartContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 // Plantilla compartida para las landings de la Colección Regional (España, Argentina, Francia e
@@ -32,14 +32,22 @@ const LANG_NAMES = { es: 'Español', en: 'English', pt: 'Português' };
 // probablemente no lee bien español, así que el propio aviso de "todavía no existe en inglés"
 // tiene que estar en inglés para que se entienda. `content.nombre` trae el nombre de la guía ya
 // traducido a los tres idiomas (ver guiaVinoEspanol.js / guiaVinoArgentino.js).
+// Si la guía YA tiene edición en ese idioma (CART_CATALOG[id].idiomas), el aviso lo dice y ofrece
+// agregarla al carrito en ese idioma con un clic — la página sigue en español, pero el PDF no.
 const NOTICE_COPY = {
   en: {
     title: 'Not yet available in English',
     body: (nombre) => `${nombre} is only available in Spanish for now. As soon as the English edition exists, you'll be able to pick it right here.`,
+    disponibleTitle: 'Available in English',
+    disponibleBody: (nombre) => `This page is in Spanish, but ${nombre} also comes as a PDF in English.`,
+    agregar: 'Add to cart — English edition',
   },
   pt: {
     title: 'Ainda não disponível em Português',
     body: (nombre) => `${nombre} está disponível apenas em espanhol, por enquanto. Assim que existir a edição em português, você vai poder escolhê-la bem aqui.`,
+    disponibleTitle: 'Disponível em Português',
+    disponibleBody: (nombre) => `Esta página está em espanhol, mas ${nombre} também vem em PDF em português.`,
+    agregar: 'Adicionar ao carrinho — edição em português',
   },
 };
 
@@ -76,9 +84,14 @@ const GuiaRegionalLanding = ({ content }) => {
   // elige la edición (ver ElegirIdiomaDialog).
   const agregarAlCarrito = () => setEligiendoIdioma(true);
 
+  // El aviso de EN/PT del header, cuando la edición existe, agrega directo en ese idioma.
+  const noticeDisponible = langNotice !== null && idiomasDeGuia(content.guideId).includes(langNotice);
+  const noticeCopy = langNotice ? NOTICE_COPY[langNotice] : null;
+
   const elegirIdioma = (lang) => {
     addItem(content.guideId, lang);
     setEligiendoIdioma(false);
+    setLangNotice(null);
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
   };
@@ -425,8 +438,6 @@ const GuiaRegionalLanding = ({ content }) => {
         </Reveal>
       </section>
 
-      {/* Aviso al elegir inglés o portugués — en el idioma que se clickeó, no en español, para
-          que quien no lee español lo entienda igual. */}
       <ElegirIdiomaDialog
         guideId={content.guideId}
         open={eligiendoIdioma}
@@ -435,16 +446,25 @@ const GuiaRegionalLanding = ({ content }) => {
         idiomaActual={itemEnCarrito?.lang}
       />
 
+      {/* Aviso al elegir inglés o portugués — en el idioma que se clickeó, no en español, para
+          que quien no lee español lo entienda igual. */}
       <Dialog open={langNotice !== null} onOpenChange={(open) => !open && setLangNotice(null)}>
         <DialogContent className="bg-copa-cream border-copa-gold rounded-none text-copa-ink">
           <DialogHeader>
             <DialogTitle className="font-cormorant font-light text-copa-ink" style={{ fontSize: 26 }}>
-              {langNotice ? NOTICE_COPY[langNotice].title : ''}
+              {noticeCopy ? (noticeDisponible ? noticeCopy.disponibleTitle : noticeCopy.title) : ''}
             </DialogTitle>
             <DialogDescription className="text-copa-ink/70" style={{ fontFamily: "'EB Garamond', serif", fontSize: 16 }}>
-              {langNotice ? NOTICE_COPY[langNotice].body(content.nombre[langNotice]) : ''}
+              {noticeCopy
+                ? (noticeDisponible ? noticeCopy.disponibleBody : noticeCopy.body)(content.nombre[langNotice])
+                : ''}
             </DialogDescription>
           </DialogHeader>
+          {noticeDisponible && (
+            <button type="button" onClick={() => elegirIdioma(langNotice)} className={btnPrimary}>
+              {noticeCopy.agregar}
+            </button>
+          )}
         </DialogContent>
       </Dialog>
 

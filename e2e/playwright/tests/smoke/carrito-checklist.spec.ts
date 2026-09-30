@@ -100,4 +100,19 @@ test.describe('Carrito — checklist de guías y oferta por volumen', () => {
     await expect(rowCopa.getByRole('checkbox')).toBeChecked();
     await expect(rowCopa.getByRole('button', { name: /Idioma: Português/ })).toBeVisible();
   });
+
+  test('Argentina tiene edición en portugués: el aviso de PT la agrega en un clic', async ({ page }) => {
+    await page.goto('/tienda/guia-vino-argentino');
+    await page.getByRole('navigation', { name: 'Idioma' }).getByRole('button', { name: 'Português' }).click();
+    await expect(page.getByRole('dialog', { name: 'Disponível em Português' })).toBeVisible();
+    await page.getByRole('button', { name: 'Adicionar ao carrinho — edição em português' }).click();
+
+    await page.getByRole('button', { name: /Ver carrito/ }).click();
+    const rowArgentino = page
+      .getByRole('dialog', { name: 'Tu carrito' })
+      .locator('label')
+      .filter({ hasText: 'Guía del Vino Argentino' });
+    await expect(rowArgentino.getByRole('checkbox')).toBeChecked();
+    await expect(rowArgentino.getByRole('button', { name: /Idioma: Português/ })).toBeVisible();
+  });
 });
