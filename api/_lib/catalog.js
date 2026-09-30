@@ -34,6 +34,10 @@ export const GUIAS_CATALOG = {
     currency: 'usd',
     disponible: true,
     filePath: 'private/guias/guia-vino-argentino.pdf',
+    filePathByLang: {
+      es: 'private/guias/guia-vino-argentino.pdf',
+      pt: 'private/guias/guia-vino-argentino-pt.pdf',
+    },
   },
   'guia-frances': {
     nombre: 'Guía del Vino Francés',

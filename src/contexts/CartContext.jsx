@@ -26,9 +26,9 @@ export const CART_CATALOG = {
     idiomas: ['es'],
   },
   'guia-argentino': {
-    nombre: { es: 'Guía del Vino Argentino', en: 'Guía del Vino Argentino', pt: 'Guía del Vino Argentino' },
+    nombre: { es: 'Guía del Vino Argentino', en: 'Guía del Vino Argentino', pt: 'Guia do Vinho Argentino' },
     amountCents: 1499,
-    idiomas: ['es'],
+    idiomas: ['es', 'pt'],
   },
   'guia-frances': {
     nombre: { es: 'Guía del Vino Francés', en: 'Guía del Vino Francés', pt: 'Guía del Vino Francés' },
