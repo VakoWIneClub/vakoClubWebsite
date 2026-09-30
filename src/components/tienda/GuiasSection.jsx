@@ -4,6 +4,7 @@ import { BookOpen, Wine, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import Reveal from '@/components/copa/Reveal';
 import NotifyGuideDialog from '@/components/tienda/NotifyGuideDialog';
+import { NOMBRE_IDIOMA, idiomasDeGuia } from '@/contexts/CartContext';
 
 // Guías con su propia landing de venta dedicada — el título y la imagen llevan ahí
 // en vez de ir directo al checkout.
@@ -15,12 +16,6 @@ const LANDING_PATH = {
   'guia-italiano': '/tienda/guia-vino-italiano',
 };
 
-// Cada idioma en su propio nombre (no traducido al español) para que un visitante de Brasil o de
-// habla inglesa reconozca de un vistazo si la guía existe en su idioma — debe coincidir con las
-// ediciones reales de api/_lib/catalog.js (`filePathByLang`); hoy solo El Mundo de la Copa tiene
-// inglés y portugués, las regionales son solo en español.
-const NOMBRE_IDIOMA = { es: 'Español', en: 'English', pt: 'Português' };
-
 const guias = [
   {
     id: 'guia-general',
@@ -30,7 +25,6 @@ const guias = [
       'Uvas, regiones y maridajes para entender qué estás bebiendo. 82 páginas: de los cinco componentes del vino a un recorrido completo por Francia, Italia, España, Argentina, Chile, Estados Unidos, Australia y más.',
     estado: 'disponible',
     etiqueta: 'Guía General',
-    idiomas: ['es', 'en', 'pt'],
     image: '/images/guias/el-mundo-de-la-copa-tapa.jpg',
   },
   {
@@ -41,7 +35,6 @@ const guias = [
       'Crianza, Reserva y Gran Reserva explicados de una vez. Rioja, Ribera del Duero, Rías Baixas, Jerez y las uvas que hacen único al vino español.',
     estado: 'disponible',
     etiqueta: 'Colección Regional · 1/4',
-    idiomas: ['es'],
     image: '/images/guias/guia-vino-espanol-tapa-card.jpg',
     imagePosition: 'top',
   },
@@ -53,7 +46,6 @@ const guias = [
       'Más allá del Malbec: Bonarda, Torrontés y por qué la altura del viñedo cambia lo que hay en tu copa. Mendoza, Salta y Patagonia explicadas de una vez.',
     estado: 'disponible',
     etiqueta: 'Colección Regional · 2/4',
-    idiomas: ['es'],
     image: '/images/guias/guia-vino-argentino-tapa.jpg',
     // Con la grilla de 3 columnas la tarjeta es más ancha y 'top' cortaba la palabra "Argentina".
     imagePosition: '50% 35%',
@@ -66,7 +58,6 @@ const guias = [
       'El traductor definitivo de qué uva se esconde detrás de cada región: Burdeos vs. Borgoña, Champagne y el resto del mapa francés, sin intimidación.',
     estado: 'disponible',
     etiqueta: 'Colección Regional · 3/4',
-    idiomas: ['es'],
     image: '/images/guias/guia-vino-frances-tapa.jpg',
     imagePosition: 'center',
   },
@@ -78,7 +69,6 @@ const guias = [
       'Veinte regiones, más de quinientas uvas y una sola regla: primero el productor. Barolo, Chianti, Amarone y los Supertuscans explicados sin memorizar.',
     estado: 'disponible',
     etiqueta: 'Colección Regional · 4/4',
-    idiomas: ['es'],
     // Imagen propia para la tarjeta, armada desde la tapa: "Italia", subtítulo y regiones, con fondo
     // extendido arriba para que la etiqueta de la colección no tape el título. Recortando la tapa
     // completa, siempre quedaba o la copa cortada arriba o la etiqueta encima de la "I".
@@ -91,6 +81,9 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
   const disponible = guia.estado === 'disponible';
   const procesando = comprando === guia.id;
   const landingPath = LANDING_PATH[guia.id];
+  // Qué ediciones existen sale de CART_CATALOG (src/contexts/CartContext.jsx), la misma fuente que
+  // usa el selector de idioma del carrito.
+  const idiomas = idiomasDeGuia(guia.id);
   return (
     <Reveal delay={Math.min(index * 0.08, 0.24)} className="copa-card flex flex-col h-full">
       <div className="relative h-56 bg-copa-creamDeep flex items-center justify-center overflow-hidden">
@@ -147,9 +140,9 @@ const GuiaCard = ({ guia, index, onComprar, onAvisame, comprando }) => {
           {/* "Idioma(s)" se escribe igual en español y en portugués. */}
           <div className="flex flex-wrap items-center gap-2 mt-4">
             <span className="font-jost text-[10px] tracking-[0.14em] uppercase text-copa-ink/50">
-              {guia.idiomas.length > 1 ? 'Idiomas' : 'Idioma'}
+              {idiomas.length > 1 ? 'Idiomas' : 'Idioma'}
             </span>
-            {guia.idiomas.map((code) => (
+            {idiomas.map((code) => (
               <span
                 key={code}
                 className="font-jost text-[10px] tracking-[0.1em] uppercase border border-copa-gold/60 text-copa-ink/80 px-2 py-0.5"

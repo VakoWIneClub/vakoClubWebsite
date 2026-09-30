@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { GUIAS_CATALOG, normalizarIdioma, aplicarPromo3x2 } from './_lib/catalog.js';
+import { GUIAS_CATALOG, normalizarIdioma, aplicarPromo3x2, idiomasDisponibles } from './_lib/catalog.js';
 
 // A dónde puede volver Stripe después del pago. Se valida contra esta lista en vez de confiar en
 // el `returnPath` que manda el cliente, para no abrir un open-redirect vía el body del POST.
@@ -41,7 +41,13 @@ export default async function handler(req, res) {
     if (!guia || !guia.disponible) {
       return res.status(400).json({ error: 'Una de las guías elegidas no está disponible para compra todavía.' });
     }
-    items.push({ guideId: raw.guideId, lang: normalizarIdioma(raw.lang), guia });
+    const lang = normalizarIdioma(raw.lang);
+    // Sin esto, pedir una edición que no existe (ej. una regional en portugués) cobraría y después
+    // getGuideFilePath entregaría el PDF en español sin avisar.
+    if (!idiomasDisponibles(guia).includes(lang)) {
+      return res.status(400).json({ error: `"${guia.nombre}" todavía no está disponible en ese idioma.` });
+    }
+    items.push({ guideId: raw.guideId, lang, guia });
   }
 
   // Ninguna guía repetida — evita cobrar la misma guía dos veces por un carrito con un ítem duplicado.

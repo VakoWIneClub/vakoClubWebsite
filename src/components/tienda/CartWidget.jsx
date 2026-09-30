@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Loader2 } from 'lucide-react';
-import { useCart, CART_CATALOG, formatUsd, calcularPromo3x2 } from '@/contexts/CartContext';
+import { useCart, CART_CATALOG, NOMBRE_IDIOMA, formatUsd, calcularPromo3x2 } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
+import ElegirIdiomaDialog from '@/components/tienda/ElegirIdiomaDialog';
 
-// Este widget vive en /tienda, en El Mundo de la Copa y en las 3 landings regionales. Solo El
-// Mundo de la Copa es realmente trilingüe, así que es la única que pasa `lang` — el resto lo deja
-// en 'es' (default), que es el único idioma real de sus guías.
+// Este widget vive en /tienda, en El Mundo de la Copa y en las landings regionales. `lang` es solo
+// el idioma de la interfaz (El Mundo de la Copa es la única página trilingüe, el resto deja 'es');
+// la edición de cada guía la elige el visitante en ElegirIdiomaDialog al tildarla, y se puede
+// cambiar después desde la etiqueta de idioma de su línea.
 const T = {
   es: {
     cartLabel: (n) => `Ver carrito (${n} ${n === 1 ? 'guía' : 'guías'})`,
@@ -21,6 +23,7 @@ const T = {
     pagar: (monto) => `Pagar todo — ${monto}`,
     redirigiendo: 'Redirigiendo…',
     vaciar: 'Vaciar carrito',
+    cambiarIdioma: (idioma) => `Idioma: ${idioma}. Cambiar`,
     errorTitle: 'No se pudo iniciar el pago',
     errorFallback: 'Intenta de nuevo en unos minutos.',
   },
@@ -36,6 +39,7 @@ const T = {
     pagar: (monto) => `Pay all — ${monto}`,
     redirigiendo: 'Redirecting…',
     vaciar: 'Empty cart',
+    cambiarIdioma: (idioma) => `Language: ${idioma}. Change`,
     errorTitle: "We couldn't start the payment",
     errorFallback: 'Try again in a few minutes.',
   },
@@ -51,6 +55,7 @@ const T = {
     pagar: (monto) => `Pagar tudo — ${monto}`,
     redirigiendo: 'Redirecionando…',
     vaciar: 'Esvaziar carrinho',
+    cambiarIdioma: (idioma) => `Idioma: ${idioma}. Trocar`,
     errorTitle: 'Não foi possível iniciar o pagamento',
     errorFallback: 'Tente novamente em alguns minutos.',
   },
@@ -62,6 +67,8 @@ const CartWidget = ({ lang = 'es' }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [pagando, setPagando] = useState(false);
+  // Guía para la que está abierto el selector de idioma (null = cerrado).
+  const [eligiendoPara, setEligiendoPara] = useState(null);
 
   if (items.length === 0) return null;
 
@@ -140,7 +147,8 @@ const CartWidget = ({ lang = 'es' }) => {
             </span>
             <div className="flex flex-col divide-y divide-copa-gold/40">
               {Object.entries(CART_CATALOG).map(([id, guia]) => {
-                const checked = items.some((it) => it.id === id);
+                const item = items.find((it) => it.id === id);
+                const checked = Boolean(item);
                 const nombre = guia.nombre[lang] || guia.nombre.es;
                 const esGratis = checked && idsGratis.has(id);
                 return (
@@ -149,9 +157,24 @@ const CartWidget = ({ lang = 'es' }) => {
                       <Checkbox
                         id={`cart-item-${id}`}
                         checked={checked}
-                        onCheckedChange={(v) => (v ? addItem(id, lang) : removeItem(id))}
+                        onCheckedChange={(v) => (v ? setEligiendoPara(id) : removeItem(id))}
                       />
-                      <span style={{ fontSize: 16 }}>{nombre}</span>
+                      <span className="flex flex-col items-start min-w-0">
+                        <span style={{ fontSize: 16 }}>{nombre}</span>
+                        {checked && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setEligiendoPara(id);
+                            }}
+                            aria-label={t.cambiarIdioma(NOMBRE_IDIOMA[item.lang])}
+                            className="font-jost text-[10px] tracking-[0.12em] uppercase text-copa-burgundy underline decoration-copa-gold underline-offset-2 hover:text-copa-ink"
+                          >
+                            {NOMBRE_IDIOMA[item.lang]}
+                          </button>
+                        )}
+                      </span>
                     </span>
                     <span className="font-jost text-[13px] tracking-[0.06em] flex-none">
                       {esGratis ? (
@@ -192,6 +215,18 @@ const CartWidget = ({ lang = 'es' }) => {
           </button>
         </DialogContent>
       </Dialog>
+
+      <ElegirIdiomaDialog
+        guideId={eligiendoPara}
+        open={eligiendoPara !== null}
+        onOpenChange={(abierto) => !abierto && setEligiendoPara(null)}
+        onElegir={(idioma) => {
+          addItem(eligiendoPara, idioma);
+          setEligiendoPara(null);
+        }}
+        uiLang={lang}
+        idiomaActual={items.find((it) => it.id === eligiendoPara)?.lang}
+      />
     </>
   );
 };

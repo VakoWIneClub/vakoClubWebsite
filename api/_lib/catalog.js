@@ -58,6 +58,13 @@ export function normalizarIdioma(lang) {
   return IDIOMAS_DISPONIBLES.includes(lang) ? lang : 'es';
 }
 
+// Ediciones que existen de una guía: las claves de `filePathByLang`, o solo español para las guías
+// de un único archivo. Es lo que valida el checkout — tiene que coincidir con `idiomas` de
+// CART_CATALOG (src/contexts/CartContext.jsx), que es lo que ofrece el selector de idioma.
+export function idiomasDisponibles(guia) {
+  return guia?.filePathByLang ? Object.keys(guia.filePathByLang) : ['es'];
+}
+
 // Resuelve qué archivo entregar para una guía en un idioma dado, con fallback a la edición en
 // español. Guías que todavía no tienen versiones por idioma (o no tienen `filePathByLang`)
 // simplemente devuelven su `filePath` de siempre.
