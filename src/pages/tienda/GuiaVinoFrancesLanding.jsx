@@ -1,6 +1,6 @@
 import GuiaRegionalLanding from '@/pages/tienda/GuiaRegionalLanding';
 
-// Contenido de la landing de venta de la Guía del Vino Francés — tercera y última entrega de la
+// Contenido de la landing de venta de la Guía del Vino Francés — tercera entrega de la
 // Colección Regional. Precio y checkout: ver api/_lib/catalog.js (guia-frances, USD 14.99, sin
 // ancla de precio "anterior"). Página cuenta y capítulos (90 páginas, 16 capítulos, diez regiones)
 // tomados de la tapa real de la guía; el copy de índice y problema se basa en las 6 páginas de
@@ -94,11 +94,12 @@ const CONTENT = {
   },
   coleccion: {
     eyebrow: 'Colección Regional',
-    title: 'Francia cierra la colección. España y Argentina ya están disponibles.',
-    text: 'La Guía del Vino Español y la Guía del Vino Argentino fueron las dos primeras entregas de la colección. Comprando ahora quedás con una invitación a la Membresía Gratuita de Vako Club.',
+    title: 'Francia es la tercera entrega. España, Argentina e Italia ya están disponibles.',
+    text: 'La Guía del Vino Español y la Guía del Vino Argentino fueron las dos primeras entregas de la colección, y la Guía del Vino Italiano llegó como cuarta. Comprando ahora quedás con una invitación a la Membresía Gratuita de Vako Club.',
     links: [
       { href: '/tienda/guia-vino-espanol', label: 'Ver la Guía del Vino Español' },
       { href: '/tienda/guia-vino-argentino', label: 'Ver la Guía del Vino Argentino' },
+      { href: '/tienda/guia-vino-italiano', label: 'Ver la Guía del Vino Italiano' },
       { href: '/suscripcion', label: 'Unirme gratis a la comunidad' },
     ],
   },
@@ -111,7 +112,7 @@ const CONTENT = {
       { q: '¿Puedo pedir un reembolso si no me convence?', a: 'Sí. Tenés 14 días completos desde tu compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin necesidad de justificarlo.' },
       { q: '¿Qué incluye exactamente el precio?', a: 'La Guía del Vino Francés completa en PDF y una invitación a la Membresía Gratuita de Vako Club. Todo por un único pago, sin suscripción.' },
       { q: '¿Necesito comprar también El Mundo de la Copa?', a: 'No, son productos independientes y podés comprar cualquiera de los dos por separado.' },
-      { q: '¿Esta compra incluye la guía de España o Argentina?', a: 'No — cada guía regional se vende por separado. Las guías de España y Argentina ya están disponibles, así que como comprador de Francia podés sumarlas cuando quieras.' },
+      { q: '¿Esta compra incluye las guías de España, Argentina o Italia?', a: 'No — cada guía regional se vende por separado. Las guías de España, Argentina e Italia ya están disponibles, así que como comprador de Francia podés sumarlas cuando quieras.' },
       { q: '¿Cómo se procesa el pago? ¿Es seguro?', a: 'El pago se procesa dentro del sitio con Stripe, de forma segura. Vako Club nunca ve ni guarda los datos de tu tarjeta.' },
       { q: '¿Puedo regalarla?', a: 'Sí. Comprala igual que siempre y escribinos a info@vakoclub.com para indicarnos a quién enviarle el enlace de descarga.' },
       { q: '¿La guía caduca?', a: 'No. Es un archivo que descargás una vez y conservás para siempre, sin depender de ninguna suscripción activa.' },

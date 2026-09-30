@@ -3,9 +3,9 @@ import { GUIAS_CATALOG, normalizarIdioma, aplicarPromo3x2 } from './_lib/catalog
 
 // A dónde puede volver Stripe después del pago. Se valida contra esta lista en vez de confiar en
 // el `returnPath` que manda el cliente, para no abrir un open-redirect vía el body del POST.
-const RETURN_PATHS = ['/tienda', '/tienda/el-mundo-de-la-copa', '/tienda/guia-vino-espanol', '/tienda/guia-vino-argentino', '/tienda/guia-vino-frances'];
+const RETURN_PATHS = ['/tienda', '/tienda/el-mundo-de-la-copa', '/tienda/guia-vino-espanol', '/tienda/guia-vino-argentino', '/tienda/guia-vino-frances', '/tienda/guia-vino-italiano'];
 
-// Tope defensivo del carrito — el catálogo hoy tiene 4 guías en total, así que esto nunca debería
+// Tope defensivo del carrito — el catálogo hoy tiene 5 guías en total, así que esto nunca debería
 // alcanzarse; solo evita un body abusivo con cientos de ítems repetidos.
 const MAX_CART_ITEMS = 10;
 

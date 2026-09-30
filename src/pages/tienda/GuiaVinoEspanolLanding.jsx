@@ -92,11 +92,12 @@ const CONTENT = {
   },
   coleccion: {
     eyebrow: 'Colección Regional',
-    title: 'España es la primera entrega. Argentina y Francia ya están disponibles.',
-    text: 'Después de España llegaron la Guía del Vino Argentino y la Guía del Vino Francés, que cierra la colección. Comprando ahora quedás con una invitación a la Membresía Gratuita de Vako Club.',
+    title: 'España es la primera entrega. Argentina, Francia e Italia ya están disponibles.',
+    text: 'Después de España llegaron la Guía del Vino Argentino, la Guía del Vino Francés y la Guía del Vino Italiano. Comprando ahora quedás con una invitación a la Membresía Gratuita de Vako Club.',
     links: [
       { href: '/tienda/guia-vino-argentino', label: 'Ver la Guía del Vino Argentino' },
       { href: '/tienda/guia-vino-frances', label: 'Ver la Guía del Vino Francés' },
+      { href: '/tienda/guia-vino-italiano', label: 'Ver la Guía del Vino Italiano' },
       { href: '/suscripcion', label: 'Unirme gratis a la comunidad' },
     ],
   },
@@ -109,7 +110,7 @@ const CONTENT = {
       { q: '¿Puedo pedir un reembolso si no me convence?', a: 'Sí. Tenés 14 días completos desde tu compra para escribirnos a info@vakoclub.com y te devolvemos el 100%, sin necesidad de justificarlo.' },
       { q: '¿Qué incluye exactamente el precio?', a: 'La Guía del Vino Español completa en PDF, acceso anticipado a la próxima guía de la colección, y una invitación a la Membresía Gratuita de Vako Club. Todo por un único pago, sin suscripción.' },
       { q: '¿Necesito comprar también El Mundo de la Copa?', a: 'No, son productos independientes y podés comprar cualquiera de los dos por separado.' },
-      { q: '¿Esta compra incluye la guía de Argentina o Francia?', a: 'No — cada guía regional se vende por separado. Las guías de Argentina y Francia ya están disponibles, así que como comprador de España podés sumarlas cuando quieras.' },
+      { q: '¿Esta compra incluye las guías de Argentina, Francia o Italia?', a: 'No — cada guía regional se vende por separado. Las guías de Argentina, Francia e Italia ya están disponibles, así que como comprador de España podés sumarlas cuando quieras.' },
       { q: '¿Cómo se procesa el pago? ¿Es seguro?', a: 'El pago se procesa dentro del sitio con Stripe, de forma segura. Vako Club nunca ve ni guarda los datos de tu tarjeta.' },
       { q: '¿Puedo regalarla?', a: 'Sí. Comprala igual que siempre y escribinos a info@vakoclub.com para indicarnos a quién enviarle el enlace de descarga.' },
       { q: '¿La guía caduca?', a: 'No. Es un archivo que descargás una vez y conservás para siempre, sin depender de ninguna suscripción activa.' },

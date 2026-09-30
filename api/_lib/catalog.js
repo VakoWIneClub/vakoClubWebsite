@@ -42,6 +42,13 @@ export const GUIAS_CATALOG = {
     disponible: true,
     filePath: 'private/guias/guia-vino-frances.pdf',
   },
+  'guia-italiano': {
+    nombre: 'Guía del Vino Italiano',
+    amountCents: 1499,
+    currency: 'usd',
+    disponible: true,
+    filePath: 'private/guias/guia-vino-italiano.pdf',
+  },
 };
 
 // Idiomas que el checkout acepta. Cualquier otro valor (o ausente) cae a español.
